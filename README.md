@@ -3,3 +3,4 @@ participation in an ENSICAEN challenge where you have to code a program to perfo
 
 ## Participants
 * Ismaël Delorme
+* Sonia Hammami
