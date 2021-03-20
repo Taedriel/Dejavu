@@ -5,7 +5,7 @@ PATH_DOC=./doc
 
 CC=gcc
 
-CFLAGS= -g -Wall 
+CFLAGS= -ansi -pedantic -Wall -Wextra -g
 LDFLAGS=
 EXE=$(PATH_BIN)/main
 
