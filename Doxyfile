@@ -1,0 +1,15 @@
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = Dejavu
+PROJECT_BRIEF          = "A racing driver who will reach the first place in the ENSICAEN Challenge"
+OUTPUT_DIRECTORY 	   = ./doc
+INPUT_ENCODING         = UTF-8
+INPUT                  = ./ 
+RECURSIVE              = YES
+EXCLUDE                = doc \
+FILE_PATTERNS          = *.c \
+                         *.h \
+GENERATE_HTML = YES
+GENERATE_LATEX = YES
+GENERATE_RTF = YES
+USE_MDFILE_AS_MAINPAGE =README.md
