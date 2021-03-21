@@ -9,20 +9,20 @@ int main()
     char action[100];
     char line_buffer[MAX_LINE_LENGTH];
 
-    struct car_t player_car;
+    struct car_t cars[3];
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
-    sscanf(line_buffer, "%d %d %d", &width, &height, &(player_car.gas_level));
+    sscanf(line_buffer, "%d %d %d", &width, &height, &(cars[0].gas_level));
     
-    player_car.boosts = BOOSTS_AT_START;
-    player_car.acc_x = 1;
-    player_car.acc_y = 0;
-    player_car.spe_x = 0;
-    player_car.spe_y = 0;
+    cars[0].boosts = BOOSTS_AT_START;
+    cars[0].acc_x = 1;
+    cars[0].acc_y = 0;
+    cars[0].spe_x = 0;
+    cars[0].spe_y = 0;
 
     fprintf(stderr, "=== >Map< ===\n");
     fprintf(stderr, "Size %d x %d\n", width, height);
-    fprintf(stderr, "Gas at start %d \n\n", player_car.gas_level);
+    fprintf(stderr, "Gas at start %d \n\n", cars[0].gas_level);
 
     for (row = 0; row < height; ++row)
     { /* Read map data, line per line */
@@ -39,29 +39,22 @@ int main()
 
         RACE_ROUND(round)
 
-        fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read positions of pilots */
-
-        sscanf(line_buffer, "%d %d %d %d %d %d",&myX, &myY, &secondX, &secondY, &thirdX, &thirdY);
-
-        fprintf(stderr, "    Positions: Me(%d,%d)  A(%d,%d), B(%d,%d)\n",myX, myY, secondX, secondY, thirdX, thirdY);
-        fflush(stderr);
+        read_positions(cars);
 
         /* Gas consumption cannot be accurate here. */
-        player_car.gas_level += gas_consumption(&player_car, 0);
-        player_car.spe_x += player_car.acc_x;
-        player_car.spe_y += player_car.acc_y;
+        cars[0].gas_level += gas_consumption(&cars[0], 0);
+        cars[0].spe_x += cars[0].acc_x;
+        cars[0].spe_y += cars[0].acc_y;
 
         /* Write the acceleration request to the race manager (stdout). */
-        post_actions(&player_car);
+        post_actions(&cars[0]);
 
-        fprintf(stderr, "    Action: %s   Gas remaining: %d\n", action, player_car.gas_level);
-        fflush(stderr);
+        RACE_BRIEF(action, cars[0].gas_level)
 
         if (0 && round > 4)
         { /* (DISABLED) Force a segfault for testing purpose */
             int *p = NULL;
-            fprintf(stderr, "Good Bye!\n");
-            fflush(stderr);
+            RACE_END()
             *p = 0;
         }
     }
