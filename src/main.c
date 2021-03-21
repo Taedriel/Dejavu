@@ -3,23 +3,21 @@
 
 int main()
 {
-    int row;
+    /*int row;*/
     int width, height;
     int round = 0;
+    int gas = 0;
     char action[100];
     char line_buffer[MAX_LINE_LENGTH];
 
     struct car_t cars[3];
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
-    sscanf(line_buffer, "%d %d %d", &width, &height, &(cars[0].gas_level));
-    
-    cars[0].boosts = BOOSTS_AT_START;
-    cars[0].acc_x = 1;
-    cars[0].acc_y = 0;
-    cars[0].spe_x = 0;
-    cars[0].spe_y = 0;
+    sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
 
+    init_car(cars, BOOSTS_AT_START, 1, 0, 0, 0, gas);
+
+    #if 0
     fprintf(stderr, "=== >Map< ===\n");
     fprintf(stderr, "Size %d x %d\n", width, height);
     fprintf(stderr, "Gas at start %d \n\n", cars[0].gas_level);
@@ -29,18 +27,17 @@ int main()
         fgets(line_buffer, MAX_LINE_LENGTH, stdin);
         fputs(line_buffer, stderr);
     }
+    #endif
 
     RACE_START()
 
     while (!feof(stdin))
     {
-        int myX, myY, secondX, secondY, thirdX, thirdY;
         round++;
 
         RACE_ROUND(round)
 
         read_positions(cars);
-
         /* Gas consumption cannot be accurate here. */
         cars[0].gas_level += gas_consumption(&cars[0], 0);
         cars[0].spe_x += cars[0].acc_x;

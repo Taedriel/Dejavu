@@ -29,6 +29,7 @@
                                     fflush(stderr);
 
 /* =================== Struct ===================*/
+
 struct car_t
 {
     int gas_level;
