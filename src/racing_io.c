@@ -4,10 +4,11 @@ int post_actions(struct car_t *player_car)
 {
     char action[ACTION_LENGTH];
 
-    memset(action, '\0', ACTION_LENGTH * sizeof(char));
     sprintf(action, "%d %d", player_car->acc_x, player_car->acc_y);
     fprintf(stdout, "%s", action);
     fflush(stdout);
+
+    RACE_BRIEF(action, player_car->gas_level)
 
     return EXIT_SUCCESS;
 }
@@ -30,4 +31,17 @@ int read_positions(struct car_t *car_list)
     fflush(stderr);
 
     return EXIT_SUCCESS;
+}
+
+void print_car(struct car_t *player_car, FILE *file)
+{
+    fprintf(file, "%d\n", player_car->acc_x);
+    fprintf(file, "%d\n", player_car->acc_y);
+    fprintf(file, "%d\n", player_car->boosts);
+    fprintf(file, "%d\n", player_car->gas_level);
+    fprintf(file, "%d\n", player_car->pos_x);
+    fprintf(file, "%d\n", player_car->pos_y);
+    fprintf(file, "%d\n", player_car->spe_x);
+    fprintf(file, "%d\n", player_car->spe_y);
+    fflush(stderr);
 }

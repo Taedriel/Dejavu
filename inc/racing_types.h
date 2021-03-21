@@ -22,7 +22,7 @@
 #define RACE_ROUND(round)           fprintf(stderr, "=== ROUND %d\n", round);\
                                     fflush(stderr);
 
-#define RACE_BRIEF(action, gas)     fprintf(stderr, "    Action: %s   Gas remaining: %d\n", action, gas) ;
+#define RACE_BRIEF(action, gas)     fprintf(stderr, "Action: %s   Gas remaining: %d\n", action, gas);\
                                     fflush(stderr);
 
 #define RACE_END()                  fprintf(stderr, "Good Bye!\n");\

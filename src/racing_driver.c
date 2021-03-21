@@ -27,4 +27,6 @@ int gas_consumption(struct car_t *player_car, int inSand)
 void consum_gas(struct car_t *player_car, int inSand)
 {
     player_car->gas_level += gas_consumption(player_car, inSand);
+    player_car->spe_x += player_car->acc_x;
+    player_car->spe_y += player_car->acc_y;
 }
