@@ -19,16 +19,14 @@ int main()
     init_car(cars+1, BOOSTS_AT_START, 1, 0, 0, 0, gas);
     init_car(cars+2, BOOSTS_AT_START, 1, 0, 0, 0, gas);
 
-    print_car(cars, stderr);
 
     fprintf(stderr, "=== >Map< ===\n");
     fprintf(stderr, "Size %d x %d\n", width, height);
-    fprintf(stderr, "Gas at start %d \n\n", cars[0].gas_level);
 
     for (row = 0; row < height; ++row)
     { /* Read map data, line per line */
         fgets(line_buffer, MAX_LINE_LENGTH, stdin);
-        fputs(line_buffer, stderr);
+        /*fputs(line_buffer, stderr);*/
     }
 
     RACE_START()
