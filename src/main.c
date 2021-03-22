@@ -15,9 +15,9 @@ int main()
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
 
-    init_car(cars, BOOSTS_AT_START, 1, 0, 0, 0, gas);
-    init_car(cars+1, BOOSTS_AT_START, 1, 0, 0, 0, gas);
-    init_car(cars+2, BOOSTS_AT_START, 1, 0, 0, 0, gas);
+    init_car(cars, BOOSTS_AT_START, 0, 0, 0, 0, gas);
+    init_car(cars+1, BOOSTS_AT_START, 0, 0, 0, 0, gas);
+    init_car(cars+2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
 
     fprintf(stderr, "=== >Map< ===\n");
@@ -34,7 +34,7 @@ int main()
     while (!feof(stdin))
     {
         round++;
-
+        set_acceleration(cars, 1, 0);
         RACE_ROUND(round, stderr)
 
         read_positions(cars);
