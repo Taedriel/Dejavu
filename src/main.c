@@ -30,7 +30,7 @@ int main()
     }
 
     RACE_START(stderr)
-/*test webhook*/
+
     while (!feof(stdin))
     {
         round++;
