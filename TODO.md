@@ -22,3 +22,8 @@
     2. Réflechir au moyen de faire ce traitement sans perdre de temps (car traitement possiblement long)
 
 4.  0.
+
+## Checked
+
+1.  0.[x]
+    1.[x]
