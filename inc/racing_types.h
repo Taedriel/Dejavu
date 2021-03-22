@@ -16,17 +16,17 @@
 
 /* =================== Macro ===================*/
 
-#define RACE_START()                fflush(stderr);\
-                                    fprintf(stderr, "\n=== Race start ===\n");
+#define RACE_START(file)                fflush(file);\
+                                        fprintf(file, "\n=== Race start ===\n");
 
-#define RACE_ROUND(round)           fprintf(stderr, "=== ROUND %d\n", round);\
-                                    fflush(stderr);
+#define RACE_ROUND(round, file)         fprintf(file, "=== ROUND %d\n", round);\
+                                        fflush(file);
 
-#define RACE_BRIEF(action, gas)     fprintf(stderr, "Action: %s   Gas remaining: %d\n", action, gas);\
-                                    fflush(stderr);
+#define RACE_BRIEF(action, gas, file)   fprintf(file, "Action: %s   Gas remaining: %d\n", action, gas);\
+                                        fflush(file);
 
-#define RACE_END()                  fprintf(stderr, "Good Bye!\n");\
-                                    fflush(stderr);
+#define RACE_END(file)                  fprintf(file, "Good Bye!\n");\
+                                        fflush(file);
 
 /* =================== Struct ===================*/
 

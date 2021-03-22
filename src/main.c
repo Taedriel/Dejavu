@@ -29,13 +29,13 @@ int main()
         /*fputs(line_buffer, stderr);*/
     }
 
-    RACE_START()
+    RACE_START(stderr)
 
     while (!feof(stdin))
     {
         round++;
 
-        RACE_ROUND(round)
+        RACE_ROUND(round, stderr)
 
         read_positions(cars);
         /* Gas consumption cannot be accurate here. */
@@ -47,7 +47,7 @@ int main()
         if (0 && round > 4)
         { /* (DISABLED) Force a segfault for testing purpose */
             int *p = NULL;
-            RACE_END()
+            RACE_END(stderr)
             *p = 0;
         }
     }

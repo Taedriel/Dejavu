@@ -8,7 +8,7 @@ int post_actions(struct car_t *player_car)
     fprintf(stdout, "%s", action);
     fflush(stdout);
 
-    RACE_BRIEF(action, player_car->gas_level)
+    RACE_BRIEF(action, player_car->gas_level, stderr)
 
     return EXIT_SUCCESS;
 }

@@ -30,3 +30,9 @@ void consum_gas(struct car_t *player_car, int inSand)
     player_car->spe_x += player_car->acc_x;
     player_car->spe_y += player_car->acc_y;
 }
+
+void set_acceleration(struct car_t *player_car, int acc_x, int acc_y)
+{
+    player_car->acc_x = acc_x;
+    player_car->acc_y = acc_y;
+}
