@@ -22,10 +22,8 @@ int main()
     init_car(cars+1, BOOSTS_AT_START, 0, 0, 0, 0, gas);
     init_car(cars+2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
-    fprintf(stderr, "=== >Map< ===\n");
-    fprintf(stderr, "Size %d x %d\n", width, height);
     init_map(&map, height, width);
-
+    
 
     RACE_START(stderr)
 

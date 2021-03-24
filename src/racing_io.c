@@ -45,3 +45,15 @@ void print_car(struct car_t *player_car, FILE *file)
     fprintf(file, "%d\n", player_car->spe_y);
     fflush(file);
 }
+
+void print_map(struct map_t *map, FILE *file)
+{
+    int row;
+
+    fprintf(file, "=== >Map< ===\n");
+    fprintf(file, "Size %d x %d\n", map->width, map->height);
+    for (row = 0; row < map->height; ++row)
+    {
+        fputs(map->array[row], file);
+    }
+}
