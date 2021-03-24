@@ -46,7 +46,7 @@ struct map_t
 {
     int width;
     int height;
-    int *(array[MAX_LINE_LENGTH]);
+    char (*array)[MAX_LINE_LENGTH];
 };
 
 

@@ -43,5 +43,5 @@ void print_car(struct car_t *player_car, FILE *file)
     fprintf(file, "%d\n", player_car->pos_y);
     fprintf(file, "%d\n", player_car->spe_x);
     fprintf(file, "%d\n", player_car->spe_y);
-    fflush(stderr);
+    fflush(file);
 }

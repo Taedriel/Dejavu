@@ -15,7 +15,7 @@ ifeq ($(SANITIZE),on)
 CFLAGS += -fsanitize=address
 endif
 
-OBJS = $(PATH_OBJ)/main.o $(PATH_OBJ)/racing_driver.o $(PATH_OBJ)/racing_io.o
+OBJS = $(PATH_OBJ)/main.o $(PATH_OBJ)/racing_driver.o $(PATH_OBJ)/racing_io.o $(PATH_OBJ)/racing_map.o
 
 .PHONY: all dir clean dist-clean doxy
 
@@ -42,6 +42,9 @@ $(PATH_OBJ)/racing_driver.o: $(PATH_SRC)/racing_driver.c
 	@$(CC) -o $@ $^ -c $(CFLAGS)
 
 $(PATH_OBJ)/racing_io.o: $(PATH_SRC)/racing_io.c
+	@$(CC) -o $@ $^ -c $(CFLAGS)
+
+$(PATH_OBJ)/racing_map.o: $(PATH_SRC)/racing_map.c
 	@$(CC) -o $@ $^ -c $(CFLAGS)
 
 clean:

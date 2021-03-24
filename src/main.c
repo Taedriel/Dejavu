@@ -1,4 +1,5 @@
 #include "racing_driver.h"
+#include "racing_map.h"
 #include "racing_io.h"
 
 int main()
@@ -11,23 +12,20 @@ int main()
     char line_buffer[MAX_LINE_LENGTH];
 
     struct car_t cars[3];
+    struct map_t map;
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
 
-    init_car(cars, BOOSTS_AT_START, 0, 0, 0, 0, gas);
+
+    init_car(cars, BOOSTS_AT_START, 1, 0, 0, 0, gas);
     init_car(cars+1, BOOSTS_AT_START, 0, 0, 0, 0, gas);
     init_car(cars+2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
-
     fprintf(stderr, "=== >Map< ===\n");
     fprintf(stderr, "Size %d x %d\n", width, height);
+    init_map(&map, height, width);
 
-    for (row = 0; row < height; ++row)
-    { /* Read map data, line per line */
-        fgets(line_buffer, MAX_LINE_LENGTH, stdin);
-        /*fputs(line_buffer, stderr);*/
-    }
 
     RACE_START(stderr)
 
