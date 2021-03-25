@@ -1,6 +1,7 @@
 #include "racing_driver.h"
 #include "racing_io.h"
 #include "racing_map.h"
+#include "utils.h"
 
 int main() {
     int row;
@@ -9,8 +10,8 @@ int main() {
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
 
-    struct car_t cars[3];
-    struct map_t map;
+    car_t cars[3];
+    map_t map;
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
@@ -31,6 +32,16 @@ int main() {
         set_acceleration(cars, 1, 0);
         */
         read_positions(cars);
+
+        if (round == 1) {
+            int ** parsed_map = parse_map(&map, cars[0].pos);
+
+            print_weighted_map(parsed_map, map.height, map.width, stderr);
+
+
+
+            /*print_map_path(&map, opti, stderr); */
+        }
 
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);

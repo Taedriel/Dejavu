@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "utils.h"
 
 /* =================== Constant ===================*/
 
@@ -30,24 +31,21 @@
 
 /* =================== Struct ===================*/
 
-struct car_t
+typedef struct car_t
 {
     int gas_level;
     int boosts;
-    int acc_x;
-    int acc_y;
-    int spe_x;
-    int spe_y;
-    int pos_x;
-    int pos_y;
-};
+    tuple_int acc;
+    tuple_int spe;
+    tuple_int pos;
+} car_t;
 
-struct map_t
+typedef struct map_t
 {
     int width;
     int height;
     char (*array)[MAX_LINE_LENGTH];
-};
+} map_t;
 
 
 #endif

@@ -10,28 +10,16 @@
 
 ## What it needs to do checkpoints
 
-1.  0. Une structure de voiture
-    1. Gestion des sorties (Dire au GDC que notre voiture veut aller à droite)
+1.  [x] Une structure de voiture
+    [x] Gestion des sorties (Dire au GDC que notre voiture veut aller à droite)
 
-2.  0. Une structure map 
-    1. Une enumération dans le but de représenter les différents types de noeud dans la map
-    2. Trouver un moyen d'économiser le plus possible l'essence
+2.  [ ] Une structure map 
+    [ ] Une enumération dans le but de représenter les différents types de noeud dans la map
+    [ ] Trouver un moyen d'économiser le plus possible l'essence
 
-3.  0. Un algorithme type chemin le plus court
-    1. Adaptation map pour l'algo de plus court chemin (graphe / matrice)
-    2. Réflechir au moyen de faire ce traitement sans perdre de temps (car traitement possiblement long)
+3.  [ ] Un algorithme type chemin le plus court
+    [ ] Adaptation map pour l'algo de plus court chemin (graphe / matrice)
+    [ ] Réflechir au moyen de faire ce traitement sans perdre de temps (car traitement possiblement long)
 
-4.  0.
+4.  [ ] 
 
-## Checked
-
-- [x] 1.0
-- [x] 1.1
-- [ ] 2.0
-- [ ] 2.1
-- [ ] 2.2
-- [ ] 2.2
-- [ ] 3.0
-- [ ] 3.1
-- [ ] 3.2
-- [ ] 4.0
