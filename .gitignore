@@ -1,5 +1,8 @@
 # Doc
 doc/
+.vscode/
+bin/
+obj/
 
 # Prerequisites
 *.d
