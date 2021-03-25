@@ -1,7 +1,12 @@
 #include "racing_io.h"
 
-int post_actions(struct car_t *player_car)
-{
+/**
+ * @brief send action to stdout, publishing theme to the GDC
+ * 
+ * @param player_car 
+ * @return int 
+ */
+int post_actions(struct car_t *player_car) {
     char action[ACTION_LENGTH];
 
     sprintf(action, "%d %d", player_car->acc_x, player_car->acc_y);
@@ -13,8 +18,14 @@ int post_actions(struct car_t *player_car)
     return EXIT_SUCCESS;
 }
 
-int read_positions(struct car_t *car_list)
-{
+/**
+ * @brief read positions of all the pilots of the track ans store them in there 
+ * respective car struc
+ * 
+ * @param car_list 
+ * @return int 
+ */
+int read_positions(struct car_t *car_list) {
     char line_buffer[MAX_LINE_LENGTH];
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read positions of pilots */
@@ -33,27 +44,17 @@ int read_positions(struct car_t *car_list)
     return EXIT_SUCCESS;
 }
 
-void print_car(struct car_t *player_car, FILE *file)
-{
-    fprintf(file, "%d\n", player_car->acc_x);
-    fprintf(file, "%d\n", player_car->acc_y);
-    fprintf(file, "%d\n", player_car->boosts);
-    fprintf(file, "%d\n", player_car->gas_level);
-    fprintf(file, "%d\n", player_car->pos_x);
-    fprintf(file, "%d\n", player_car->pos_y);
-    fprintf(file, "%d\n", player_car->spe_x);
-    fprintf(file, "%d\n", player_car->spe_y);
+/**
+ * @brief print all the car info 
+ * 
+ * @param player_car 
+ * @param file 
+ */
+void print_car(struct car_t *player_car, FILE *file) {
+    fprintf(file, "Acc: %d %d\tSpeed: %d %d\tPos: %d %d\n", player_car->acc_x,
+            player_car->acc_y, player_car->spe_x, player_car->spe_y,
+            player_car->pos_x, player_car->pos_y);
+    fprintf(file, "Gas: %d\tBoost: %d\n", player_car->gas_level,
+            player_car->boosts);
     fflush(file);
-}
-
-void print_map(struct map_t *map, FILE *file)
-{
-    int row;
-
-    fprintf(file, "=== >Map< ===\n");
-    fprintf(file, "Size %d x %d\n", map->width, map->height);
-    for (row = 0; row < map->height; ++row)
-    {
-        fputs(map->array[row], file);
-    }
 }

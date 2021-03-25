@@ -6,7 +6,7 @@ PATH_INC=./inc
 
 CC=gcc
 
-CFLAGS = -Wall -Wextra -ansi -pedantic -Wpedantic -g -I$(PATH_INC)
+CFLAGS = -Wall -Wextra -ansi -pedantic -std=c99 -Wpedantic -g -I$(PATH_INC) -Wno-unused-variable
 LDFLAGS= -lm
 PILOT_NAME = $(PATH_BIN)/Dejavu
 
@@ -15,13 +15,13 @@ ifeq ($(SANITIZE),on)
 CFLAGS += -fsanitize=address
 endif
 
-OBJS = $(PATH_OBJ)/main.o $(PATH_OBJ)/racing_driver.o $(PATH_OBJ)/racing_io.o $(PATH_OBJ)/racing_map.o
+SRCS = $(wildcard $(PATH_SRC)/*.c)
+OBJS = $(patsubst $(PATH_SRC)/%.c, $(PATH_OBJ)/%.o, $(SRCS))
 
 .PHONY: all dir clean dist-clean doxy
 
 all: dir $(PILOT_NAME)
-	@echo "all is done !"
-	@make -s clean
+	@echo "\nAll is done !\n"
 
 dir:
 	@mkdir -p $(PATH_BIN)
@@ -33,24 +33,15 @@ doxy:
 	@doxygen
 
 $(PILOT_NAME):$(OBJS)
-	@$(CC) -o $@ $^ $(LDFLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(PATH_OBJ)/main.o:  $(PATH_SRC)/main.c
-	@$(CC) -o $@ $^ -c $(CFLAGS)
-
-$(PATH_OBJ)/racing_driver.o: $(PATH_SRC)/racing_driver.c
-	@$(CC) -o $@ $^ -c $(CFLAGS)
-
-$(PATH_OBJ)/racing_io.o: $(PATH_SRC)/racing_io.c
-	@$(CC) -o $@ $^ -c $(CFLAGS)
-
-$(PATH_OBJ)/racing_map.o: $(PATH_SRC)/racing_map.c
-	@$(CC) -o $@ $^ -c $(CFLAGS)
+$(PATH_OBJ)/%.o: $(PATH_SRC)/%.c
+	$(CC) -o $@ $^ -c $(CFLAGS)
 
 clean:
-	@rm -f *.o
+	rm -f $(PATH_OBJ)/*.o
 
 dist-clean: clean
-	@rm -fr $(PATH_BIN)
-	@rm -fr $(PATH_DOC)
-	@rm -fr $(PATH_LIB)
+	rm -fr $(PATH_BIN)
+	rm -fr $(PATH_DOC)
+	rm -fr $(PATH_LIB)
