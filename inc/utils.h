@@ -8,4 +8,6 @@ typedef struct tuple_int {
 
 } tuple_int;
 
+void print_tuple(tuple_int * t, char * rep);
+
 #endif

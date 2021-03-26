@@ -35,16 +35,16 @@ typedef struct car_t
 {
     int gas_level;
     int boosts;
-    tuple_int acc;
-    tuple_int spe;
-    tuple_int pos;
+    tuple_int * acc;
+    tuple_int * spe;
+    tuple_int * pos;
 } car_t;
 
 typedef struct map_t
 {
     int width;
     int height;
-    char (*array)[MAX_LINE_LENGTH];
+    char **array;
 } map_t;
 
 

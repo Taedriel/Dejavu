@@ -13,14 +13,18 @@
  */
 void init_car(struct car_t *player_car, int boosts, int acc_x,
               int acc_y, int spe_x, int spe_y, int gas) {
-    player_car->acc.x = acc_x;
-    player_car->acc.y = acc_y;
+    player_car->acc = malloc(sizeof(tuple_int));
+    player_car->spe = malloc(sizeof(tuple_int));
+    player_car->pos = malloc(sizeof(tuple_int));
+
+    player_car->acc->x = acc_x;
+    player_car->acc->y = acc_y;
     player_car->boosts = boosts;
     player_car->gas_level = gas;
-    player_car->spe.x = spe_x;
-    player_car->spe.y = spe_y;
-    player_car->pos.x = 0;
-    player_car->pos.y = 0;
+    player_car->spe->x = spe_x;
+    player_car->spe->y = spe_y;
+    player_car->pos->x = 0;
+    player_car->pos->y = 0;
 }
 
 /**
@@ -31,8 +35,8 @@ void init_car(struct car_t *player_car, int boosts, int acc_x,
  * @return int the amount of gas used
  */
 int gas_consumption(struct car_t *player_car, int inSand) {
-    int gas = player_car->acc.x * player_car->acc.x + player_car->acc.y * player_car->acc.y;
-    gas += (int)(sqrt(player_car->spe.x * player_car->spe.x + player_car->spe.y * player_car->spe.y) * 3.0 / 2.0);
+    int gas = player_car->acc->x * player_car->acc->x + player_car->acc->y * player_car->acc->y;
+    gas += (int)(sqrt(player_car->spe->x * player_car->spe->x + player_car->spe->y * player_car->spe->y) * 3.0 / 2.0);
     if (inSand) {
         gas += 1;
     }
@@ -47,8 +51,8 @@ int gas_consumption(struct car_t *player_car, int inSand) {
  */
 void consum_gas(struct car_t *player_car, int inSand) {
     player_car->gas_level -= gas_consumption(player_car, inSand);
-    player_car->spe.x += player_car->acc.x;
-    player_car->spe.y += player_car->acc.y;
+    player_car->spe->x += player_car->acc->x;
+    player_car->spe->y += player_car->acc->y;
 }
 
 /**
@@ -59,6 +63,6 @@ void consum_gas(struct car_t *player_car, int inSand) {
  * @param acc_y 
  */
 void set_acceleration(struct car_t *player_car, int acc_x, int acc_y) {
-    player_car->acc.x = acc_x;
-    player_car->acc.y = acc_y;
+    player_car->acc->x = acc_x;
+    player_car->acc->y = acc_y;
 }

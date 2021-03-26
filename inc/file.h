@@ -20,9 +20,9 @@ void push(stack *s, void * a);
 
 void * pop(stack *s);
 
-void print_cell(cell* c, void (print_func)(void *, char *));
+void print_cell(cell* c, void (print_func)(void *, char *), FILE * file);
 
-void print_stack(stack s, void (print_func)(void *, char *));
+void print_stack(stack s, void (print_func)(void *, char *), FILE * file);
 
 void concat_stack(stack* s1, stack* s2);
 

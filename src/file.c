@@ -68,23 +68,25 @@ void * pop(stack *s) {
     return v;
 }
 
-void print_cell(cell* c, void (print_func)(void *, char*) ) {
+void print_cell(cell* c, void (print_func)(void *, char*), FILE * file) {
     char * rep = malloc(sizeof(char) * 1024);
     print_func(c->x, rep);
-    printf("| %s |", rep);
+    fprintf(file, "| %s |", rep);
     free(rep);
 }
 
-void print_stack(stack s, void (print_func)(void *, char*)) {
+void print_stack(stack s, void (print_func)(void *, char*), FILE * file) {
     cell *p = s.head;
     if (p == NULL){
-        printf("Stack is Empty");
+        fprintf(file, "Stack is Empty");
     }
+
+    fprintf(file, "[");
     while (p != NULL){
-        print_cell(p, print_func);
+        print_cell(p, print_func, file);
         p = (cell *) (p->next);
     }
-    printf("\n");
+    fprintf(file, "]\n");
 }
 
 /**

@@ -14,10 +14,11 @@ void init_map(map_t *map, int height, int width) {
 
     map->height = height;
     map->width = width;
-    map->array = malloc(height * sizeof(void *));
+    map->array = malloc(height * sizeof(char *));
 
     /* Read map data, line per line */
-    for (row = 0; row < height; ++row) { 
+    for (row = 0; row < height; row++) {
+        map->array[row] = malloc(sizeof(char) * MAX_LINE_LENGTH);
         fgets(map->array[row], MAX_LINE_LENGTH, stdin);
         fputs(map->array[row], stderr);
     }
@@ -65,7 +66,7 @@ void print_weighted_map(int ** map, int width, int height, FILE * file) {
     int i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
-            fprintf(file, "%d", map[i][j]);
+            fprintf(file, "(%2d) ", map[i][j]);
         }
         fprintf(file, "\n");
     }
@@ -80,7 +81,7 @@ void print_weighted_map(int ** map, int width, int height, FILE * file) {
 void get_valid_neighnoor(map_t map, tuple_int startpos, tuple_int* neighboor) {
     if ((startpos.x + 1) < map.width) {
         if (startpos.y >= 0 && startpos.y < map.height) {
-            if (map.array[startpos.y][startpos.x+1] == '.'){
+            if (map.array[startpos.y][startpos.x+1] != '.'){
                 neighboor[0].x = startpos.x+1;
                 neighboor[0].y = startpos.y;
             } else {
@@ -91,7 +92,7 @@ void get_valid_neighnoor(map_t map, tuple_int startpos, tuple_int* neighboor) {
     } 
     if ((startpos.x - 1) >= 0) {
         if (startpos.y >= 0 && startpos.y < map.height) {
-            if (map.array[startpos.y][startpos.x-1] == '.'){
+            if (map.array[startpos.y][startpos.x-1] != '.'){
                 neighboor[1].x = startpos.x-1;
                 neighboor[1].y = startpos.y;
             } else {
@@ -102,7 +103,7 @@ void get_valid_neighnoor(map_t map, tuple_int startpos, tuple_int* neighboor) {
     } 
     if ((startpos.y + 1) < map.height) {
         if (startpos.x >= 0 && startpos.x < map.width) {
-            if (map.array[startpos.y+1][startpos.x] == '.'){
+            if (map.array[startpos.y+1][startpos.x] != '.'){
                 neighboor[2].x = startpos.x;
                 neighboor[2].y = startpos.y+1;
             } else {
@@ -113,7 +114,7 @@ void get_valid_neighnoor(map_t map, tuple_int startpos, tuple_int* neighboor) {
     } 
     if ((startpos.y - 1) >= 0) {
         if (startpos.x >= 0 && startpos.x < map.width) {
-            if (map.array[startpos.y-1][startpos.x] == '.'){
+            if (map.array[startpos.y-1][startpos.x] != '.'){
                 neighboor[3].x = startpos.x;
                 neighboor[3].y = startpos.y-1;
             }else {
@@ -125,8 +126,9 @@ void get_valid_neighnoor(map_t map, tuple_int startpos, tuple_int* neighboor) {
 }
 
 int **parse_map(map_t * map, tuple_int startpos) {
-    tuple_int* retour = malloc(sizeof(tuple_int) * 256);
+
     int **djikstra = malloc(sizeof(int *) * map->height);
+
     stack *s = create_stack();
     tuple_int neighboor[4];
     int i, j, cpt = 0;
@@ -144,19 +146,24 @@ int **parse_map(map_t * map, tuple_int startpos) {
     get_valid_neighnoor(*map, current_pos, neighboor);
     for (i = 0; i < 4; i++) {
         if (neighboor[i].x != -1) {
+            djikstra[neighboor[i].y][neighboor[i].x] = 1;
             push(s, (void *) (&(neighboor[i])));
         }
     }
 
     while (!is_stack_empty(s)) {
-        cpt ++;
+        print_stack(*s, &print_tuple, stderr);
         current_pos = *((tuple_int *)(pop(s)));
-        djikstra[current_pos.y][current_pos.x] = cpt;
+        fprintf(stderr, "(%d %d)\n", current_pos.x, current_pos.y);
+        cpt = djikstra[current_pos.y][current_pos.x];
 
         get_valid_neighnoor(*map, current_pos, neighboor);
         for (i = 0; i < 4; i++) {
             if (neighboor[i].x != -1) {
-                push(s, (void *) (&(neighboor[i])));
+                if (djikstra[neighboor[i].y][neighboor[i].x] > cpt + 1 || djikstra[neighboor[i].y][neighboor[i].x] == -1) {
+                    djikstra[neighboor[i].y][neighboor[i].x] = cpt + 1;
+                    push(s, (void *) (&(neighboor[i])));
+                }
             }
         }
     }

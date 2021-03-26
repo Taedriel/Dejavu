@@ -4,7 +4,6 @@
 #include "utils.h"
 
 int main() {
-    int row;
     int width, height;
     int round = 0;
     int gas = 0;
@@ -34,11 +33,9 @@ int main() {
         read_positions(cars);
 
         if (round == 1) {
-            int ** parsed_map = parse_map(&map, cars[0].pos);
-
+            int ** parsed_map = parse_map(&map, *(cars[0].pos));
+            fprintf(stderr, "%p\n", parsed_map);
             print_weighted_map(parsed_map, map.height, map.width, stderr);
-
-
 
             /*print_map_path(&map, opti, stderr); */
         }

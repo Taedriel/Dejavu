@@ -6,13 +6,14 @@ PATH_INC=./inc
 
 CC=gcc
 
-CFLAGS = -Wall -Wextra -ansi -pedantic -std=c99 -Wpedantic -g -I$(PATH_INC) -Wno-unused-variable
+CFLAGS = -Wall -Wextra -ansi -pedantic -std=c99 -Wpedantic -g -I$(PATH_INC) -Wno-unused-parameter	
 LDFLAGS= -lm
 PILOT_NAME = $(PATH_BIN)/Dejavu
 
 SANITIZE=off
 ifeq ($(SANITIZE),on)
 CFLAGS += -fsanitize=address
+LDFLAGS += -fsanitize=address
 endif
 
 SRCS = $(wildcard $(PATH_SRC)/*.c)
