@@ -2,8 +2,11 @@
 #include "file.h"
 #include "utils.h"
 
+#include <assert.h>
+
 /**
  * @brief init the map struct given the first input of a race
+ *        ! Must be used ! => else buffer pb  
  * 
  * @param map 
  * @param height 
@@ -135,17 +138,21 @@ int **parse_map(map_t * map, tuple_int startpos) {
 
     for (i = 0; i < map->height; i++) {
         djikstra[i] = malloc(sizeof(int) * map->width);
-        for (j = 0; j < map->width; j++) {
-            djikstra[i][j] = -1;
-        }
+        memset(djikstra[i], -1, map->width);
     }
 
-    tuple_int current_pos = startpos;
+    tuple_int current_pos; 
+    current_pos.x = startpos.x;
+    current_pos.y = startpos.y;
+
+
+
     djikstra[current_pos.y][current_pos.x] = 0;
 
     get_valid_neighnoor(*map, current_pos, neighboor);
     for (i = 0; i < 4; i++) {
         if (neighboor[i].x != -1) {
+            assert(neighboor[i].y < 0 || neighboor[i].x < 0);
             djikstra[neighboor[i].y][neighboor[i].x] = 1;
             push(s, (void *) (&(neighboor[i])));
         }
