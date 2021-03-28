@@ -33,9 +33,9 @@ int main() {
         read_positions(cars);
 
         if (round == 1) {
-            int ** parsed_map = parse_map(&map, *(cars[0].pos));
-            fprintf(stderr, "%p\n", parsed_map);
-            print_weighted_map(parsed_map, map.height, map.width, stderr);
+            int **parsed_map = parse_map(&map, *(cars[0].pos));
+
+            print_weighted_map(parsed_map, map.width, map.height, stderr);
 
             /*print_map_path(&map, opti, stderr); */
         }

@@ -11,6 +11,8 @@ void print_map_path(map_t *map, tuple_int * path, FILE *file);
 
 void print_weighted_map(int ** map, int width, int height, FILE * file);
 
+void get_valid_neighnoor(map_t map, tuple_int startpos, tuple_int* neighboor);
+
 int **parse_map(map_t * map, tuple_int startpos);
 
 #endif
