@@ -1,7 +1,6 @@
 #ifndef FILE_H
 #define FILE_H
 
-
 typedef struct cell {
     void * x;
     struct cell* next;

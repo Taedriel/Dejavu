@@ -47,5 +47,13 @@ typedef struct map_t
     char **array;
 } map_t;
 
+typedef struct tuple_int
+{
+
+    int x;
+    int y;
+
+} tuple_int;
+
 
 #endif
