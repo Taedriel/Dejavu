@@ -155,11 +155,8 @@ int **parse_map(map_t * map, tuple_int startpos) {
     }
 
     while (!is_stack_empty(s)) {
-        fprintf(stderr, "Empty %d\n", is_stack_empty(s));
-        print_stack(*s, &print_tuple, stderr);
         current_pos = *((tuple_int *)(pop(s)));
         cpt = djikstra[current_pos.y][current_pos.x];
-        fprintf(stderr, "cpt: %d\n", cpt);
 
         get_valid_neighnoor(*map, current_pos, neighboor);
         for (i = 0; i < 4; i++) {
