@@ -38,6 +38,8 @@ int main() {
             int **parsed_map = parse_map(&map, *(cars[0].pos));
 
             print_weighted_map(parsed_map, map.width, map.height, logs);
+            fflush(logs);
+            fclose(logs);
 
             /*print_map_path(&map, opti, stderr); */
         }
