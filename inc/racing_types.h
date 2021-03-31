@@ -31,6 +31,14 @@
 
 /* =================== Struct ===================*/
 
+typedef struct tuple_int
+{
+
+    int x;
+    int y;
+
+} tuple_int;
+
 typedef struct car_t
 {
     int gas_level;
@@ -47,13 +55,6 @@ typedef struct map_t
     char **array;
 } map_t;
 
-typedef struct tuple_int
-{
-
-    int x;
-    int y;
-
-} tuple_int;
 
 
 #endif
