@@ -69,7 +69,7 @@ void print_weighted_map(int ** map, int width, int height, FILE * file) {
     int i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
-            fprintf(file, "(%d) ", map[i][j]);
+            fprintf(file, "%d ", map[i][j]);
         }
         fprintf(file, "\n");
     }
