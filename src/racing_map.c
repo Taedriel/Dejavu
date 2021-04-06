@@ -161,57 +161,41 @@ int **parse_map(map_t * map, tuple_int startpos) {
         }
     }
 
+    free(temp);
     destroy_stack(s);
     return djikstra;
 }
 
 tuple_int ** find_path(int ** weighted_map, map_t * map, int * path_size, tuple_int start, tuple_int end) {
     
-    int i, min;
-    int hasFinished = 0;
-    tuple_int ** retour;
-    stack * path = create_stack();
+    int i, min, cpt = 0;
+    tuple_int ** retour = malloc(sizeof(tuple_int *) * 1024); //TODO free
     
-    tuple_int mint;
-    tuple_int neighboor[4];
-    tuple_int current_pos;
+    tuple_int neighboor[4]; 
+    tuple_int * current_pos = copy_tuple_int(end);
 
-    push(path, (void *) (&end));
-    while (!is_stack_empty(path)) {
-
-        current_pos = *((tuple_int *)(pop(path)));
+    while (current_pos != NULL) {
         min = -1;
+        retour[cpt++] = malloc(sizeof(tuple_int));
 
-        get_valid_neighnoor(map->width, map->height, current_pos, neighboor);
+        get_valid_neighnoor(map->width, map->height, *current_pos, neighboor);
         for (i = 0; i < 4; i++) {
             if (weighted_map[neighboor[i].y][neighboor[i].x] == 0){
-                memcpy(&mint, &(neighboor[i]), sizeof(tuple_int));
-                hasFinished = 1;
+                memcpy(retour[cpt - 1], copy_tuple_int(neighboor[i]), sizeof(tuple_int));
+                current_pos = NULL;
                 break;
-            }
-            else if (weighted_map[neighboor[i].y][neighboor[i].x] != -1) {
+            } else if (weighted_map[neighboor[i].y][neighboor[i].x] != -1) {
                 if (min == -1 || min > weighted_map[neighboor[i].y][neighboor[i].x]){
                     min = weighted_map[neighboor[i].y][neighboor[i].x];
-                    memcpy(&mint, &(neighboor[i]), sizeof(tuple_int));
+                    memcpy(retour[cpt - 1], copy_tuple_int(neighboor[i]), sizeof(tuple_int));
+                    memcpy(current_pos, &(neighboor[i]), sizeof(tuple_int));
                 }     
             }
         }
-        
-        push(path, (void *) (&mint));
-        if (hasFinished) {
-            break;
-        }
     }       
 
-    fprintf(stderr, "SIZE file: %d\n", path->size);
-    retour = malloc(sizeof(tuple_int *) * path->size);
-    *path_size = path->size;
-    for (int i = path->size-1; i >= 0; i--) {
-        retour[i] = malloc(sizeof(tuple_int));
-        memcpy(retour[i], pop(path), sizeof(tuple_int));
-    }
-
-    destroy_stack(path);
+    free(current_pos);
+    *path_size = cpt;
     return retour;
 }
 
@@ -234,7 +218,5 @@ tuple_int ** find_end(map_t map, int * size) {
         }
     }
 
-
     return retour;
-
 }

@@ -61,5 +61,7 @@ int main() {
         post_actions(cars);
     }
 
+
+    //TODO free plein de truc 
     return EXIT_SUCCESS;
 }
