@@ -66,3 +66,15 @@ void set_acceleration(struct car_t *player_car, int acc_x, int acc_y) {
     player_car->acc->x = acc_x;
     player_car->acc->y = acc_y;
 }
+
+tuple_int get_acc_to_reach(struct car_t *car, tuple_int B)
+{
+    tuple_int acc;
+
+    int t = 1;
+
+    acc.x = 2*(B.x-car->pos->x-car->spe->x*t)/(t*t) - car->acc->x;
+    acc.y = 2*(B.y-car->pos->y-car->spe->y*t)/(t*t) - car->acc->y;
+
+    return acc;
+}
