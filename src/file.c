@@ -14,6 +14,7 @@ stack* create_stack() {
     s = malloc(sizeof(stack));
     s->head = 0;
     s->tail = 0;
+    s->size = 0;
 
     return s;
 }
@@ -25,7 +26,7 @@ stack* create_stack() {
  * @return int 
  */
 int is_stack_empty(stack *s) {
-    return s->head == NULL;
+    return s->size == 0;
 }
 
 /**
@@ -46,6 +47,7 @@ void push(stack *s, void * a){
         s->tail->next = c;
     }
     s->tail = c;
+    s->size ++;
 }
 
 /**
@@ -55,14 +57,16 @@ void push(stack *s, void * a){
  * @return element 
  */
 void * pop(stack *s) {
-    cell *temp = s->head;
-    void * v; 
-    if (temp == NULL) {
+    if (is_stack_empty(s)) {
         return NULL;
     } 
+
+    cell *temp = s->head;
+    void * v; 
     
     v = temp->x;
     s->head = (cell *) (s->head->next);
+    s->size --;
     free(temp);
 
     return v;

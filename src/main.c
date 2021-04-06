@@ -4,12 +4,14 @@
 #include "utils.h"
 
 int main() {
-    int width, height;
+    int width, height, size, opti_size, i;
     int round = 0;
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
     FILE * logs;
 
+    tuple_int ** endpos;
+    tuple_int ** opti;
     car_t cars[3];
     map_t map;
 
@@ -22,6 +24,7 @@ int main() {
     init_car(cars + 2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
     init_map(&map, height, width);
+    fprintf(stderr, "%d %d\n", height, width);
 
     RACE_START(stderr)
 
@@ -41,7 +44,14 @@ int main() {
             fflush(logs);
             fclose(logs);
 
-            /*print_map_path(&map, opti, stderr); */
+            endpos = find_end(map, &size);
+            opti = find_path(parsed_map, &map, &opti_size, *(cars[0].pos), *(endpos[0]));
+
+            for (i = 0; i < opti_size; i++){
+                fprintf(stderr, "%d %d\n", opti[i]->x, opti[i]->y);
+            }
+
+            print_map_path(&map, opti, opti_size, stderr);
         }
         
         /* Gas consumption cannot be accurate here. */

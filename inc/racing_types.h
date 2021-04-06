@@ -14,6 +14,11 @@
 #define BOOSTS_AT_START             5
 #define ACTION_LENGTH               100
 
+#define END_CHAR                    '='
+#define WALL_CHAR                   '.'
+#define SAND_CHAR                   '~'
+#define ROAD_CHAR                   '#'
+
 /* =================== Macro ===================*/
 
 #define RACE_START(file)                fflush(file);\

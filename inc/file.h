@@ -9,6 +9,7 @@ typedef struct cell {
 typedef struct stack {
     cell* head;
     cell* tail;
+    int size;
 }stack;
 
 stack* create_stack();
