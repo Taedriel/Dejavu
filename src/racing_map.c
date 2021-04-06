@@ -110,6 +110,30 @@ void get_valid_neighnoor(int width, int height, tuple_int startpos, tuple_int *n
             neighboor[3].y = startpos.y-1;
         }
     } 
+    if ((startpos.y - 1) >= 0 && (startpos.x - 1) >= 0) {
+        if (startpos.x >= 0 && startpos.x < width) {
+            neighboor[4].x = startpos.x-1;
+            neighboor[4].y = startpos.y-1;
+        }
+    } 
+    if ((startpos.y - 1) >= 0 && (startpos.x + 1) < width) {
+        if (startpos.x >= 0 && startpos.x < width) {
+            neighboor[5].x = startpos.x+1;
+            neighboor[5].y = startpos.y-1;
+        }
+    } 
+    if ((startpos.y + 1) < height && (startpos.x + 1) < width) {
+        if (startpos.x >= 0 && startpos.x < width) {
+            neighboor[6].x = startpos.x+1;
+            neighboor[6].y = startpos.y+1;
+        }
+    } 
+    if ((startpos.y + 1) < height && (startpos.x - 1) >= 0) {
+        if (startpos.x >= 0 && startpos.x < width) {
+            neighboor[7].x = startpos.x-1;
+            neighboor[7].y = startpos.y+1;
+        }
+    } 
 }
 
 int **parse_map(map_t * map, tuple_int startpos) {
@@ -120,7 +144,7 @@ int **parse_map(map_t * map, tuple_int startpos) {
     int i, cpt = 0;
 
     tuple_int * temp;
-    tuple_int neighboor[4];
+    tuple_int neighboor[8];
 
     for (i = 0; i < map->height; i++) {
         djikstra[i] = malloc(sizeof(int) * map->width);
@@ -135,7 +159,7 @@ int **parse_map(map_t * map, tuple_int startpos) {
 
     djikstra[current_pos.y][current_pos.x] = 0;
     get_valid_neighnoor(map->width, map->height, current_pos, neighboor);
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 8; i++) {
         if (map->array[neighboor[i].y][neighboor[i].x] != '.') {
             djikstra[neighboor[i].y][neighboor[i].x] = 1;
             temp = malloc(sizeof(tuple_int));
@@ -149,7 +173,7 @@ int **parse_map(map_t * map, tuple_int startpos) {
         cpt = djikstra[current_pos.y][current_pos.x];
 
         get_valid_neighnoor(map->width, map->height, current_pos, neighboor);
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 8; i++) {
             if (map->array[neighboor[i].y][neighboor[i].x] != WALL_CHAR) {
                 if (djikstra[neighboor[i].y][neighboor[i].x] > cpt + 1 || djikstra[neighboor[i].y][neighboor[i].x] == -1) {
                     djikstra[neighboor[i].y][neighboor[i].x] = cpt + 1;
@@ -171,7 +195,7 @@ tuple_int ** find_path(int ** weighted_map, map_t * map, int * path_size, tuple_
     int i, min, cpt = 0;
     tuple_int ** retour = malloc(sizeof(tuple_int *) * 1024); //TODO free
     
-    tuple_int neighboor[4]; 
+    tuple_int neighboor[8]; 
     tuple_int * current_pos = copy_tuple_int(end);
 
     while (current_pos != NULL) {
@@ -179,7 +203,7 @@ tuple_int ** find_path(int ** weighted_map, map_t * map, int * path_size, tuple_
         retour[cpt++] = malloc(sizeof(tuple_int));
 
         get_valid_neighnoor(map->width, map->height, *current_pos, neighboor);
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < 8; i++) {
             if (weighted_map[neighboor[i].y][neighboor[i].x] == 0){
                 memcpy(retour[cpt - 1], copy_tuple_int(neighboor[i]), sizeof(tuple_int));
                 current_pos = NULL;

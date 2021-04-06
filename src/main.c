@@ -4,7 +4,7 @@
 #include "utils.h"
 
 int main() {
-    int width, height, size, opti_size, i;
+    int width, height, size, opti_size, i, min, min_ind;
     int round = 0;
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
@@ -38,14 +38,21 @@ int main() {
         read_positions(cars);
 
         if (round == 1) {
-            int **parsed_map = parse_map(&map, *(cars[0].pos));
+            int **djikstra = parse_map(&map, *(cars[0].pos));
 
-            print_weighted_map(parsed_map, map.width, map.height, logs);
+            print_weighted_map(djikstra, map.width, map.height, logs);
             fflush(logs);
             fclose(logs);
 
             endpos = find_end(map, &size);
-            opti = find_path(parsed_map, &map, &opti_size, *(cars[0].pos), *(endpos[0]));
+            min = -1;
+            for (i = 0; i < size; i++){
+                if (min == -1 || min > djikstra[endpos[i]->y][endpos[i]->x]){
+                    min = djikstra[endpos[i]->y][endpos[i]->x];
+                    min_ind = i;
+                }
+            }
+            opti = find_path(djikstra, &map, &opti_size, *(cars[0].pos), *(endpos[min_ind]));
 
             for (i = 0; i < opti_size; i++){
                 fprintf(stderr, "%d %d\n", opti[i]->x, opti[i]->y);
