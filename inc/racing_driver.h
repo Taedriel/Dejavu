@@ -12,4 +12,6 @@ void consum_gas(struct car_t *player_car, int inSand);
 
 void set_acceleration(struct car_t *player_car, int acc_x, int acc_y);
 
+tuple_int get_acc_to_reach(struct car_t* car, tuple_int B);
+
 #endif
