@@ -8,10 +8,11 @@
  */
 int post_actions(car_t *player_car) {
     char action[ACTION_LENGTH];
-    int ax = (player_car->acc->x == 0) ? 0 : player_car->acc->x / abs(player_car->acc->x);
+    /*int ax = (player_car->acc->x == 0) ? 0 : player_car->acc->x / abs(player_car->acc->x);
     int ay = (player_car->acc->y == 0) ? 0 : player_car->acc->y / abs(player_car->acc->y);
 
-    sprintf(action, "%d %d", ax, ay);
+    sprintf(action, "%d %d", ax, ay);*/
+    sprintf(action, "%d %d", player_car->acc->x, player_car->acc->y);
     fprintf(stdout, "%s", action);
     fflush(stdout);
 

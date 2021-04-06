@@ -37,9 +37,10 @@ int main() {
         */
         read_positions(cars);
 
-        tuple_int point = {30,30};
+        tuple_int point = {26,5};
         tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
-        fprintf(stderr, "%d %d\n",TEST_AHHHH.x, TEST_AHHHH.y );
+        set_acceleration_on_tuple(cars, TEST_AHHHH);
+        print_car(cars, stderr);
 
         if (round == 1) {
             int **djikstra = parse_map(&map, *(cars[0].pos));

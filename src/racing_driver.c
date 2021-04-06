@@ -70,11 +70,22 @@ void set_acceleration(struct car_t *player_car, int acc_x, int acc_y) {
 tuple_int get_acc_to_reach(struct car_t *car, tuple_int B)
 {
     tuple_int acc;
+    double new_speed_norm;
 
-    int t = 1;
-
-    acc.x = 2*(B.x-car->pos->x-car->spe->x*t)/(t*t) - car->acc->x;
-    acc.y = 2*(B.y-car->pos->y-car->spe->y*t)/(t*t) - car->acc->y;
-
+    acc.x = 2*(B.x-car->pos->x-car->spe->x) - car->acc->x;
+    acc.y = 2*(B.y-car->pos->y-car->spe->y) - car->acc->y;
+    acc.x = (acc.x == 0) ? 0 : acc.x / abs(acc.x);
+    acc.y = (acc.y == 0) ? 0 : acc.y/abs(acc.y);
+    new_speed_norm = sqrt((acc.x + car->spe->x) * (acc.x + car->spe->x) + (acc.y + car->spe->y) * (acc.y + car->spe->y));
+    if (new_speed_norm > 5)
+    {
+        acc.x = 0;
+        acc.y = 0;
+    }
     return acc;
+}
+
+void set_acceleration_on_tuple(struct car_t *player_car, tuple_int acc)
+{
+    set_acceleration(player_car, acc.x, acc.y);
 }
