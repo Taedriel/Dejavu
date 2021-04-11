@@ -12,6 +12,7 @@ int main() {
 
     tuple_int ** endpos;
     tuple_int ** opti;
+    tuple_int dir;
     car_t cars[3];
     map_t map;
 
@@ -68,6 +69,9 @@ int main() {
         
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
+
+        dir = get_acc_to_reach(cars, *(opti[round]));
+        set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */
         post_actions(cars);
