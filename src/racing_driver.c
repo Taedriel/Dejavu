@@ -72,6 +72,8 @@ tuple_int get_acc_to_reach(struct car_t *car, tuple_int B)
     tuple_int acc;
     double new_speed_norm;
 
+    fprintf(stderr, "\npoint ou qu'il faut aller : %d %d\n", B.x, B.y);
+
     acc.x = 2*(B.x-car->pos->x-car->spe->x) - car->acc->x;
     acc.y = 2*(B.y-car->pos->y-car->spe->y) - car->acc->y;
     acc.x = (acc.x == 0) ? 0 : acc.x / abs(acc.x);
