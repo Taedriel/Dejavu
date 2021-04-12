@@ -60,17 +60,14 @@ int main() {
             }
             opti = find_path(djikstra, &map, &opti_size, *(cars[0].pos), *(endpos[min_ind]));
 
-            for (i = 0; i < opti_size; i++){
-                fprintf(stderr, "%d %d\n", opti[i]->x, opti[i]->y);
-            }
-
             print_map_path(&map, opti, opti_size, stderr);
         }
         
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
 
-        dir = get_acc_to_reach(cars, *(opti[round]));
+        fprintf(stderr, "%d %d\n", opti[opti_size - round - 1]->x, opti[opti_size - round - 1]->y);
+        dir = get_acc_to_reach(*cars, *(opti[opti_size - round - 1]));
         set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */

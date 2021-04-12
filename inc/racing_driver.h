@@ -16,4 +16,10 @@ tuple_int get_acc_to_reach(struct car_t *car, tuple_int B);
 
 void set_acceleration_on_tuple(struct car_t *player_car, tuple_int acc);
 
+tuple_int get_acc_to_reach_v2(struct car_t car, struct map_t map, tuple_int cible);
+
+int asservire_y(struct car_t car, int pos_y);
+
+int asservire_x(struct car_t car, int pos_x);
+
 #endif
