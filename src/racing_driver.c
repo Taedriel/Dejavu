@@ -133,7 +133,7 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int B) {
     tuple_int acc;
     acc.x = asservire_x(*car, B.x);
     acc.y = asservire_x(*car, B.y);
-#if 1
+
     double new_speed_norm;
     int x = 0;
     int y = 0;
@@ -161,6 +161,7 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int B) {
     }
 
 
+#if 0
     new_speed_norm = sqrt((acc.x + car->spe->x) * (acc.x + car->spe->x) +
                           (acc.y + car->spe->y) * (acc.y + car->spe->y));
     if (new_speed_norm > 5) {
