@@ -38,9 +38,9 @@ int main() {
     */
         read_positions(cars);
 
-        tuple_int point = {26, 5};
-        tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
-        set_acceleration_on_tuple(cars, TEST_AHHHH);
+        //tuple_int point = {26, 5};
+        //tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
+        //set_acceleration_on_tuple(cars, TEST_AHHHH);
         print_car(cars, stderr);
 
         if (round == 1) {
@@ -69,7 +69,7 @@ int main() {
 
         fprintf(stderr, "%d %d\n", opti[opti_size - round - 1]->x,
                 opti[opti_size - round - 1]->y);
-        dir = get_acc_to_reach(cars, *(opti[opti_size - 2 * round - 1]));
+        dir = get_acc_to_reach(cars, map, *(opti[opti_size - round - 1]));
         set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */
