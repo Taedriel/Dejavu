@@ -19,6 +19,11 @@
 #define SAND_CHAR                   '~'
 #define ROAD_CHAR                   '#'
 
+#define ERROR_ACC_ALL               -1
+#define ERROR_ACC_NO                0
+#define ERROR_ACC_Y                 1
+#define ERROR_ACC_X                 2
+
 /* =================== Macro ===================*/
 
 #define RACE_START(file)                fflush(file);\
