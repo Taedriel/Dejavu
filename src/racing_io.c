@@ -38,11 +38,11 @@ int read_positions(struct car_t *car_list) {
            &(car_list[1].pos->x), &(car_list[1].pos->y),
            &(car_list[2].pos->x), &(car_list[2].pos->y));
 
-    fprintf(stderr, "    Positions: Me(%d,%d)  A(%d,%d), B(%d,%d)\n",
+    /*fprintf(stderr, "    Positions: Me(%d,%d)  A(%d,%d), B(%d,%d)\n",
             car_list[0].pos->x, car_list[0].pos->y,
             car_list[1].pos->x, car_list[1].pos->y,
             car_list[2].pos->x, car_list[2].pos->y);
-    fflush(stderr);
+    fflush(stderr);*/
 
     return EXIT_SUCCESS;
 }

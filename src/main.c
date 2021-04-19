@@ -8,10 +8,10 @@ int main() {
     int round = 0;
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
-    FILE * logs;
+    FILE *logs;
 
-    tuple_int ** endpos;
-    tuple_int ** opti;
+    tuple_int **endpos;
+    tuple_int **opti;
     tuple_int dir;
     car_t cars[3];
     map_t map;
@@ -20,22 +20,22 @@ int main() {
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
 
-    init_car(cars, BOOSTS_AT_START, 1, 0, 0, 0, gas);
+    init_car(cars, BOOSTS_AT_START, 0, 0, 0, 0, gas);
     init_car(cars + 1, BOOSTS_AT_START, 0, 0, 0, 0, gas);
     init_car(cars + 2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
     init_map(&map, height, width);
-    fprintf(stderr, "%d %d\n", height, width);
+    // fprintf(stderr, "%d %d\n", height, width);
 
-    RACE_START(stderr)
+    // RACE_START(stderr)
 
     while (!feof(stdin)) {
         round++;
-        RACE_ROUND(round, stderr)
-
         /*
-        set_acceleration(cars, 1, 0);
-        */
+    RACE_ROUND(round, stderr)
+
+    set_acceleration(cars, 1, 0);
+    */
         read_positions(cars);
 
         /*
@@ -54,29 +54,30 @@ int main() {
 
             endpos = find_end(map, &size);
             min = -1;
-            for (i = 0; i < size; i++){
-                if (min == -1 || min > djikstra[endpos[i]->y][endpos[i]->x]){
+            for (i = 0; i < size; i++) {
+                if (min == -1 || min > djikstra[endpos[i]->y][endpos[i]->x]) {
                     min = djikstra[endpos[i]->y][endpos[i]->x];
                     min_ind = i;
                 }
             }
-            opti = find_path(djikstra, &map, &opti_size, *(cars[0].pos), *(endpos[min_ind]));
+            opti = find_path(djikstra, &map, &opti_size, *(cars[0].pos),
+                             *(endpos[min_ind]));
 
             print_map_path(&map, opti, opti_size, stderr);
         }
-        
+
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
 
-        fprintf(stderr, "%d %d\n", opti[opti_size - round - 2]->x, opti[opti_size - round - 2]->y);
-        dir = get_acc_to_reach(cars, *(opti[opti_size - round - 2]));
+        fprintf(stderr, "%d %d\n", opti[opti_size - round - 1]->x,
+                opti[opti_size - round - 1]->y);
+        dir = get_acc_to_reach(cars, map, *(opti[opti_size - round - 1]));
         set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */
         post_actions(cars);
     }
 
-
-    //TODO free plein de truc 
+    // TODO free plein de truc
     return EXIT_SUCCESS;
 }

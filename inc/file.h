@@ -1,33 +1,34 @@
 #ifndef FILE_H
 #define FILE_H
+#include <stdio.h>
 
 typedef struct cell {
-    void * x;
+    void* x;
     struct cell* next;
-}cell;
+} cell;
 
 typedef struct stack {
     cell* head;
     cell* tail;
     int size;
-}stack;
+} stack;
 
 stack* create_stack();
 
-int is_stack_empty(stack *s);
+int is_stack_empty(stack* s);
 
-void push(stack *s, void * a);
+void push(stack* s, void* a);
 
-void * pop(stack *s);
+void* pop(stack* s);
 
-void print_cell(cell* c, void (print_func)(void *, char *), FILE * file);
+void print_cell(cell* c, void(print_func)(void*, char*), FILE* file);
 
-void print_stack(stack s, void (print_func)(void *, char *), FILE * file);
+void print_stack(stack s, void(print_func)(void*, char*), FILE* file);
 
 void concat_stack(stack* s1, stack* s2);
 
-stack* copy_stack(stack * s);
+stack* copy_stack(stack* s);
 
-void destroy_stack(stack *s);
+void destroy_stack(stack* s);
 
 #endif
