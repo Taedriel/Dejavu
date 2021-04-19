@@ -1,5 +1,6 @@
 #include "racing_map.h"
 #include "file.h"
+#include "pile.h"
 #include "utils.h"
 
 #include <assert.h>
@@ -140,7 +141,7 @@ int **parse_map(map_t * map, tuple_int startpos) {
 
     int **djikstra = malloc(sizeof(int *) * map->height);
 
-    stack *s = create_stack();
+    queue *s = create_queue();
     int i, cpt = 0;
 
     tuple_int * temp;
@@ -164,12 +165,12 @@ int **parse_map(map_t * map, tuple_int startpos) {
             djikstra[neighboor[i].y][neighboor[i].x] = 1;
             temp = malloc(sizeof(tuple_int));
             memcpy(temp, &(neighboor[i]), sizeof(tuple_int));
-            push(s, (void *) temp);
+            add(s, (void *) temp);
         }
     }
 
-    while (!is_stack_empty(s)) {
-        current_pos = *((tuple_int *)(pop(s)));
+    while (!is_queue_empty(s)) {
+        current_pos = *((tuple_int *)(last(s)));
         cpt = djikstra[current_pos.y][current_pos.x];
 
         get_valid_neighnoor(map->width, map->height, current_pos, neighboor);
@@ -179,14 +180,14 @@ int **parse_map(map_t * map, tuple_int startpos) {
                     djikstra[neighboor[i].y][neighboor[i].x] = cpt + 1;
                     temp = malloc(sizeof(tuple_int));
                     memcpy(temp, &(neighboor[i]), sizeof(tuple_int));
-                    push(s, (void *)temp);
+                    add(s, (void *)temp);
                 }
             }
         }
     }
 
     free(temp);
-    destroy_stack(s);
+    destroy_queue(s);
     return djikstra;
 }
 
@@ -220,6 +221,7 @@ tuple_int ** find_path(int ** weighted_map, map_t * map, int * path_size, tuple_
 
     free(current_pos);
     *path_size = cpt;
+    retour = realloc(retour, sizeof(tuple_int) * cpt);
     return retour;
 }
 

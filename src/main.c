@@ -38,10 +38,12 @@ int main() {
         */
         read_positions(cars);
 
+        /*
         tuple_int point = {26,5};
         tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
         set_acceleration_on_tuple(cars, TEST_AHHHH);
         print_car(cars, stderr);
+        */
 
         if (round == 1) {
             int **djikstra = parse_map(&map, *(cars[0].pos));
@@ -66,8 +68,8 @@ int main() {
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
 
-        fprintf(stderr, "%d %d\n", opti[opti_size - round - 1]->x, opti[opti_size - round - 1]->y);
-        dir = get_acc_to_reach(*cars, *(opti[opti_size - round - 1]));
+        fprintf(stderr, "%d %d\n", opti[opti_size - round - 2]->x, opti[opti_size - round - 2]->y);
+        dir = get_acc_to_reach(cars, *(opti[opti_size - round - 2]));
         set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */
