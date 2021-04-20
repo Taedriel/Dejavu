@@ -1,41 +1,34 @@
 #ifndef PILE_H
 #define PILE_H
-
 #include <stdio.h>
-#include <stdlib.h>
 
-typedef struct queue_cell {
-    
-    void * x;
-    struct queue_cell* next;
-    struct queue_cell* prev;
-    
-}queue_cell;
+typedef struct cell {
+    void* x;
+    struct cell* next;
+} cell;
 
-typedef struct queue {
-    queue_cell* head;
-    queue_cell* tail;
+typedef struct stack {
+    cell* head;
+    cell* tail;
     int size;
-}queue;
+} stack;
 
-queue* create_queue();
+stack* create_stack();
 
-int is_queue_empty(queue *s);
+int is_stack_empty(stack* s);
 
-void add(queue * s, void * a);
+void push(stack* s, void* a);
 
-void * last(queue * s);
+void* pop(stack* s);
 
-void print_queue_cell(queue_cell * c, void (print_func)(void *, char *), FILE * file);
+void print_cell(cell* c, void(print_func)(void*, char*), FILE* file);
 
-void print_queue(queue * s, void (print_func)(void *, char *), FILE * file);
+void print_stack(stack s, void(print_func)(void*, char*), FILE* file);
 
-void concat_queue(queue * s1, queue * s2);
+void concat_stack(stack* s1, stack* s2);
 
-queue* copy_queue(queue * s);
+stack* copy_stack(stack* s);
 
-void destroy_queue(queue * s);
-
-void print_queue_int(int  c, char * buf);
+void destroy_stack(stack* s);
 
 #endif

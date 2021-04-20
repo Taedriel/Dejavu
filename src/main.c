@@ -1,6 +1,7 @@
 #include "racing_driver.h"
 #include "racing_io.h"
 #include "racing_map.h"
+#include "racing_algorithm.h"
 #include "utils.h"
 
 int main() {
