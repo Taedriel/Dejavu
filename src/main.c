@@ -1,21 +1,25 @@
+#include "racing_algorithm.h"
 #include "racing_driver.h"
 #include "racing_io.h"
 #include "racing_map.h"
-#include "racing_algorithm.h"
+#include "racing_weighted_map.h"
 #include "utils.h"
 
 int main() {
-    int width, height, size, opti_size, i, min, min_ind;
+    int width, height, size_end_pos, opti_size, i, min, min_ind;
     int round = 0;
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
     FILE *logs;
 
-    tuple_int **endpos;
-    tuple_int **opti;
-    tuple_int dir;
+    weighted_map_t *A_star;
     car_t cars[3];
     map_t map;
+
+    tuple_int ** opti;
+    tuple_int **endpos;
+    tuple_int dir;
+    
 
     logs = fopen("log.txt", "w+");
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
@@ -47,22 +51,23 @@ int main() {
         */
 
         if (round == 1) {
-            int **djikstra = parse_map(&map, *(cars[0].pos));
+            endpos = find_end(map, &size_end_pos);
 
-            print_weighted_map(djikstra, map.width, map.height, logs);
-            fflush(logs);
-            fclose(logs);
-
-            endpos = find_end(map, &size);
+            A_star = weight_map(&map, *(cars[0].pos), endpos, size_end_pos);
             min = -1;
-            for (i = 0; i < size; i++) {
-                if (min == -1 || min > djikstra[endpos[i]->y][endpos[i]->x]) {
-                    min = djikstra[endpos[i]->y][endpos[i]->x];
+            for (i = 0; i < size_end_pos; i++) {
+                if (min == -1 || min > A_star->heuristique[endpos[i]->y][endpos[i]->x]) {
+                    min = A_star->heuristique[endpos[i]->y][endpos[i]->x];
                     min_ind = i;
                 }
             }
-            opti = find_path(djikstra, &map, &opti_size, *(cars[0].pos),
-                             *(endpos[min_ind]));
+
+            print_weighted_map(A_star->heuristique, map.width, map.height, logs);
+            fflush(logs);
+            fclose(logs);
+
+            opti = (tuple_int **) (list_to_tab(find_path(A_star, &map, &opti_size, *(cars[0].pos),
+                             *(endpos[min_ind]))));
 
             print_map_path(&map, opti, opti_size, stderr);
         }

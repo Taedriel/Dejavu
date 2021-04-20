@@ -167,3 +167,17 @@ void destroy_list(list *s) {
     }
     free(s);
 }
+
+
+void ** list_to_tab (list *s) {
+    int i;
+    list_cell * temp;
+    void ** ret = malloc(sizeof(void *));
+    temp = s->head;
+    for (i = 0; i < s->size; i++) {
+        memcpy(ret[i], temp->x, sizeof(void *));
+        temp = temp->next;
+    }
+
+    return ret;
+}

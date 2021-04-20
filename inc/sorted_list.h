@@ -24,7 +24,7 @@ void add_sorted_list(sorted_list *s, void *a, int score);
 
 void remove_sorted_list(sorted_list *s, int indice);
 
-void *get_sorted_list(sorted_list *s, int i);
+void *get_sorted_list(sorted_list *s, int i, float * score);
 
 void print_sorted_list_int(int content, char *buf);
 

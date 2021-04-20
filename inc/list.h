@@ -39,4 +39,6 @@ list *copy_list(list *s);
 
 void destroy_list(list *s);
 
+void ** list_to_tab (list *s);
+
 #endif

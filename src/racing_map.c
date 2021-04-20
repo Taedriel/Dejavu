@@ -1,7 +1,5 @@
 #include "racing_map.h"
 
-#include <assert.h>
-
 /**
  * @brief init the map struct given the first input of a race
  *        ! Must be used ! => else buffer pb  
@@ -66,11 +64,11 @@ void print_map_path(map_t *map, tuple_int **path, int path_size, FILE *file) {
     }
 }
 
-void print_weighted_map(int **map, int width, int height, FILE *file) {
+void print_weighted_map(float ** map, int width, int height, FILE *file) {
     int i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
-            fprintf(file, "%d ", map[i][j]);
+            fprintf(file, "%2.1f", map[i][j]);
         }
         fprintf(file, "\n");
     }

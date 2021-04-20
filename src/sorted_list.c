@@ -98,7 +98,7 @@ void remove_sorted_list(sorted_list *s, int indice) {
  * @param s 
  * @return element 
  */
-void *get_sorted_list(sorted_list *s, int i) {
+void *get_sorted_list(sorted_list *s, int i, float * cout) {
     sorted_list_cell *temp;
     int cpt; 
 
@@ -117,6 +117,7 @@ void *get_sorted_list(sorted_list *s, int i) {
         temp = temp->next;
     }
 
+    *cout = temp->score;
     return temp->x;
 }
 void print_sorted_list_int(int content, char *buf) {

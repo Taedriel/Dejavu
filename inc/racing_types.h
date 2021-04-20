@@ -74,7 +74,7 @@ typedef struct map_t
 typedef struct weighted_map_t
 {
     float ** heuristique;
-    float ** dist_from_end;
+    float ** cout;
 
 } weighted_map_t;
 
