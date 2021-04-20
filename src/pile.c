@@ -132,7 +132,7 @@ stack *copy_stack(stack *s) {
     }
 
     while (p != NULL) {
-        push(copy, p->x);
+        push_stack(copy, p->x);
         p = (cell *)(p->next);
     }
     return copy;
@@ -145,7 +145,7 @@ stack *copy_stack(stack *s) {
  */
 void destroy_stack(stack *s) {
     while (s->head != NULL) {
-        pop(s);
+        pop_stack(s);
     }
     free(s);
 }

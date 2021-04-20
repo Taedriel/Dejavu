@@ -5,7 +5,8 @@
 #include "racing_weighted_map.h"
 #include "utils.h"
 
-int main() {
+int main () {
+
     int width, height, size_end_pos, opti_size, i, min, min_ind;
     int round = 0;
     int gas = 0;
@@ -16,10 +17,9 @@ int main() {
     car_t cars[3];
     map_t map;
 
-    tuple_int ** opti;
+    tuple_int **opti;
     tuple_int **endpos;
     tuple_int dir;
-    
 
     logs = fopen("log.txt", "w+");
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
@@ -37,10 +37,9 @@ int main() {
     while (!feof(stdin)) {
         round++;
         /*
-    RACE_ROUND(round, stderr)
-
-    set_acceleration(cars, 1, 0);
-    */
+        RACE_ROUND(round, stderr)
+        set_acceleration(cars, 1, 0);
+        */
         read_positions(cars);
 
         /*
@@ -66,8 +65,8 @@ int main() {
             fflush(logs);
             fclose(logs);
 
-            opti = (tuple_int **) (list_to_tab(find_path(A_star, &map, &opti_size, *(cars[0].pos),
-                             *(endpos[min_ind]))));
+            opti = (tuple_int **)(list_to_tab( find_path(A_star, &map, &opti_size, *(cars[0].pos),
+                                                        *(endpos[min_ind]))));
 
             print_map_path(&map, opti, opti_size, stderr);
         }

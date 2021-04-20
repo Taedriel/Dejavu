@@ -36,7 +36,6 @@ int is_list_empty(list *s) {
  * @param a 
  */
 void add_list(list *s, void *a) {
-    list_cell *temp;
     list_cell *c = malloc(sizeof(list_cell));
 
     c->x = a;

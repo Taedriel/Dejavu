@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "utils.h"
 #include "file.h"
 #include "pile.h"
 #include "list.h"

@@ -1,7 +1,8 @@
 #include <assert.h>
 
-#include "racing_types.h"
 #include "racing_map.h"
+#include "racing_types.h"
+#include "utils.h"
 
 /**
  * @brief return the 4 (or less) neighnoor that are crossable of a case of the map
@@ -9,7 +10,7 @@
  * @param map 
  * @param startpos 
  */
-void get_valid_neighnoor(int width, int height, tuple_int startpos, tuple_int *neighboor) {
+void get_valid_neighbor(int width, int height, tuple_int startpos, tuple_int *neighboor) {
     if ((startpos.x + 1) < width) {
         if (startpos.y >= 0 && startpos.y < height) {
             neighboor[0].x = startpos.x + 1;
@@ -60,13 +61,9 @@ void get_valid_neighnoor(int width, int height, tuple_int startpos, tuple_int *n
     }
 }
 
-
-float heuristique(weighted_map_t weighted_map, tuple_int current_pos){
-
+float heuristique(weighted_map_t weighted_map, tuple_int current_pos) {
     return weighted_map.heuristique[current_pos.y][current_pos.x];
-
 }
-
 
 /**
  * @brief perform A*
@@ -78,46 +75,46 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos){
  * @param end 
  * @return tuple_int** 
  */
-list * find_path(weighted_map_t weighted_map, map_t *map, int *path_size, tuple_int start, tuple_int end) {
-    int i, j, k, min, cpt = 0;
+list *find_path(weighted_map_t *weighted_map, map_t *map, int *path_size, tuple_int start, tuple_int end) {
+    int i;
     int exist_in_open_wlc = 0, exist_in_closed = 0;
-    float current_weight = 0.,weight = 0., score = 0.;
+    float current_weight = 0., weight = 0., score = 0.;
 
-    sorted_list * openList = create_sorted_list();
-    sorted_list_cell * temp;
-    list * closedList = create_list();
-    
+    sorted_list *openList = create_sorted_list();
+    sorted_list_cell *temp_sorted;
+    list_cell *temp;
+    list *closedList = create_list();
+
     tuple_int *u = copy_tuple_int(end);
-    tuple_int *v;
-    tuple_int * temptuple;
+    tuple_int *v = malloc(sizeof(tuple_int));
+    tuple_int *temptuple = malloc(sizeof(tuple_int));
     tuple_int neighboor[8];
 
-    add_sorted_list(openList, (void *) (&start), 0);
+    add_sorted_list(openList, (void *)(&start), 0);
 
     while (!is_sorted_list_empty(openList)) {
-
-        *u = *((tuple_int *) get_sorted_list(openList, 0, &current_weight));
-        if (u->x == end.x && u->y == end.y){
+        *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
+        if (u->x == end.x && u->y == end.y) {
             return closedList;
         }
 
-        get_valid_neighnoor(map->width, map->height, *u, neighboor);
+        get_valid_neighbor(map->width, map->height, *u, neighboor);
         for (i = 0; i < 8; i++) {
             v->x = neighboor[i].x;
             v->y = neighboor[i].y;
 
             if (map->array[v->y][v->x] != -1) {
                 //not a wall
-                temp = openList->head;
-                while(temp->next != NULL){
-                    *temptuple = *((tuple_int *) temp->x);
-                    if (temptuple->x == neighboor[i].x && temptuple->y == neighboor[i].y){
-                        if (weighted_map.cout[temptuple->y][temptuple->x] != -1 && weighted_map.cout[temptuple->y][temptuple->x] < current_weight){
+                temp_sorted = openList->head;
+                while (temp_sorted->next != NULL) {
+                    *temptuple = *((tuple_int *)temp_sorted->x);
+                    if (temptuple->x == neighboor[i].x && temptuple->y == neighboor[i].y) {
+                        if (weighted_map->cout[temptuple->y][temptuple->x] != -1 && weighted_map->cout[temptuple->y][temptuple->x] < current_weight) {
                             exist_in_open_wlc = 1;
                             break;
                         }
                     }
-                    temp = temp->next;
+                    temp_sorted = temp_sorted->next;
                 }
 
                 temp = closedList->head;
@@ -127,10 +124,10 @@ list * find_path(weighted_map_t weighted_map, map_t *map, int *path_size, tuple_
                         exist_in_closed = 1;
                         break;
                     }
+                    temp = temp->next;
                 }
 
                 if (!(exist_in_open_wlc || exist_in_closed)) {
-
                     switch (map->array[neighboor[i].y][neighboor[i].x]) {
                         case SAND_CHAR:
                             weight = current_weight + 4;
@@ -147,16 +144,17 @@ list * find_path(weighted_map_t weighted_map, map_t *map, int *path_size, tuple_
                             break;
                     }
 
-                    weighted_map.cout[v->y][v->x] = weight;
-                    score = weighted_map.cout[v->y][v->x] + heuristique(weighted_map, *v);
+                    weighted_map->cout[v->y][v->x] = weight;
+                    score = weighted_map->cout[v->y][v->x] + heuristique(*weighted_map, *v);
                     add_sorted_list(openList, (void *)v, score);
                 }
             }
 
-            add_list(closedList, (void *) v);
+            add_list(closedList, (void *)v);
         }
     }
 
+    free(temptuple);
     free(u);
     free(v);
 
