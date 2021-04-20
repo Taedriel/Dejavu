@@ -2,7 +2,6 @@
 
 #include "racing_types.h"
 #include "racing_map.h"
-#include "utils.h"
 
 /**
  * @brief return the 4 (or less) neighnoor that are crossable of a case of the map
@@ -72,26 +71,27 @@ void get_valid_neighnoor(int width, int height, tuple_int startpos, tuple_int *n
  * @param end 
  * @return tuple_int** 
  */
-tuple_int **find_path(weighted_map_t weighted_map, map_t *map, int *path_size, tuple_int start, tuple_int end) {
+queue * find_path(weighted_map_t weighted_map, map_t *map, int *path_size, tuple_int start, tuple_int end) {
     int i, min, cpt = 0;
 
-    sor
-    tuple_int **retour = malloc(sizeof(tuple_int *) * MAX_PATH_SIZE);  //TODO free
+    sorted_list * openList = create_sorted_list();
+    queue * closedList = create_queue();
+    
     tuple_int *current_pos = copy_tuple_int(end);
     tuple_int neighboor[8];
 
-    while (current_pos != NULL) {
-        min = -1;
-        retour[cpt++] = malloc(sizeof(tuple_int));
+    add_sorted_list(openList, (void *) (&start), 0);
+
+    while (!is_sorted_list_empty(openList)) {
+
+        *current_pos = *((tuple_int *) get_sorted_list(openList, 0));
+        if (current_pos->x == end.x && current_pos->y == end.y){
+            return closedList;
+        }
 
         get_valid_neighnoor(map->width, map->height, *current_pos, neighboor);
-        sort_neighboor(neighboor);
         for (i = 0; i < 8; i++) {
-            if (weighted_map[neighboor[i].y][neighboor[i].x] == 0) {
-                memcpy(retour[cpt - 1], copy_tuple_int(neighboor[i]), sizeof(tuple_int));
-                current_pos = NULL;
-                break;
-            } else if (weighted_map[neighboor[i].y][neighboor[i].x] != -1) {
+            if (weighted_map[neighboor[i].y][neighboor[i].x] != -1) {
                 //not a wall
                 if (min == -1 || min > weighted_map[neighboor[i].y][neighboor[i].x]) {
                     min = weighted_map[neighboor[i].y][neighboor[i].x];

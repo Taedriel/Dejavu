@@ -21,9 +21,9 @@ queue* create_queue();
 
 int is_queue_empty(queue* s);
 
-void add(queue* s, void* a);
+void add_queue(queue* s, void* a);
 
-void* last(queue* s);
+void* last_queue(queue* s);
 
 void print_queue_cell(queue_cell* c, void(print_func)(void*, char*), FILE* file);
 

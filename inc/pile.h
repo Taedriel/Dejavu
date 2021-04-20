@@ -17,9 +17,9 @@ stack* create_stack();
 
 int is_stack_empty(stack* s);
 
-void push(stack* s, void* a);
+void push_stack(stack* s, void* a);
 
-void* pop(stack* s);
+void* pop_stack(stack* s);
 
 void print_cell(cell* c, void(print_func)(void*, char*), FILE* file);
 

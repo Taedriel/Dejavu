@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "file.h"
 #include "pile.h"
+#include "list.h"
 #include "sorted_list.h"
 
 /* =================== Constant ===================*/
@@ -72,7 +73,7 @@ typedef struct map_t
 
 typedef struct weighted_map_t
 {
-    float ** dist_from_start;
+    float ** heuristique;
     float ** dist_from_end;
 
 } weighted_map_t;

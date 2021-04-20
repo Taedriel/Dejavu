@@ -35,7 +35,7 @@ int is_stack_empty(stack *s) { return s->size == 0; }
  * @param s
  * @param a
  */
-void push(stack *s, void *a) {
+void push_stack(stack *s, void *a) {
     cell *c;
     c = malloc(sizeof(cell));
     c->x = a;
@@ -57,7 +57,7 @@ void push(stack *s, void *a) {
  * @param s
  * @return element
  */
-void *pop(stack *s) {
+void *pop_stack(stack *s) {
     if (is_stack_empty(s)) {
         return NULL;
     }

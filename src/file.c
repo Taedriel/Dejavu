@@ -35,7 +35,7 @@ int is_queue_empty(queue *s) {
  * @param s 
  * @param a 
  */
-void add(queue *s, void *a) {
+void add_queue(queue *s, void *a) {
     queue_cell *c = malloc(sizeof(queue_cell));
     c->x = a;
     c->next = 0;
@@ -58,7 +58,7 @@ void add(queue *s, void *a) {
  * @param s 
  * @return element 
  */
-void *last(queue *s) {
+void *last_queue(queue *s) {
     queue_cell *temp;
     void *v;
 
@@ -143,7 +143,7 @@ queue *copy_queue(queue *s) {
     }
 
     while (p != NULL) {
-        add(copy, p->x);
+        add_queue(copy, p->x);
         p = (queue_cell *)(p->prev);
     }
     return copy;
@@ -156,7 +156,7 @@ queue *copy_queue(queue *s) {
  */
 void destroy_queue(queue *s) {
     while (s->head != NULL) {
-        last(s);
+        last_queue(s);
     }
     free(s);
 }

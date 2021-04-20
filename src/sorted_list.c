@@ -35,7 +35,7 @@ int is_sorted_list_empty(sorted_list *s) {
  * @param s 
  * @param a 
  */
-void add(sorted_list *s, void *a, int score) {
+void add_sorted_list(sorted_list *s, void *a, int score) {
     sorted_list_cell * temp;
     sorted_list_cell * c = malloc(sizeof(sorted_list_cell));
 
@@ -72,7 +72,7 @@ void add(sorted_list *s, void *a, int score) {
  * @param s 
  * @param indice 
  */
-void remove (sorted_list *s, int indice) {
+void remove_sorted_list(sorted_list *s, int indice) {
     sorted_list_cell * temp;
     int cpt;
 
@@ -98,11 +98,11 @@ void remove (sorted_list *s, int indice) {
  * @param s 
  * @return element 
  */
-void *get(sorted_list *s, int i) {
+void *get_sorted_list(sorted_list *s, int i) {
     sorted_list_cell *temp;
     int cpt; 
 
-    if (is_queue_empty(s)) {
+    if (is_sorted_list_empty(s)) {
         return NULL;
     }
 
@@ -130,16 +130,16 @@ void print_sorted_list_cell(sorted_list_cell *c, void(print_func)(void *, char *
     free(rep);
 }
 
-void print_queue(sorted_list *s, void(print_func)(void *, char *), FILE *file) {
+void print_sorted_list(sorted_list *s, void(print_func)(void *, char *), FILE *file) {
     sorted_list_cell *p = s->head;
-    if (is_queue_empty(s)) {
+    if (is_sorted_list_empty(s)) {
         fprintf(file, "Queue is Empty");
         return;
     }
 
     fprintf(file, "[");
     while (p != NULL) {
-        print_queue_cell(p, print_func, file);
+        print_sorted_list_cell(p, print_func, file);
         p = (sorted_list_cell *)(p->next);
     }
     fprintf(file, "] = %d\n", s->size);
@@ -157,12 +157,12 @@ sorted_list *copy_sorted_list(sorted_list *s) {
 
     copy = malloc(sizeof(sorted_list));
 
-    if (is_queue_empty(s)) {
+    if (is_sorted_list_empty(s)) {
         return copy;
     }
 
     while (p != NULL) {
-        add(copy, p->x, p->score);
+        add_sorted_list(copy, p->x, p->score);
         p = (sorted_list_cell *)(p->prev);
     }
     return copy;
@@ -175,7 +175,7 @@ sorted_list *copy_sorted_list(sorted_list *s) {
  */
 void destroy_sorted_list(sorted_list *s) {
     while (s->size != 0) {
-        remove(s, 0);
+        remove_sorted_list(s, 0);
     }
     free(s);
 }
