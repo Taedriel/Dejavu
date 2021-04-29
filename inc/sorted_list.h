@@ -20,7 +20,7 @@ sorted_list *create_sorted_list();
 
 int is_sorted_list_empty(sorted_list *s);
 
-void add_sorted_list(sorted_list *s, void *a, int score);
+void add_sorted_list(sorted_list *s, void *a, float score);
 
 void remove_sorted_list(sorted_list *s, int indice);
 

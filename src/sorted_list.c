@@ -35,31 +35,49 @@ int is_sorted_list_empty(sorted_list *s) {
  * @param s 
  * @param a 
  */
-void add_sorted_list(sorted_list *s, void *a, int score) {
+void add_sorted_list(sorted_list *s, void *a, float score) {
     sorted_list_cell * temp;
     sorted_list_cell * c = malloc(sizeof(sorted_list_cell));
 
     c->x = a;
     c->next = 0;
     c->prev = 0;
-
-
+    c->score = score;
 
     if (is_sorted_list_empty(s)) {
         s->tail = c;
         s->head = c;
     } else {
         temp = s->head;
-        while (score > temp->score && temp->next != NULL) {
+        /*
+        fprintf(stderr, "%p --> %p\n",(void *) s->head, (void *) s->tail);
+        */
+        while (temp != s->tail) {
+            /*
+            fprintf(stderr, "!= %p\n", (void *) temp);
+            */
+            if (score < temp->score){
+                break;
+            }
+
             temp = temp->next;
         }
+        /*
+        fprintf(stderr, "end == %p (%f)\n", (void *) temp, score);
+        */
 
         if (temp == s->tail && score > temp->score) {
             temp->next = c;
             c->prev = temp;
-        }else {
+            s->tail = c;
+        } else if (temp == s->head && score < temp->score){
+            temp->prev = c;
             c->next = temp;
+            s->head = c;
+        } else {
+            temp->prev->next = c;
             c->prev = temp->prev;
+            c->next = temp;
             temp->prev = c;
         }
     }
@@ -86,7 +104,14 @@ void remove_sorted_list(sorted_list *s, int indice) {
             cpt ++;
             temp = temp->next;
         }
-        temp->prev->next = temp->next;
+        if (temp == s->head){
+            s->head = temp->next;
+        } else if (temp == s->tail) {
+            temp->prev->next = temp->next;
+        } else {
+            s->tail = temp->prev;
+        }
+        s->size--;
         free(temp);
     }
 }
@@ -127,7 +152,7 @@ void print_sorted_list_int(int content, char *buf) {
 void print_sorted_list_cell(sorted_list_cell *c, void(print_func)(void *, char *), FILE *file) {
     char *rep = malloc(sizeof(char) * 1024);
     print_func(c->x, rep);
-    fprintf(file, "| %s |", rep);
+    fprintf(file, "| %s :%f|", rep, c->score);
     free(rep);
 }
 

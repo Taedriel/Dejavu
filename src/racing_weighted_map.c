@@ -3,6 +3,7 @@
 #include "racing_algorithm.h"
 #include "racing_map.h"
 #include "racing_types.h"
+#include "utils.h"
 
 /**
  * @brief init a weigthed_map structure that contain two float tab. One representing
@@ -42,7 +43,7 @@ weighted_map_t *init_weighted_map(int height, int width) {
  * @param startpos 
  * @return weighted_map_t* 
  */
-weighted_map_t *weight_map(map_t *map, tuple_int startpos, tuple_int **endpos, int size_list_endpos) {
+weighted_map_t *pre_weight_map(map_t *map, tuple_int startpos, tuple_int **endpos, int size_list_endpos) {
     int i, current_value = 0;
     float weight;
 
@@ -79,10 +80,128 @@ weighted_map_t *weight_map(map_t *map, tuple_int startpos, tuple_int **endpos, i
             }
         }
 
-        free(current_pos);
     } while (!is_queue_empty(s));
 
+    free(current_pos);
     free(temp);
     destroy_queue(s);
     return ret;
+}
+
+/**
+ * @brief perform A*
+ * 
+ * @param weighted_map 
+ * @param map 
+ * @param path_size 
+ * @param start 
+ * @param end 
+ * @return tuple_int** 
+ */
+void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int end) {
+    int i, tempx, tempy;
+    int exist_in_open_wlc = 0, exist_in_closed = 0;
+    float current_weight = 0., weight = 0., score = 0.;
+
+    sorted_list *openList = create_sorted_list();
+    sorted_list_cell *temp_sorted;
+    list *closedList = create_list();
+    list_cell *temp;
+
+    tuple_int *u = malloc(sizeof(tuple_int));
+    tuple_int *v = malloc(sizeof(tuple_int));
+    tuple_int *temptuple;
+    tuple_int neighboor[8];
+
+    add_sorted_list(openList, (void *)(&start), 0);
+
+    while (!is_sorted_list_empty(openList)) {
+        *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
+        remove_sorted_list(openList, 0);
+        if (u->x == end.x && u->y == end.y) {
+            return;
+        }
+
+        get_valid_neighbor(map->width, map->height, *u, neighboor);
+        for (i = 0; i < 8; i++) {
+            v = malloc(sizeof(tuple_int));
+            v->x = neighboor[i].x;
+            v->y = neighboor[i].y;
+            fprintf(stderr, "Neighbor: %d %d ...\n", v->x, v->y);
+
+            if (map->array[v->y][v->x] != -1) {
+                //not a wall
+                exist_in_closed = 0;
+                exist_in_open_wlc = 0;
+
+                if (!is_sorted_list_empty(openList)) {
+                    //print_sorted_list(openList, print_tuple, stderr);
+                    temp_sorted = openList->head;
+                    while (temp_sorted != NULL) {
+                        tempx = ((tuple_int *)(temp_sorted->x))->x;
+                        tempy = ((tuple_int *)(temp_sorted->x))->y;
+                        if (tempx == v->x && tempy == v->y) {
+                            if (weighted_map->cout[tempy][tempx] != -1 && weighted_map->cout[tempy][tempx] < current_weight) {
+                                exist_in_open_wlc = 1;
+                                break;
+                            }
+                        }
+                        temp_sorted = temp_sorted->next;
+                    }
+                }
+
+                if (!is_list_empty(closedList)) {
+                    //print_list(closedList, print_tuple, stderr);
+                    temp = closedList->head;
+                    while (temp != NULL) {
+                        tempx = ((tuple_int *)(temp->x))->x;
+                        tempy = ((tuple_int *)(temp->x))->y;
+                        if (tempx == v->x && tempy == v->y) {
+                            //fprintf(stderr, "Found tuple in closedList: %d (%d %d)\n", closedList->size, tempx, tempy);
+                            exist_in_closed = 1;
+                            break;
+                        }
+                        temp = temp->next;
+                    }
+                }
+
+                if (!(exist_in_open_wlc || exist_in_closed)) {
+                    //fprintf(stderr, "Ajout de nouvelle case\n");
+                    switch (map->array[neighboor[i].y][neighboor[i].x]) {
+                        case SAND_CHAR:
+                            weight = 4;
+                            break;
+
+                        case END_CHAR:
+                            weight = 0;
+                            break;
+
+                        case ROAD_CHAR:
+                            __attribute__((fallthrough));
+                        default:
+                            weight = 1;
+                            break;
+                    }
+
+                    weighted_map->cout[v->y][v->x] = weight;
+                    score = weight * heuristique(*weighted_map, *v);
+                    add_sorted_list(openList, (void *)v, score);
+                }
+            }
+        }
+
+        temptuple = malloc(sizeof(tuple_int));
+        memcpy(temptuple, u, sizeof(tuple_int));
+        add_list(closedList, (void *)temptuple);
+    }
+
+    destroy_list(closedList);
+    destroy_sorted_list(openList);
+    /*
+    free(temptuple);
+    free(u);
+    free(v);
+    */
+
+    return;
 }

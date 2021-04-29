@@ -65,102 +65,46 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos) {
     return weighted_map.heuristique[current_pos.y][current_pos.x];
 }
 
-/**
- * @brief perform A*
- * 
- * @param weighted_map 
- * @param map 
- * @param path_size 
- * @param start 
- * @param end 
- * @return tuple_int** 
- */
-list *find_path(weighted_map_t *weighted_map, map_t *map, int *path_size, tuple_int start, tuple_int end) {
-    int i;
-    int exist_in_open_wlc = 0, exist_in_closed = 0;
-    float current_weight = 0., weight = 0., score = 0.;
+list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int end){
 
-    sorted_list *openList = create_sorted_list();
-    sorted_list_cell *temp_sorted;
-    list_cell *temp;
-    list *closedList = create_list();
+    int x, y, minWeight;
 
-    tuple_int *u = copy_tuple_int(end);
-    tuple_int *v = malloc(sizeof(tuple_int));
-    tuple_int *temptuple = malloc(sizeof(tuple_int));
-    tuple_int neighboor[8];
+    list * ret = create_list();
+    tuple_int * current_pos = copy_tuple_int(start);
+    tuple_int best;
 
-    add_sorted_list(openList, (void *)(&start), 0);
+    while (current_pos->x != start.x && current_pos->y != start.y) {
 
-    while (!is_sorted_list_empty(openList)) {
-        *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
-        if (u->x == end.x && u->y == end.y) {
-            return closedList;
+        add_list(ret, copy_tuple_int(*current_pos));
+        minWeight = -1;
+
+        for(y = max(current_pos->y -1, 0); y < min(current_pos->y +1, map->width); y++) {
+            for(x = max(current_pos->x -1, 0); x < min(current_pos->x +1, map->height); x++) {
+                
+                if (minWeight == -1 || weighted_map->cout[y][x] < minWeight) {
+                    minWeight = weighted_map->cout[y][x];
+                    best.x = x;
+                    best.y = y;
+                }
+            }   
         }
 
-        get_valid_neighbor(map->width, map->height, *u, neighboor);
-        for (i = 0; i < 8; i++) {
-            v->x = neighboor[i].x;
-            v->y = neighboor[i].y;
-
-            if (map->array[v->y][v->x] != -1) {
-                //not a wall
-                temp_sorted = openList->head;
-                while (temp_sorted->next != NULL) {
-                    *temptuple = *((tuple_int *)temp_sorted->x);
-                    if (temptuple->x == neighboor[i].x && temptuple->y == neighboor[i].y) {
-                        if (weighted_map->cout[temptuple->y][temptuple->x] != -1 && weighted_map->cout[temptuple->y][temptuple->x] < current_weight) {
-                            exist_in_open_wlc = 1;
-                            break;
-                        }
-                    }
-                    temp_sorted = temp_sorted->next;
-                }
-
-                temp = closedList->head;
-                while (temp->next != NULL) {
-                    *temptuple = *((tuple_int *)temp->x);
-                    if (temptuple->x == neighboor[i].x && temptuple->y == neighboor[i].y) {
-                        exist_in_closed = 1;
-                        break;
-                    }
-                    temp = temp->next;
-                }
-
-                if (!(exist_in_open_wlc || exist_in_closed)) {
-                    switch (map->array[neighboor[i].y][neighboor[i].x]) {
-                        case SAND_CHAR:
-                            weight = current_weight + 4;
-                            break;
-
-                        case END_CHAR:
-                            weight = 0;
-                            break;
-
-                        case ROAD_CHAR:
-                            __attribute__((fallthrough));
-                        default:
-                            weight = current_weight + 1;
-                            break;
-                    }
-
-                    weighted_map->cout[v->y][v->x] = weight;
-                    score = weighted_map->cout[v->y][v->x] + heuristique(*weighted_map, *v);
-                    add_sorted_list(openList, (void *)v, score);
-                }
-            }
-
-            add_list(closedList, (void *)v);
-        }
+        current_pos->x = best.x;
+        current_pos->y = best.y;
     }
 
-    free(temptuple);
-    free(u);
-    free(v);
 
-    return closedList;
+
+    return ret;
 }
 
+/**
+ * @brief return a list of coord that are the end of the track
+ * 
+ * @param map 
+ * @param size 
+ * @return tuple_int** 
+ */
 tuple_int **find_end(map_t map, int *size) {
     tuple_int **retour = malloc(sizeof(tuple_int *) * 20);
     int i, j, cpt;

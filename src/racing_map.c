@@ -54,6 +54,7 @@ void print_map_path(map_t *map, tuple_int **path, int path_size, FILE *file) {
                 if (path[p]->x == col && path[p]->y == row) {
                     fprintf(file, "o");
                     printed = 1;
+                    break;
                 }
             }
             if (!printed) {
@@ -68,7 +69,7 @@ void print_weighted_map(float ** map, int width, int height, FILE *file) {
     int i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
-            fprintf(file, "%2.1f", map[i][j]);
+            fprintf(file, "(%5.1f) ", map[i][j]);
         }
         fprintf(file, "\n");
     }

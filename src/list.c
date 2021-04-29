@@ -43,13 +43,12 @@ void add_list(list *s, void *a) {
     c->prev = 0;
 
     if (is_list_empty(s)) {
-        s->tail = c;
         s->head = c;
     } else {
         c->prev = s->tail;
         s->tail->next = c;
-        s->tail = c;
     }
+    s->tail = c;
     s->size++;
 }
 
@@ -170,10 +169,10 @@ void destroy_list(list *s) {
 
 void ** list_to_tab (list *s) {
     int i;
-    list_cell * temp;
-    void ** ret = malloc(sizeof(void *));
-    temp = s->head;
-    for (i = 0; i < s->size; i++) {
+    list_cell * temp = s->head;
+    void ** ret = malloc(sizeof(void *) * s->size);
+    for (i = 0; i < s->size - 2; i++) {
+        ret[i] = malloc(sizeof(int *));
         memcpy(ret[i], temp->x, sizeof(void *));
         temp = temp->next;
     }

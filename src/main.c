@@ -7,12 +7,13 @@
 
 int main () {
 
-    int width, height, size_end_pos, opti_size, i, min, min_ind;
+    int width, height, size_end_pos, i, min, min_ind;
     int round = 0;
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
     FILE *logs;
 
+    list * list_opti;
     weighted_map_t *A_star;
     car_t cars[3];
     map_t map;
@@ -52,7 +53,7 @@ int main () {
         if (round == 1) {
             endpos = find_end(map, &size_end_pos);
 
-            A_star = weight_map(&map, *(cars[0].pos), endpos, size_end_pos);
+            A_star = pre_weight_map(&map, *(cars[0].pos), endpos, size_end_pos);
             min = -1;
             for (i = 0; i < size_end_pos; i++) {
                 if (min == -1 || min > A_star->heuristique[endpos[i]->y][endpos[i]->x]) {
@@ -65,18 +66,25 @@ int main () {
             fflush(logs);
             fclose(logs);
 
-            opti = (tuple_int **)(list_to_tab( find_path(A_star, &map, &opti_size, *(cars[0].pos),
-                                                        *(endpos[min_ind]))));
+            weight_map(A_star, &map, *(cars[0].pos), *(endpos[min_ind]));
 
-            print_map_path(&map, opti, opti_size, stderr);
+            list_opti = find_path(A_star, &map, *(cars[0].pos),*(endpos[min_ind]));
+            opti = (tuple_int **)(list_to_tab(list_opti)); 
+
+            fprintf(stderr, "size: %d\n", list_opti->size);
+            for (i = 0; i < list_opti->size-1; i++) {
+                fprintf(stderr, "%d %d\n", opti[i]->x, opti[i]->y);
+            }
+
+            print_map_path(&map, opti, list_opti->size, stderr);
         }
 
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
 
-        fprintf(stderr, "%d %d\n", opti[opti_size - round - 1]->x,
-                opti[opti_size - round - 1]->y);
-        dir = get_acc_to_reach(cars, map, *(opti[opti_size - round - 1]));
+        fprintf(stderr, "%d %d\n", opti[list_opti->size - round - 2]->x,
+                opti[list_opti->size - round - 2]->y);
+        dir = get_acc_to_reach(cars, map, *(opti[list_opti->size - round - 1]));
         set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */
