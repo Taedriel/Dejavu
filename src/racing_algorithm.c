@@ -65,35 +65,48 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos) {
     return weighted_map.heuristique[current_pos.y][current_pos.x];
 }
 
-list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int end){
+int _in (tuple_int ** liste, int size, tuple_int elem) {
+    int i;
 
-    int x, y, minWeight;
+    for (i = 0; i < size; i++) {
+        if (liste[i]->x == elem.x && liste[i]->y == elem.y) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int ** endpos, int size){
+
+    int x, y;
+    float minWeight;
 
     list * ret = create_list();
     tuple_int * current_pos = copy_tuple_int(start);
     tuple_int best;
 
-    while (current_pos->x != start.x && current_pos->y != start.y) {
+    while (!_in(endpos, size, *current_pos)) {
 
         add_list(ret, copy_tuple_int(*current_pos));
         minWeight = -1;
 
-        for(y = max(current_pos->y -1, 0); y < min(current_pos->y +1, map->width); y++) {
-            for(x = max(current_pos->x -1, 0); x < min(current_pos->x +1, map->height); x++) {
-                
-                if (minWeight == -1 || weighted_map->cout[y][x] < minWeight) {
-                    minWeight = weighted_map->cout[y][x];
-                    best.x = x;
-                    best.y = y;
+        for(y = max(current_pos->y -1, 0); y <= min(current_pos->y +1, map->width); y++) {
+            for(x = max(current_pos->x -1, 0); x <= min(current_pos->x +1, map->height); x++) {
+                if (weighted_map->cout[y][x] != -1) {
+                    if ((minWeight == -1 || weighted_map->cout[y][x] < minWeight) && y != current_pos->y && x != current_pos->x) {
+                        minWeight = weighted_map->cout[y][x];
+                        best.x = x;
+                        best.y = y;
+                    }
                 }
             }   
         }
 
+        fprintf(stderr, "%d %d %f\n", best.x, best.y, minWeight);
         current_pos->x = best.x;
         current_pos->y = best.y;
     }
-
-
 
     return ret;
 }

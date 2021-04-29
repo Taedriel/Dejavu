@@ -7,7 +7,7 @@ void get_valid_neighbor(int width, int height, tuple_int startpos, tuple_int *ne
 
 float heuristique(weighted_map_t weighted_map, tuple_int current_pos);
 
-list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int end);
+list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int ** endpos, int size);
 
 tuple_int ** find_end(map_t map, int * size);
 

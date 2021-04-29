@@ -7,11 +7,11 @@
 
 int main () {
 
-    int width, height, size_end_pos, i, min, min_ind;
+    int width, height, size_end_pos, i;
     int round = 0;
     int gas = 0;
     char line_buffer[MAX_LINE_LENGTH];
-    FILE *logs;
+    FILE *logs, *logs_cout;
 
     list * list_opti;
     weighted_map_t *A_star;
@@ -23,6 +23,7 @@ int main () {
     tuple_int dir;
 
     logs = fopen("log.txt", "w+");
+    logs_cout = fopen("log_cout.txt", "w+");
     fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read gas level at Start */
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
 
@@ -53,22 +54,27 @@ int main () {
         if (round == 1) {
             endpos = find_end(map, &size_end_pos);
 
-            A_star = pre_weight_map(&map, *(cars[0].pos), endpos, size_end_pos);
-            min = -1;
-            for (i = 0; i < size_end_pos; i++) {
-                if (min == -1 || min > A_star->heuristique[endpos[i]->y][endpos[i]->x]) {
-                    min = A_star->heuristique[endpos[i]->y][endpos[i]->x];
-                    min_ind = i;
-                }
-            }
+            A_star = init_weighted_map(map.height, map.width, *(cars[0].pos));
+            
+            pre_weight_map(A_star, &map, endpos, size_end_pos);
+            // min = -1;
+            // for (i = 0; i < size_end_pos; i++) {
+            //     if (min == -1 || min > A_star->heuristique[endpos[i]->y][endpos[i]->x]) {
+            //         min = A_star->heuristique[endpos[i]->y][endpos[i]->x];
+            //         min_ind = i;
+            //     }
+            // }
 
-            print_weighted_map(A_star->heuristique, map.width, map.height, logs);
-            fflush(logs);
+            print_weighted_map(A_star->dist_from_end, map.width, map.height, logs);
             fclose(logs);
+            fflush(logs);
 
-            weight_map(A_star, &map, *(cars[0].pos), *(endpos[min_ind]));
+            weight_map(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
+            print_weighted_map(A_star->heuristique, map.width, map.height, logs_cout);
+            fclose(logs_cout);
+            fflush(logs_cout);
 
-            list_opti = find_path(A_star, &map, *(cars[0].pos),*(endpos[min_ind]));
+            list_opti = find_path(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
             opti = (tuple_int **)(list_to_tab(list_opti)); 
 
             fprintf(stderr, "size: %d\n", list_opti->size);

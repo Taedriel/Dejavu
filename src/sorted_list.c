@@ -47,40 +47,54 @@ void add_sorted_list(sorted_list *s, void *a, float score) {
     if (is_sorted_list_empty(s)) {
         s->tail = c;
         s->head = c;
+    } else if (s->size == 1) {
+        if (score > s->head->score){
+            s->head->next = c;
+            c->prev = s->head;
+            s->tail = c;
+        }else {
+            s->tail->prev = c;
+            c->next = s->tail;
+            s->head = c;
+        }
     } else {
         temp = s->head;
-        /*
-        fprintf(stderr, "%p --> %p\n",(void *) s->head, (void *) s->tail);
-        */
+        
+        //fprintf(stderr, "%p --> %p\n",(void *) s->head, (void *) s->tail);
+        
         while (temp != s->tail) {
-            /*
-            fprintf(stderr, "!= %p\n", (void *) temp);
-            */
+            
+            //fprintf(stderr, "!= %p\n", (void *) temp);
+            
             if (score < temp->score){
                 break;
             }
 
             temp = temp->next;
         }
-        /*
-        fprintf(stderr, "end == %p (%f)\n", (void *) temp, score);
-        */
+        
+        //fprintf(stderr, "end == %p (%f)\n", (void *) temp, score);
 
-        if (temp == s->tail && score > temp->score) {
-            temp->next = c;
-            c->prev = temp;
-            s->tail = c;
-        } else if (temp == s->head && score < temp->score){
-            temp->prev = c;
-            c->next = temp;
+        if (temp == s->head && score < temp->score) {
+            //insertion au debut
+            s->head->prev = c;
+            c->next = s->head;
             s->head = c;
+        } else if (temp == s->tail && score > temp->score) {
+            //insertion a la fin
+            s->tail->next = c;
+            c->prev = s->tail;
+            s->tail = c;
         } else {
+            //insertion entre deux, temp est à droite
+            //temp-1 -> temp -> temp+1
+            //insertion entre temp-1 et temp
             temp->prev->next = c;
             c->prev = temp->prev;
             c->next = temp;
             temp->prev = c;
         }
-    }
+        }
     s->size++;
 }
 
