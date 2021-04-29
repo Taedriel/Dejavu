@@ -90,6 +90,10 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
             break;
         }
     }
+    if (current_pos == NULL){
+        //no path found
+        return ret;
+    }
 
     while (!(current_pos->x == start.x && current_pos->y == start.y)) {
 

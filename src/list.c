@@ -62,7 +62,7 @@ void remove_list(list *s, int indice) {
     list_cell *temp;
     int cpt;
 
-    if (!is_list_empty(s) && indice < s->size) {
+    if (!is_list_empty(s) && indice < abs(s->size)) {
         if (indice < 0)
             indice = s->size - indice;
 
@@ -72,9 +72,20 @@ void remove_list(list *s, int indice) {
             cpt++;
             temp = temp->next;
         }
-        temp->prev->next = temp->next;
+
+        if (temp == s->head) {
+            s->head = temp->next;
+            temp->next = 0;
+        }else if (temp == s->tail) {
+            s->tail = temp->prev;
+            temp->prev->next = 0;
+        } else {
+            temp->prev->next = temp->next;
+        }
+            
         free(temp);
     }
+    s->size--;
 }
 
 /**
@@ -160,7 +171,7 @@ list *copy_list(list *s) {
  * @param s 
  */
 void destroy_list(list *s) {
-    while (s->size != 0) {
+    while (s->size > 1) {
         remove_list(s, 0);
     }
     free(s);

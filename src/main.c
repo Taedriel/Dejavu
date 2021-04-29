@@ -88,8 +88,8 @@ int main () {
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
 
-        fprintf(stderr, "%d %d\n", opti[list_opti->size - round - 2]->x,
-                opti[list_opti->size - round - 2]->y);
+        fprintf(stderr, "%d %d\n", opti[list_opti->size - round - 1]->x,
+                opti[list_opti->size - round - 1]->y);
         dir = get_acc_to_reach(cars, map, *(opti[list_opti->size - round - 1]));
         set_acceleration(cars, dir.x, dir.y);
 

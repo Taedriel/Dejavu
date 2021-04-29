@@ -127,7 +127,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
         
         *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
         remove_sorted_list(openList, 0);
-        // fprintf(stderr, "===========Current %d %d %d================\n", openList->size, u->x, u->y);
+        fprintf(stderr, "===========Current %d %d %d================\n", openList->size, u->x, u->y);
         for (i = 0; i < size_list_endpos; i++) {
             if (u->x == endpos[i]->x && u->y == endpos[i]->y) {
                 return;
@@ -137,11 +137,12 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
         get_valid_neighbor(map->width, map->height, *u, neighboor);
         for (i = 0; i < 8; i++) {
             v = copy_tuple_int(neighboor[i]);
-            // fprintf(stderr, "Neighbor: %d %d = %c\n", v->x, v->y, map->array[v->y][v->x]);
+            fprintf(stderr, "Neighbor: %d %d = %c\n", v->x, v->y, map->array[v->y][v->x]);
 
             if (map->array[v->y][v->x] != WALL_CHAR) {
                 //not a wall
                 exist_in_closed = 0;
+                exist_in_open = 0;
 
                 if (!is_list_empty(closedList)) {
                     // print_list(closedList, print_tuple, stderr);
@@ -150,7 +151,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
                         tempx = ((tuple_int *)(temp->x))->x;
                         tempy = ((tuple_int *)(temp->x))->y;
                         if (tempx == v->x && tempy == v->y) {
-                            // fprintf(stderr, "\tFound tuple in closedList: %d (%d %d)\n", closedList->size, tempx, tempy);
+                            fprintf(stderr, "\tFound tuple in closedList: %d (%d %d)\n", closedList->size, tempx, tempy);
                             exist_in_closed = 1;
                             break;
                         }
@@ -203,7 +204,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
 
                         if (!exist_in_open) {
                             add_sorted_list(openList, (void *)v, heur);
-                            // fprintf(stderr, "Ajout de nouvelle case de poid: %f %f\n", cout, heur);
+                            fprintf(stderr, "Ajout de nouvelle case de poid: %f %f\n", cout, heur);
                         }
                     }
                 }
