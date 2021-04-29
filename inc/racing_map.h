@@ -9,7 +9,8 @@ void print_map(struct map_t *map, FILE *file);
 
 void print_map_path(map_t *map, tuple_int ** path, int path_size, FILE *file);
 
-void print_weighted_map(float ** map, int width, int height, FILE * file);
+void print_float_weighted_map(float ** map, int width, int height, FILE * file);
 
+void print_int_weighted_map(int **map, int width, int height, FILE *file);
 
 #endif

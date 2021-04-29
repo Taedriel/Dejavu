@@ -65,11 +65,21 @@ void print_map_path(map_t *map, tuple_int **path, int path_size, FILE *file) {
     }
 }
 
-void print_weighted_map(float ** map, int width, int height, FILE *file) {
+void print_float_weighted_map(float ** map, int width, int height, FILE *file) {
     int i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
             fprintf(file, "(%5.1f) ", map[i][j]);
+        }
+        fprintf(file, "\n");
+    }
+}
+
+void print_int_weighted_map(int ** map, int width, int height, FILE *file) {
+    int i, j;
+    for (i = 0; i < height; i++) {
+        for (j = 0; j < width; j++) {
+            fprintf(file, "(%x) ", map[i][j]);
         }
         fprintf(file, "\n");
     }

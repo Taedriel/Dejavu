@@ -65,12 +65,12 @@ int main () {
             //     }
             // }
 
-            print_weighted_map(A_star->dist_from_end, map.width, map.height, logs);
+            print_float_weighted_map(A_star->dist_from_end, map.width, map.height, logs);
             fclose(logs);
             fflush(logs);
 
             weight_map(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
-            print_weighted_map(A_star->heuristique, map.width, map.height, logs_cout);
+            print_int_weighted_map(A_star->came_from, map.width, map.height, logs_cout);
             fclose(logs_cout);
             fflush(logs_cout);
 
@@ -78,7 +78,7 @@ int main () {
             opti = (tuple_int **)(list_to_tab(list_opti)); 
 
             fprintf(stderr, "size: %d\n", list_opti->size);
-            for (i = 0; i < list_opti->size-1; i++) {
+            for (i = list_opti->size-1; i > 0; i--) {
                 fprintf(stderr, "%d %d\n", opti[i]->x, opti[i]->y);
             }
 

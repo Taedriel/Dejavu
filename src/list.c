@@ -168,12 +168,14 @@ void destroy_list(list *s) {
 
 
 void ** list_to_tab (list *s) {
-    int i;
+    int i = 0;
+    void ** ret = malloc(sizeof(void *) * s->size + 1);
     list_cell * temp = s->head;
-    void ** ret = malloc(sizeof(void *) * s->size);
-    for (i = 0; i < s->size - 2; i++) {
-        ret[i] = malloc(sizeof(int *));
-        memcpy(ret[i], temp->x, sizeof(void *));
+    while (temp != NULL) {
+        fprintf(stderr, "%p\n", temp->x);            
+        ret[i] = temp->x;
+        fprintf(stderr, "%p\n", ret[i]);            
+        i++;
         temp = temp->next;
     }
 
