@@ -10,55 +10,51 @@
  * @param map 
  * @param startpos 
  */
-void get_valid_neighbor(int width, int height, tuple_int startpos, tuple_int *neighboor) {
+list * get_valid_neighbor(int width, int height, tuple_int startpos) {
+    list * ret = create_list();
+    
     if ((startpos.x + 1) < width) {
         if (startpos.y >= 0 && startpos.y < height) {
-            neighboor[0].x = startpos.x + 1;
-            neighboor[0].y = startpos.y;
+            add_list(ret, create_tuple_int(startpos.x +1, startpos.y));
         }
     }
     if ((startpos.x - 1) >= 0) {
         if (startpos.y >= 0 && startpos.y < height) {
-            neighboor[1].x = startpos.x - 1;
-            neighboor[1].y = startpos.y;
+            add_list(ret, create_tuple_int(startpos.x -1, startpos.y));
         }
     }
     if ((startpos.y + 1) < height) {
         if (startpos.x >= 0 && startpos.x < width) {
-            neighboor[2].x = startpos.x;
-            neighboor[2].y = startpos.y + 1;
+            add_list(ret, create_tuple_int(startpos.x, startpos.y + 1));
         }
     }
     if ((startpos.y - 1) >= 0) {
         if (startpos.x >= 0 && startpos.x < width) {
-            neighboor[3].x = startpos.x;
-            neighboor[3].y = startpos.y - 1;
+            add_list(ret, create_tuple_int(startpos.x, startpos.y - 1));
         }
     }
     if ((startpos.y - 1) >= 0 && (startpos.x - 1) >= 0) {
         if (startpos.x >= 0 && startpos.x < width) {
-            neighboor[4].x = startpos.x - 1;
-            neighboor[4].y = startpos.y - 1;
+            add_list(ret, create_tuple_int(startpos.x - 1, startpos.y - 1));
         }
     }
     if ((startpos.y - 1) >= 0 && (startpos.x + 1) < width) {
         if (startpos.x >= 0 && startpos.x < width) {
-            neighboor[5].x = startpos.x + 1;
-            neighboor[5].y = startpos.y - 1;
+            add_list(ret, create_tuple_int(startpos.x + 1, startpos.y - 1));
         }
     }
     if ((startpos.y + 1) < height && (startpos.x + 1) < width) {
         if (startpos.x >= 0 && startpos.x < width) {
-            neighboor[6].x = startpos.x + 1;
-            neighboor[6].y = startpos.y + 1;
+            add_list(ret, create_tuple_int(startpos.x + 1, startpos.y + 1));
         }
     }
     if ((startpos.y + 1) < height && (startpos.x - 1) >= 0) {
         if (startpos.x >= 0 && startpos.x < width) {
-            neighboor[7].x = startpos.x - 1;
-            neighboor[7].y = startpos.y + 1;
+            add_list(ret, create_tuple_int(startpos.x - 1, startpos.y + 1));
         }
     }
+
+    return ret;
 }
 
 float heuristique(weighted_map_t weighted_map, tuple_int current_pos) {

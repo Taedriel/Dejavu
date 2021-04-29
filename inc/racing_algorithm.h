@@ -3,7 +3,7 @@
 
 #include "racing_types.h"
 
-void get_valid_neighbor(int width, int height, tuple_int startpos, tuple_int *neighboor);
+list * get_valid_neighbor(int width, int height, tuple_int startpos);
 
 float heuristique(weighted_map_t weighted_map, tuple_int current_pos);
 

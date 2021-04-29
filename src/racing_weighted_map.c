@@ -59,9 +59,9 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, tuple_int **endpo
     float weight;
 
     queue *s = create_queue();
+    list * neighboor;
 
     tuple_int *temp;
-    tuple_int neighboor[8];
     tuple_int * current_pos = malloc(sizeof(tuple_int));
 
     for (i = 0; i < size_list_endpos; i++) {
@@ -74,15 +74,15 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, tuple_int **endpo
         *current_pos = *((tuple_int *)(last_queue(s)));
         current_value = weighted_map->dist_from_end[current_pos->y][current_pos->x];
 
-        get_valid_neighbor(map->width, map->height, *current_pos, neighboor);
-        for (i = 0; i < 8; i++) {
-            if (map->array[neighboor[i].y][neighboor[i].x] != WALL_CHAR) {
+        neighboor = get_valid_neighbor(map->width, map->height, *current_pos);
+        for (i = 0; i < neighboor->size; i++) {
+            temp = copy_tuple_int(*((tuple_int *) get_list(neighboor, i)));
+            if (map->array[temp->y][temp->x] != WALL_CHAR) {
                 weight = current_value + 1 + (i >= 4 ? 0.5 : 0);
-                if (weighted_map->dist_from_end[neighboor[i].y][neighboor[i].x] > weight \
-                 || weighted_map->dist_from_end[neighboor[i].y][neighboor[i].x] == -1) {
-                    weighted_map->dist_from_end[neighboor[i].y][neighboor[i].x] = weight;
-                    temp = copy_tuple_int(neighboor[i]);
-                    add_queue(s, (void *)temp);
+                if (weighted_map->dist_from_end[temp->y][temp->x] > weight \
+                 || weighted_map->dist_from_end[temp->y][temp->x] == -1) {
+                    weighted_map->dist_from_end[temp->y][temp->x] = weight;
+                    add_queue(s, (void *) temp);
                 }
             }
         }
@@ -118,7 +118,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
 
     tuple_int *u = malloc(sizeof(tuple_int));
     tuple_int *v;
-    tuple_int neighboor[8];
+    list * neighboor;
 
     add_sorted_list(openList, (void *)(&start), weighted_map->heuristique[start.y][start.y]);
 
@@ -134,9 +134,9 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
             }
         }
 
-        get_valid_neighbor(map->width, map->height, *u, neighboor);
-        for (i = 0; i < 8; i++) {
-            v = copy_tuple_int(neighboor[i]);
+        neighboor = get_valid_neighbor(map->width, map->height, *u);
+        for (i = 0; i < neighboor->size; i++) {
+            v = copy_tuple_int(*((tuple_int *) get_list(neighboor, i)));
             fprintf(stderr, "Neighbor: %d %d = %c\n", v->x, v->y, map->array[v->y][v->x]);
 
             if (map->array[v->y][v->x] != WALL_CHAR) {
@@ -163,7 +163,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
 
                     cout = weighted_map->cout[u->y][u->x];
                     cout += (i >= 4 ? 0.5 : 0);
-                    switch (map->array[neighboor[i].y][neighboor[i].x]) {
+                    switch (map->array[v->y][v->x]) {
                         case SAND_CHAR:
                             cout += 2;
                             break;
