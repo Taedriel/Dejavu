@@ -4,16 +4,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "utils.h"
-
 /**
- * @brief Create a Stack object
- *
- * @return stack*
+ * @brief Create a Queue object FILO
+ * 
+ * @return stack* 
  */
-stack *create_stack() {
-    stack *s;
-    s = malloc(sizeof(stack));
+queue *create_queue() {
+    queue *s;
+    s = malloc(sizeof(queue));
     s->head = 0;
     s->tail = 0;
     s->size = 0;
@@ -22,130 +20,143 @@ stack *create_stack() {
 }
 
 /**
- * @brief return whether the stack is empty or not
- *
- * @param s
- * @return int
+ * @brief return whether the queue is empty or not
+ * 
+ * @param s 
+ * @return int 
  */
-int is_stack_empty(stack *s) { return s->size == 0; }
+int is_queue_empty(queue *s) {
+    return s->size == 0;
+}
 
 /**
- * @brief push an element on the stack
- *
- * @param s
- * @param a
+ * @brief push an element at the beginning of the queue 
+ * 
+ * @param s 
+ * @param a 
  */
-void push(stack *s, void *a) {
-    cell *c;
-    c = malloc(sizeof(cell));
+void add_queue(queue *s, void *a) {
+    queue_cell *c = malloc(sizeof(queue_cell));
     c->x = a;
     c->next = 0;
+    c->prev = 0;
 
-    if (is_stack_empty(s)) {
-        s->head = c;
+    if (is_queue_empty(s)) {
+        s->tail = c;
     } else {
-        s->tail->next = c;
+        c->next = s->head;
+        c->next->prev = c;
     }
-    s->tail = c;
+    s->head = c;
     s->size++;
 }
 
 /**
- * @brief pop an element from the stack, if the stack is empty, return a null
- * element
- *
- * @param s
- * @return element
+ * @brief pop an element from the end of the queue,
+ *  if the queue is empty, return a null element
+ * 
+ * @param s 
+ * @return element 
  */
-void *pop(stack *s) {
-    if (is_stack_empty(s)) {
-        return NULL;
-    }
-
-    cell *temp = s->head;
+void *last_queue(queue *s) {
+    queue_cell *temp;
     void *v;
 
+    if (is_queue_empty(s)) {
+        return NULL;
+    }
+    temp = s->tail;
     v = temp->x;
-    s->head = (cell *)(s->head->next);
+
+    s->tail = (queue_cell *)(s->tail->prev);
     s->size--;
     free(temp);
 
+    if (is_queue_empty(s)) {
+        s->head = NULL;
+        s->tail = NULL;
+    }
+
     return v;
 }
+void print_queue_int(int content, char *buf) {
+    sprintf(buf, "%d", content);
+}
 
-void print_cell(cell *c, void(print_func)(void *, char *), FILE *file) {
+void print_queue_cell(queue_cell *c, void(print_func)(void *, char *), FILE *file) {
     char *rep = malloc(sizeof(char) * 1024);
     print_func(c->x, rep);
     fprintf(file, "| %s |", rep);
     free(rep);
 }
 
-void print_stack(stack s, void(print_func)(void *, char *), FILE *file) {
-    cell *p = s.head;
-    if (p == NULL) {
-        fprintf(file, "Stack is Empty");
+void print_queue(queue *s, void(print_func)(void *, char *), FILE *file) {
+    queue_cell *p = s->head;
+    if (is_queue_empty(s)) {
+        fprintf(file, "Queue is Empty");
+        return;
     }
 
     fprintf(file, "[");
     while (p != NULL) {
-        print_cell(p, print_func, file);
-        p = (cell *)(p->next);
+        print_queue_cell(p, print_func, file);
+        p = (queue_cell *)(p->next);
     }
-    fprintf(file, "]\n");
+    fprintf(file, "] = %d\n", s->size);
 }
 
 /**
- * @brief concat the second stack at the end of the first,
+ * @brief concat the second queue at the end of the first, 
  * not regarding whether there are empty or not
- *
- * @param s1
- * @param s2
+ * 
+ * @param s1 
+ * @param s2 
  */
-void concat_stack(stack *s1, stack *s2) {
-    if (is_stack_empty(s1)) {
+void concat_queue(queue *s1, queue *s2) {
+    if (is_queue_empty(s1)) {
         /* swap s1 and s2 */
         s1->head = s2->head;
         s1->tail = s2->tail;
         return;
     }
 
-    if (!is_stack_empty(s2)) {
+    if (!is_queue_empty(s2)) {
         s1->tail->next = s2->head;
         s1->tail = s2->tail;
     }
 }
 
 /**
- * @brief copy
- *
- * @param s
- * @return stack*
+ * @brief copy a queue into another
+ * 
+ * @param s 
+ * @return queue* 
  */
-stack *copy_stack(stack *s) {
-    stack *copy;
-    cell *p = s->head;
+queue *copy_queue(queue *s) {
+    queue *copy;
+    queue_cell *p = s->tail;
 
-    copy = malloc(sizeof(stack));
+    copy = malloc(sizeof(queue));
 
-    if (is_stack_empty(s)) {
+    if (is_queue_empty(s)) {
         return copy;
     }
 
     while (p != NULL) {
-        push(copy, p->x);
-        p = (cell *)(p->next);
+        add_queue(copy, p->x);
+        p = (queue_cell *)(p->prev);
     }
     return copy;
 }
 
 /**
- * @brief free a stack and all the cell inside
- *
- * @param s
+ * @brief free a queue and all the queue_cell inside
+ * 
+ * @param s 
  */
-void destroy_stack(stack *s) {
+void destroy_queue(queue *s) {
     while (s->head != NULL) {
-        pop(s);
+        last_queue(s);
     }
     free(s);
 }

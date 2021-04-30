@@ -134,7 +134,9 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int B) {
     acc.x = asservire_x(*car, B.x);
     acc.y = asservire_x(*car, B.y);
 
+    /*
     double new_speed_norm;
+    */
     int x = 0;
     int y = 0;
 

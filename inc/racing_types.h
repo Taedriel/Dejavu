@@ -8,11 +8,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "file.h"
+#include "pile.h"
+#include "list.h"
+#include "sorted_list.h"
+
 /* =================== Constant ===================*/
 
 #define MAX_LINE_LENGTH             1024
 #define BOOSTS_AT_START             5
 #define ACTION_LENGTH               100
+#define MAX_PATH_SIZE               1024
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'
@@ -64,6 +70,13 @@ typedef struct map_t
     char **array;
 } map_t;
 
+typedef struct weighted_map_t
+{
+    int ** came_from;
+    float ** dist_from_end;
+    float ** heuristique;
+    float ** cout;
 
+} weighted_map_t;
 
 #endif

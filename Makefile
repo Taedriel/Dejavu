@@ -24,7 +24,7 @@ OBJS = $(patsubst $(PATH_SRC)/%.c, $(PATH_OBJ)/%.o, $(SRCS))
 all: dir $(PILOT_NAME)
 	@echo "\nAll is done !\n"
 
-install: all
+install: clean all
 	rm -f ../GrandPrix2021_4.0.2/drivers/Dejavu
 	cp ./bin/Dejavu ../GrandPrix2021_4.0.2/drivers/Dejavu 
 
