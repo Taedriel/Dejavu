@@ -38,9 +38,6 @@ int main() {
     */
         read_positions(cars);
 
-        //tuple_int point = {26, 5};
-        //tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
-        //set_acceleration_on_tuple(cars, TEST_AHHHH);
         print_car(cars, stderr);
 
         if (round == 1) {
