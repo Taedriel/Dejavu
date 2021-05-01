@@ -14,13 +14,11 @@ void set_acceleration(struct car_t *player_car, int acc_x, int acc_y);
 
 tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int B);
 
+int theoric_position(int new_coord, int prev_coord, int prev_spe);
+
+int normed_acc(int coord);
+
 void set_acceleration_on_tuple(struct car_t *player_car, tuple_int acc);
-
-tuple_int get_acc_to_reach_v2(struct car_t car, struct map_t map, tuple_int cible);
-
-int asservire_y(struct car_t car, int pos_y);
-
-int asservire_x(struct car_t car, int pos_x);
 
 int is_valid_acceleration(struct car_t *car, tuple_int acc, struct map_t map);
 
