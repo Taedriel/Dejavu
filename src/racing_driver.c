@@ -5,7 +5,6 @@ void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
     player_car->acc = malloc(sizeof(tuple_int));
     player_car->spe = malloc(sizeof(tuple_int));
     player_car->pos = malloc(sizeof(tuple_int));
-
     player_car->acc->x = acc_x;
     player_car->acc->y = acc_y;
     player_car->boosts = boosts;

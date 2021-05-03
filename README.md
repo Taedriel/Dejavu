@@ -4,6 +4,6 @@ participation in an ENSICAEN challenge where you have to code a program to perfo
 ## Participants
 * Ismaël Delorme
 * Sonia Hammami
-* Paul Lemair <lord.nightmare05@gmail.com>
+* Paul Lemair 
 
 
