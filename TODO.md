@@ -27,7 +27,7 @@
 ## TODO
 
 - [ ] revoir l'asservissement
-- [ ] séparer en segments
+- [x] séparer en segments
 - [ ] revoir le sable
 - [ ] ponderer avec l'acceleration
 - [ ] gérer les autres voiture !!!

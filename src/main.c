@@ -4,6 +4,7 @@
 #include "racing_map.h"
 #include "racing_weighted_map.h"
 #include "utils.h"
+#include "test.h"
 
 int main () {
 
@@ -21,6 +22,8 @@ int main () {
     tuple_int **opti;
     tuple_int **endpos;
     tuple_int dir;
+
+    do_all_tests();
 
     logs = fopen("log.txt", "w+");
     logs_cout = fopen("log_cout.txt", "w+");
@@ -43,13 +46,6 @@ int main () {
         set_acceleration(cars, 1, 0);
         */
         read_positions(cars);
-
-        /*
-        tuple_int point = {26,5};
-        tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
-        set_acceleration_on_tuple(cars, TEST_AHHHH);
-        print_car(cars, stderr);
-        */
 
         if (round == 1) {
             endpos = find_end(map, &size_end_pos);
