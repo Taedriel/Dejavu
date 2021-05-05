@@ -29,8 +29,8 @@ int gas_consumption(struct car_t* player_car, int inSand) {
 
 void consum_gas(struct car_t* player_car, int inSand) {
     player_car->gas_level -= gas_consumption(player_car, inSand);
-    player_car->spe->x += player_car->acc->x;
-    player_car->spe->y += player_car->acc->y;
+    player_car->spe->x = (inSand) ? player_car->spe->x > 0 : player_car->spe->x + player_car->acc->x;
+    player_car->spe->y = (inSand) ? player_car->spe->y > 0 : player_car->spe->y + player_car->acc->y;
 }
 
 void set_acceleration(struct car_t* player_car, int acc_x, int acc_y) {

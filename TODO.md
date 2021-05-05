@@ -28,6 +28,6 @@
 
 - [ ] revoir l'asservissement
 - [x] séparer en segments
-- [ ] revoir le sable
+- [x] revoir le sable
 - [ ] ponderer avec l'acceleration
 - [ ] gérer les autres voiture !!!
