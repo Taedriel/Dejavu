@@ -53,7 +53,7 @@ stack *remove_useless_points(stack *traj) {
     }
     if (!test_cell) {
         push_stack(new_stack, end_seg);
-    } else if (new_stack->head != test_cell) {
+    } else if (new_stack->head->x != test_cell) {
         push_stack(new_stack, test_cell);
     }
 

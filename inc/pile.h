@@ -1,6 +1,7 @@
 #ifndef PILE_H
 #define PILE_H
 #include <stdio.h>
+#include <list.h>
 
 typedef struct cell {
     void* x;
@@ -30,5 +31,9 @@ void concat_stack(stack* s1, stack* s2);
 stack* copy_stack(stack* s);
 
 void destroy_stack(stack* s);
+
+void** stack_to_tab(stack* s);
+
+stack *list_to_stack(list* s);
 
 #endif
