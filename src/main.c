@@ -69,8 +69,9 @@ int main () {
             fclose(logs);
             fflush(logs);
 
-            weight_map(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
-            print_int_weighted_map(A_star->came_from, map.width, map.height, logs_cout);
+            
+            weight_map(A_star, &map, *(cars[0].pos), endpos, size_end_pos, cars[0]);
+            print_float_weighted_map(A_star->heuristique, map.width, map.height, logs_cout);
             fclose(logs_cout);
             fflush(logs_cout);
 

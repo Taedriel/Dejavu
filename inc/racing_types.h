@@ -19,6 +19,7 @@
 #define BOOSTS_AT_START             5
 #define ACTION_LENGTH               100
 #define MAX_PATH_SIZE               1024
+#define DELTA_SPEED                 0.5
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'
@@ -72,6 +73,7 @@ typedef struct map_t
 
 typedef struct weighted_map_t
 {
+    float ** acceleration;
     int ** came_from;
     float ** dist_from_end;
     float ** heuristique;
