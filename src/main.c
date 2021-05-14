@@ -37,10 +37,10 @@ int main () {
     init_car(cars + 2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
     init_map(&map, height, width);
-    // fprintf(stderr, "%d %d\n", height, width);
 
     // RACE_START(stderr)
 
+    
     while (!feof(stdin)) {
         round++;
         /*
@@ -63,12 +63,13 @@ int main () {
             //     }
             // }
 
+
+            weight_map(A_star, &map, *(cars[0].pos), endpos, size_end_pos, cars);
+            
             print_float_weighted_map(A_star->dist_from_end, map.width, map.height, logs);
             fclose(logs);
             fflush(logs);
-
-            weight_map(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
-            print_int_weighted_map(A_star->came_from, map.width, map.height, logs_cout);
+            print_float_weighted_map(A_star->heuristique, map.width, map.height, logs_cout);
             fclose(logs_cout);
             fflush(logs_cout);
 

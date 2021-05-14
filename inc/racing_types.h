@@ -21,6 +21,7 @@
 #define BOOSTS_AT_START             5
 #define ACTION_LENGTH               100
 #define MAX_PATH_SIZE               1024
+#define DELTA_SPEED                 0.5
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'
