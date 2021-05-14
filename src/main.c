@@ -4,6 +4,7 @@
 #include "racing_map.h"
 #include "racing_weighted_map.h"
 #include "utils.h"
+#include "test.h"
 
 int main () {
 
@@ -21,6 +22,8 @@ int main () {
     tuple_int **opti;
     tuple_int **endpos;
     tuple_int dir;
+
+    //do_all_tests();
 
     logs = fopen("log.txt", "w+");
     logs_cout = fopen("log_cout.txt", "w+");
@@ -43,13 +46,6 @@ int main () {
         set_acceleration(cars, 1, 0);
         */
         read_positions(cars);
-
-        /*
-        tuple_int point = {26,5};
-        tuple_int TEST_AHHHH = get_acc_to_reach(cars, point);
-        set_acceleration_on_tuple(cars, TEST_AHHHH);
-        print_car(cars, stderr);
-        */
 
         if (round == 1) {
             endpos = find_end(map, &size_end_pos);
@@ -76,26 +72,29 @@ int main () {
             fflush(logs_cout);
 
             list_opti = find_path(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
-            opti = (tuple_int **)(list_to_tab(list_opti)); 
-
+            //opti = (tuple_int **)(list_to_tab(list_opti));
+            stack *tmp_stack = remove_useless_points(list_to_stack(list_opti));
+            opti = (tuple_int **)(stack_to_tab(tmp_stack));
+            
             fprintf(stderr, "size: %d\n", list_opti->size);
-            for (i = list_opti->size-1; i > 0; i--) {
+            for (i = tmp_stack->size - 1; i > 0; i--) {
                 fprintf(stderr, "%d %d\n", opti[i]->x, opti[i]->y);
             }
 
-            print_map_path(&map, opti, list_opti->size, stderr);
+            print_map_path(&map, opti, tmp_stack->size, stderr);
         }
-
+        #if 0 
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
 
-        fprintf(stderr, "%d %d\n", opti[list_opti->size - round - 1]->x,
-                opti[list_opti->size - round - 1]->y);
+        //fprintf(stderr, "%d %d\n", opti[list_opti->size - round - 1]->x,
+        //        opti[list_opti->size - round - 1]->y);
         dir = get_acc_to_reach(cars, map, *(opti[list_opti->size - round - 1]));
         set_acceleration(cars, dir.x, dir.y);
 
         /* Write the acceleration request to the race manager (stdout). */
         post_actions(cars);
+        #endif 
     }
 
     // TODO free plein de truc

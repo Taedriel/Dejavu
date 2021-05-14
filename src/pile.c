@@ -149,3 +149,28 @@ void destroy_stack(stack *s) {
     }
     free(s);
 }
+
+void **stack_to_tab(stack *s) {
+    int i = 0;
+    void **ret = malloc(sizeof(void *) * s->size + 1);
+
+    cell *temp = s->head;
+    while (temp != NULL) {
+        ret[i] = temp->x;
+        fprintf(stderr, "%p\n", ret[i]);
+        i++;
+        temp = temp->next;
+    }
+
+    return ret;
+}
+
+stack *list_to_stack(list *s) {
+    stack *new_stack = create_stack();
+    int i;
+    for (i = 0 ; i < s->size; i++)
+    {
+        push_stack(new_stack, get_list(s, i));
+    }
+    return new_stack;
+}

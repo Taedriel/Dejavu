@@ -1,15 +1,10 @@
+#include "list.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "list.h"
-
-/**
- * @brief Create a Queue object FILO
- * 
- * @return stack* 
- */
-list * create_list() {
+list *create_list() {
     list *s;
     s = malloc(sizeof(list));
     s->head = 0;
@@ -19,22 +14,10 @@ list * create_list() {
     return s;
 }
 
-/**
- * @brief return whether the queue is empty or not
- * 
- * @param s 
- * @return int 
- */
 int is_list_empty(list *s) {
     return s->size == 0;
 }
 
-/**
- * @brief add an element in the list at the end 
- * 
- * @param s 
- * @param a 
- */
 void add_list(list *s, void *a) {
     list_cell *c = malloc(sizeof(list_cell));
 
@@ -52,68 +35,47 @@ void add_list(list *s, void *a) {
     s->size++;
 }
 
-/**
- * @brief remove an object from the list at indice i
- * 
- * @param s 
- * @param indice 
- */
 void remove_list(list *s, int indice) {
     list_cell *temp;
     int cpt;
-
     if (!is_list_empty(s) && indice < abs(s->size)) {
         if (indice < 0)
             indice = s->size - indice;
-
         temp = s->head;
         cpt = 0;
         while (cpt != indice) {
             cpt++;
             temp = temp->next;
         }
-
         if (temp == s->head) {
             s->head = temp->next;
             temp->next = 0;
-        }else if (temp == s->tail) {
+        } else if (temp == s->tail) {
             s->tail = temp->prev;
             temp->prev->next = 0;
         } else {
             temp->prev->next = temp->next;
         }
-            
         free(temp);
     }
     s->size--;
 }
 
-/**
- * @brief get an element from the end of the queue,
- *  if the queue is empty, return a null element
- * 
- * @param s 
- * @return element 
- */
 void *get_list(list *s, int i) {
     list_cell *temp;
     int cpt;
-
     if (is_list_empty(s)) {
         return NULL;
     }
-
     if (i >= s->size) {
         return NULL;
     }
-
     cpt = 0;
     temp = s->head;
     while (cpt != i) {
         cpt++;
         temp = temp->next;
     }
-
     return temp->x;
 }
 void print_list_int(int content, char *buf) {
@@ -142,12 +104,6 @@ void print_list(list *s, void(print_func)(void *, char *), FILE *file) {
     fprintf(file, "] = %d\n", s->size);
 }
 
-/**
- * @brief copy a queue into another
- * 
- * @param s 
- * @return queue* 
- */
 list *copy_list(list *s) {
     list *copy;
     list_cell *p = s->tail;
@@ -165,11 +121,6 @@ list *copy_list(list *s) {
     return copy;
 }
 
-/**
- * @brief free a queue and all the queue_cell inside
- * 
- * @param s 
- */
 void destroy_list(list *s) {
     while (s->size > 1) {
         remove_list(s, 0);
@@ -177,15 +128,14 @@ void destroy_list(list *s) {
     free(s);
 }
 
-
-void ** list_to_tab (list *s) {
+void **list_to_tab(list *s) {
     int i = 0;
-    void ** ret = malloc(sizeof(void *) * s->size + 1);
-    list_cell * temp = s->head;
+    void **ret = malloc(sizeof(void *) * s->size + 1);
+    list_cell *temp = s->head;
     while (temp != NULL) {
-        fprintf(stderr, "%p\n", temp->x);            
+        fprintf(stderr, "%p\n", temp->x);
         ret[i] = temp->x;
-        fprintf(stderr, "%p\n", ret[i]);            
+        fprintf(stderr, "%p\n", ret[i]);
         i++;
         temp = temp->next;
     }

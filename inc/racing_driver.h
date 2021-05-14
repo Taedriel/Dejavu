@@ -3,25 +3,89 @@
 
 #include "racing_types.h"
 
-void init_car(struct car_t *player_car, int boosts, int acc_x,
-              int acc_y, int spe_x, int spe_y, int gas);
+/**
+ * @brief initialize a car with all the given value
+ *
+ * @param player_car
+ * @param boosts
+ * @param acc_x
+ * @param acc_y
+ * @param spe_x
+ * @param spe_y
+ * @param gas
+ */
+void init_car(struct car_t *player_car, int boosts, int acc_x, int acc_y, int spe_x, int spe_y, int gas);
 
+/**
+ * @brief return the amount of gas used by the car
+ *
+ * @param player_car
+ * @param inSand whether the car is in sand or not (1 for yes or 0 for no)
+ * @return int the amount of gas used
+ */
 int gas_consumption(struct car_t *player_car, int inSand);
 
+/**
+ * @brief update the pos of the car and the gas level
+ *
+ * @param player_car
+ * @param inSand
+ */
 void consum_gas(struct car_t *player_car, int inSand);
 
+/**
+ * @brief Set the acceleration of a car
+ *
+ * @param player_car
+ * @param acc_x
+ * @param acc_y
+ */
 void set_acceleration(struct car_t *player_car, int acc_x, int acc_y);
 
-tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int B);
-
+/**
+ * @brief Set the acceleration on tuple object
+ * 
+ * @param player_car 
+ * @param acc 
+ */
 void set_acceleration_on_tuple(struct car_t *player_car, tuple_int acc);
 
-tuple_int get_acc_to_reach_v2(struct car_t car, struct map_t map, tuple_int cible);
+/**
+ * @brief Return the theorical position
+ * 
+ * @param new_coord 
+ * @param prev_coord 
+ * @param prev_spe 
+ * @return int 
+ */
+int theoric_position(int new_coord, int prev_coord, int prev_spe);
 
-int asservire_y(struct car_t car, int pos_y);
+/**
+ * @brief Return the logical acceleration
+ * 
+ * @param coord 
+ * @return int 
+ */
+int normed_acc(int coord);
 
-int asservire_x(struct car_t car, int pos_x);
+/**
+ * @brief Get the acceleration to reach point
+ * 
+ * @param car your car 
+ * @param map the map
+ * @param B The point you want to reach
+ * @return tuple_int 
+ */
+tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int B);
 
+/**
+ * @brief Return which composant of the acceleration is valid 
+ * 
+ * @param car 
+ * @param acc 
+ * @param map 
+ * @return int 
+ */
 int is_valid_acceleration(struct car_t *car, tuple_int acc, struct map_t map);
 
 #endif

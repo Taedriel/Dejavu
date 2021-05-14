@@ -13,13 +13,21 @@
 1.  [x] Une structure de voiture
     [x] Gestion des sorties (Dire au GDC que notre voiture veut aller à droite)
 
-2.  [ ] Une structure map 
-    [ ] Une enumération dans le but de représenter les différents types de noeud dans la map
+2.  [x] Une structure map 
+    [x] Une enumération dans le but de représenter les différents types de noeud dans la map
     [ ] Trouver un moyen d'économiser le plus possible l'essence
 
-3.  [ ] Un algorithme type chemin le plus court
-    [ ] Adaptation map pour l'algo de plus court chemin (graphe / matrice)
+3.  [x] Un algorithme type chemin le plus court
+    [x] Adaptation map pour l'algo de plus court chemin (graphe / matrice)
     [ ] Réflechir au moyen de faire ce traitement sans perdre de temps (car traitement possiblement long)
 
 4.  [ ] 
+ 
 
+## TODO
+
+- [ ] revoir l'asservissement
+- [x] séparer en segments
+- [x] revoir le sable
+- [ ] ponderer avec l'acceleration
+- [ ] gérer les autres voiture !!!

@@ -4,13 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-/**
- * @brief Create a Queue object FILO
- * 
- * @return stack* 
- */
 queue *create_queue() {
     queue *s;
+    
     s = malloc(sizeof(queue));
     s->head = 0;
     s->tail = 0;
@@ -19,22 +15,10 @@ queue *create_queue() {
     return s;
 }
 
-/**
- * @brief return whether the queue is empty or not
- * 
- * @param s 
- * @return int 
- */
 int is_queue_empty(queue *s) {
     return s->size == 0;
 }
 
-/**
- * @brief push an element at the beginning of the queue 
- * 
- * @param s 
- * @param a 
- */
 void add_queue(queue *s, void *a) {
     queue_cell *c = malloc(sizeof(queue_cell));
     c->x = a;
@@ -51,13 +35,6 @@ void add_queue(queue *s, void *a) {
     s->size++;
 }
 
-/**
- * @brief pop an element from the end of the queue,
- *  if the queue is empty, return a null element
- * 
- * @param s 
- * @return element 
- */
 void *last_queue(queue *s) {
     queue_cell *temp;
     void *v;
@@ -79,6 +56,7 @@ void *last_queue(queue *s) {
 
     return v;
 }
+
 void print_queue_int(int content, char *buf) {
     sprintf(buf, "%d", content);
 }
@@ -105,13 +83,7 @@ void print_queue(queue *s, void(print_func)(void *, char *), FILE *file) {
     fprintf(file, "] = %d\n", s->size);
 }
 
-/**
- * @brief concat the second queue at the end of the first, 
- * not regarding whether there are empty or not
- * 
- * @param s1 
- * @param s2 
- */
+
 void concat_queue(queue *s1, queue *s2) {
     if (is_queue_empty(s1)) {
         /* swap s1 and s2 */
@@ -126,12 +98,6 @@ void concat_queue(queue *s1, queue *s2) {
     }
 }
 
-/**
- * @brief copy a queue into another
- * 
- * @param s 
- * @return queue* 
- */
 queue *copy_queue(queue *s) {
     queue *copy;
     queue_cell *p = s->tail;
@@ -149,11 +115,6 @@ queue *copy_queue(queue *s) {
     return copy;
 }
 
-/**
- * @brief free a queue and all the queue_cell inside
- * 
- * @param s 
- */
 void destroy_queue(queue *s) {
     while (s->head != NULL) {
         last_queue(s);
