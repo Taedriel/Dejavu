@@ -45,7 +45,12 @@ void set_acceleration_on_tuple(struct car_t* player_car, tuple_int acc) {
 inline int theoric_position(int new_coord, int prev_coord, int prev_spe) {
     return new_coord - prev_coord - prev_spe;
 }
-
+/**
+ * @todo ici on doit recup le segment en question 
+ * puis on calcule la distance. Enfin, un if 
+ * arbitraire avec une valeur choisi de longeur limite
+ * avant le boost. 
+ */
 inline int normed_acc(int coord) {
     if (coord < 0)
         return -1;
