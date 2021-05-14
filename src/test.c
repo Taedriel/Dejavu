@@ -61,7 +61,7 @@ void test_segment_len() {
     fprintf(stderr, "Beginning test\n");
 
     tab = (tuple_int**)stack_to_tab(Stack1);
-    number_seg = Stack1->size - 1;
+    number_seg = Stack1->size - 1; 
 
     for (i = 0; i < number_seg; i++) {
         fprintf(stderr, "%lf\n", segment_len(*tab, number_seg, i));

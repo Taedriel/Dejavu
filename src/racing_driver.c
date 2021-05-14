@@ -1,4 +1,5 @@
 #include "racing_driver.h"
+#include "racing_checkpoints.h"
 
 void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
               int spe_x, int spe_y, int gas) {

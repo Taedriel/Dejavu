@@ -16,10 +16,7 @@ int min(int a, int b);
 
 int dot_product(tuple_int *a, tuple_int *b, tuple_int *c);
 
-stack *remove_useless_points(stack *traj);
 
 double distance(tuple_int a, tuple_int b);
-
-double segment_len(tuple_int *tab, int tab_size, int index);
 
 #endif

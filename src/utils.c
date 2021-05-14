@@ -35,38 +35,6 @@ int dot_product(tuple_int *a, tuple_int *b, tuple_int *c) {
     return (b->x - a->x) * (c->y - b->y) - (b->y - a->y) * (c->x - b->x);
 }
 
-stack *remove_useless_points(stack *traj) {
-    stack *new_stack = create_stack();
-
-    tuple_int *begin_seg = (tuple_int *)pop_stack(traj);
-    tuple_int *end_seg = (tuple_int *)pop_stack(traj);
-    tuple_int *test_cell = NULL;
-
-    push_stack(new_stack, begin_seg);
-    while (!is_stack_empty(traj)) {
-        test_cell = (tuple_int *)pop_stack(traj);
-        if (dot_product(begin_seg, end_seg, test_cell)) {
-            push_stack(new_stack, end_seg);
-            begin_seg = end_seg;
-        }
-        end_seg = test_cell;
-    }
-    if (!test_cell) {
-        push_stack(new_stack, end_seg);
-    } else if (new_stack->head->x != test_cell) {
-        push_stack(new_stack, test_cell);
-    }
-
-    return new_stack;
-}
-
 double distance(tuple_int a, tuple_int b) {
     return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
-}
-
-double segment_len(tuple_int *tab, int tab_size, int index) {
-    if (index + 1 > tab_size) {
-        return -1;
-    }
-    return distance(tab[index], tab[index + 1]);
 }
