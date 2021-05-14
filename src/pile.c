@@ -157,7 +157,7 @@ void **stack_to_tab(stack *s) {
     cell *temp = s->head;
     while (temp != NULL) {
         ret[i] = temp->x;
-        fprintf(stderr, "%p\n", ret[i]);
+        //fprintf(stderr, "%p\n", ret[i]);
         i++;
         temp = temp->next;
     }

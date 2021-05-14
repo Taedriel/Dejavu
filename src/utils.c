@@ -59,3 +59,14 @@ stack *remove_useless_points(stack *traj) {
 
     return new_stack;
 }
+
+double distance(tuple_int a, tuple_int b) {
+    return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
+double segment_len(tuple_int *tab, int tab_size, int index) {
+    if (index + 1 > tab_size) {
+        return -1;
+    }
+    return distance(tab[index], tab[index + 1]);
+}
