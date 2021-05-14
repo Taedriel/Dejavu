@@ -57,8 +57,24 @@ list * get_valid_neighbor(int width, int height, tuple_int startpos) {
     return ret;
 }
 
-float heuristique(weighted_map_t weighted_map, tuple_int current_pos) {
-    return weighted_map.heuristique[current_pos.y][current_pos.x];
+float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** liste_accel_map, float cout) {
+
+
+    float heur = cout + weighted_map.dist_from_end[current_pos.y][current_pos.x];
+
+    if (liste_accel_map != NULL) {
+
+        heur -= liste_accel_map[0][current_pos.y][current_pos.x];
+        heur -= liste_accel_map[1][current_pos.y][current_pos.x];
+        
+        heur += liste_accel_map[2][current_pos.y][current_pos.x];
+        heur += liste_accel_map[3][current_pos.y][current_pos.x];
+        heur += liste_accel_map[4][current_pos.y][current_pos.x];
+        heur += liste_accel_map[5][current_pos.y][current_pos.x];
+    }
+
+
+    return heur;
 }
 
 int _in (tuple_int ** liste, int size, tuple_int elem) {
@@ -117,18 +133,26 @@ int tuple_normed_to_int(tuple_int a) {
                                     : 1));
 }
 
+int is_in_diagonal_from(tuple_int start, tuple_int dest) {
+    return abs(start.x - dest.x) > 0 && abs(start.y - dest.y) > 0; 
+}
+
 list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int ** endpos, int size){
 
-    int i   ;
+    int i, min = -1;
 
     list * ret = create_list();
     tuple_int * current_pos;
     tuple_int * diff;
 
     for (i = 0; i < size; i ++) {
+        fprintf(stderr, "(%d %d)\n", endpos[i]->x, endpos[i]->y);
         if (weighted_map->came_from[endpos[i]->y][endpos[i]->x] != -1) {
-            current_pos = copy_tuple_int(*(endpos[i]));
-            break;
+            if (min == -1 || weighted_map->heuristique[endpos[i]->y][endpos[i]->x] < min){
+                fprintf(stderr, "find min heur value for %d %d: %f\n", endpos[i]->x, endpos[i]->y, weighted_map->heuristique[endpos[i]->y][endpos[i]->x]);
+                min = weighted_map->heuristique[endpos[i]->y][endpos[i]->x];
+                current_pos = copy_tuple_int(*(endpos[i]));
+            }
         }
     }
     if (current_pos == NULL){

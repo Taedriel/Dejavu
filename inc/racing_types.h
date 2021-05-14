@@ -73,7 +73,6 @@ typedef struct map_t
 
 typedef struct weighted_map_t
 {
-    float ** acceleration;
     int ** came_from;
     float ** dist_from_end;
     float ** heuristique;

@@ -5,7 +5,7 @@
 
 list * get_valid_neighbor(int width, int height, tuple_int startpos);
 
-float heuristique(weighted_map_t weighted_map, tuple_int current_pos);
+float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** liste_map_accel, float cout);
 
 list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int ** endpos, int size);
 
@@ -16,6 +16,8 @@ int tuple_to_int(tuple_int origine, tuple_int dest);
 int tuple_normed_to_int(tuple_int a);
 
 int hamming_weight(int x);
+
+int is_in_diagonal_from(tuple_int start, tuple_int dest);
 
 tuple_int *int_to_tuple(int entier);
 
