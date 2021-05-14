@@ -7,11 +7,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "file.h"
 #include "pile.h"
 #include "list.h"
 #include "sorted_list.h"
+
 
 /* =================== Constant ===================*/
 

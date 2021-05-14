@@ -3,6 +3,7 @@
 #include "racing_io.h"
 #include "racing_map.h"
 #include "racing_weighted_map.h"
+#include "racing_checkpoints.h"
 #include "utils.h"
 #include "test.h"
 
@@ -15,6 +16,7 @@ int main () {
     FILE *logs, *logs_cout;
 
     list * list_opti;
+    stack *tmp_stack;
     weighted_map_t *A_star;
     car_t cars[3];
     map_t map;
@@ -72,7 +74,7 @@ int main () {
 
             list_opti = find_path(A_star, &map, *(cars[0].pos), endpos, size_end_pos);
             //opti = (tuple_int **)(list_to_tab(list_opti));
-            stack *tmp_stack = remove_useless_points(list_to_stack(list_opti));
+            tmp_stack = remove_useless_points(list_to_stack(list_opti));
             opti = (tuple_int **)(stack_to_tab(tmp_stack));
             
             fprintf(stderr, "size: %d\n", list_opti->size);
@@ -82,6 +84,11 @@ int main () {
 
             print_map_path(&map, opti, tmp_stack->size, stderr);
         }
+        srand(time(0));
+        int test_1 = rand() % map.height;
+        int test_2 = rand() % map.width;
+
+        fprintf(stderr, "value index for coord %d %d : %d", test_2, test_1, get_segment_by_coord(opti, tmp_stack->size, A_star, create_tuple_int(test_1, test_2)));
         #if 0 
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);
