@@ -62,18 +62,38 @@ weighted_map_t *init_weighted_map(int height, int width, tuple_int start) {
     return ret;
 }
 
-void fill_speed_map(map_t map, float ** to_map, tuple_int start_pos, float current_speed) {
+void fill_proba_map(map_t map, float ** to_map, tuple_int start_pos, car_t car) {
+    int i,j, delta;
     
-    if (current_speed == 0) {
-        return;
-    }
-    int i;
-    
-    to_map[start_pos.y][start_pos.x] = current_speed;
+    fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->x, car.spe->x, car.pos->x + car.spe->x - 2, car.pos->x, car.spe->x, car.pos->x + car.spe->x + 2 + 1);
+    fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->y, car.spe->y, car.pos->y + car.spe->y - 2, car.pos->y, car.spe->y, car.pos->y + car.spe->y + 2 + 1);
 
-    list * neighboor = get_valid_neighbor(map.width, map.height, start_pos);
-    for (i = 0; i < neighboor->size; i++) {
-        fill_speed_map(map, to_map, *((tuple_int *) get_list(neighboor, i)), current_speed - DELTA_SPEED);
+    for (i = max(car.pos->x + car.spe->x - 2, 0); i < min(car.pos->x + car.spe->x + 2 + 1, map.width); i++) {
+        if (to_map[start_pos.y][i] == 0) {
+            delta = abs(i - (car.pos->x + car.spe->x));
+            to_map[start_pos.y][i] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
+            fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
+        }
+    } 
+    fprintf(stderr, "\n");
+
+    for (i = max(car.pos->y + car.spe->y - 2, 0); i < min(car.pos->y + car.spe->y + 2 + 1, map.height); i++) {
+        if (to_map[i][start_pos.x] == 0) {
+            delta = abs(i - (car.pos->y + car.spe->y));
+            to_map[i][start_pos.x] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
+            fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
+        }
+    } 
+    fprintf(stderr, "\n");
+
+    for (i = 0; i < map.height; i++) {
+        for (j = 0; j < map.width; j++) {
+            if (i != start_pos.y && j != start_pos.x){
+                if (to_map[i][start_pos.x] != 0. && to_map[start_pos.y][j] != 0) {
+                    to_map[i][j] = to_map[start_pos.y][j] * to_map[i][start_pos.x];
+                }
+            }
+        }
     }
 }
 
@@ -141,14 +161,14 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     int i, tempx, tempy;
     int exist_in_open = 0, exist_in_closed = 0;
     float current_weight = 0., cout = 0.;
-    float *** list_acc_map = malloc(sizeof(float **) * 6);
+    float *** list_acc_map = malloc(sizeof(float **) * 3);
 
     for (i = 0; i < 3; i++) {
-        list_acc_map[2*i] = init_accel_map(map->height, map->width);
-        fill_speed_map(*map, list_acc_map[2*i], *(cars[i].pos), cars[i].spe->x);
-        list_acc_map[2*i+1] = init_accel_map(map->height, map->width);
-        fill_speed_map(*map, list_acc_map[2*i+1], *(cars[i].pos), cars[i].spe->y);
+        list_acc_map[i] = init_accel_map(map->height, map->width);
+        fill_proba_map(*map, list_acc_map[i], *(cars[i].pos), cars[i]);
     }
+
+    print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
 
     sorted_list *openList = create_sorted_list();
     sorted_list_cell *temp_sorted;
@@ -218,7 +238,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                             cout += 1;
                             break;
                     }
-                    
+
                     if (weighted_map->cout[v->y][v->x] == -1 || cout < weighted_map->cout[v->y][v->x]) {
                         weighted_map->came_from[v->y][v->x] = tuple_to_int(*u, *v);
                         weighted_map->cout[v->y][v->x] = cout;

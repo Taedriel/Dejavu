@@ -33,8 +33,6 @@ int main () {
     tuple_int dir;
 
     //do_all_tests();
-    logs = fopen("log.txt", "w+");
-    logs_cout = fopen("log_cout.txt", "w+");
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin);
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
@@ -62,12 +60,6 @@ int main () {
 
             weight_map(A_star_global, &map, *(cars[0].pos), list_endpos, cars);
             
-            print_float_weighted_map(A_star_global->cout, map.width, map.height, logs);
-            fclose(logs);
-            fflush(logs);
-            print_float_weighted_map(A_star_global->heuristique, map.width, map.height, logs_cout);
-            fclose(logs_cout);
-            fflush(logs_cout);
 
             list_opti_global = find_path(A_star_global, &map, *(cars[0].pos), list_endpos);
             tmp_stack = remove_useless_points(list_to_stack(list_opti_global));
@@ -78,31 +70,40 @@ int main () {
                 fprintf(stderr, "%d %d\n", ((tuple_int *) get_list(list_opti_global, i))->x, ((tuple_int *) get_list(list_opti_global, i))->y);
             }
 
-            print_map_path(&map, list_to_tab(list_opti_global), list_opti_global->size, stderr);
+            print_map_path(&map, (tuple_int **) list_to_tab(list_opti_global), list_opti_global->size, stderr);
             print_map_path(&map, opti_global, tmp_stack->size, stderr);
 
-        }else {
-            
-            if (new_segment){
-
-                A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
-                start_pos = copy_tuple_int(*(cars[0].pos));
-                end_pos = copy_tuple_int(*(opti_global[segment]));
-                list_endpos = create_list_from_obj(end_pos);
-                pre_weight_map(A_star_local, &map, list_endpos);
-            
-                new_segment = 0;
-            }
-
-            weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
-
-            list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
-            dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, 0)));
-            set_acceleration(cars, dir.x, dir.y);
-
-            //TEST FIN DE SEGMENT ICI
-            
         }
+            
+        start_pos = copy_tuple_int(*(cars[0].pos));
+        
+        if (new_segment){
+
+            A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
+            end_pos = copy_tuple_int(*(opti_global[segment]));
+            list_endpos = create_list_from_obj(end_pos);
+            pre_weight_map(A_star_local, &map, list_endpos);
+        
+            new_segment = 0;
+        }
+
+        weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
+
+        logs = fopen("log.txt", "w+");
+        logs_cout = fopen("log_cout.txt", "w+");
+        fprintf(logs, "Round n°%d, Segement n°%d\n", round, segment);
+        fprintf(logs_cout, "Round n°%d, Segement n°%d\n", round, segment);
+        print_float_weighted_map(A_star_local->cout, map.width, map.height, logs);
+        fclose(logs);
+        print_float_weighted_map(A_star_local->heuristique, map.width, map.height, logs_cout);
+        fclose(logs_cout);
+
+        list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
+        dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, 0)));
+        set_acceleration(cars, dir.x, dir.y);
+
+        //TEST FIN DE SEGMENT ICI
+        
 
         consum_gas(cars, 0);
         post_actions(cars);

@@ -22,7 +22,11 @@
 #define ACTION_LENGTH               100
 #define MAX_PATH_SIZE               1024
 #define DELTA_SPEED                 0.5
-#define DIAG_WEIGHT                 1.1
+
+#define DIAG_WEIGHT                 1
+#define OWN_SPEED_WEIGHT            1
+#define CONCUR_SPEED_WEIGHT         1
+#define POURCENT_LOSS_BY_ACC_WEIGHT 1./5.
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'

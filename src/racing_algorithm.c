@@ -58,30 +58,16 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** 
 
     if (liste_accel_map != NULL) {
 
-        heur -= liste_accel_map[0][current_pos.y][current_pos.x];
-        heur -= liste_accel_map[1][current_pos.y][current_pos.x];
+        heur -= OWN_SPEED_WEIGHT * liste_accel_map[0][current_pos.y][current_pos.x];
         
-        heur += liste_accel_map[2][current_pos.y][current_pos.x];
-        heur += liste_accel_map[3][current_pos.y][current_pos.x];
-        heur += liste_accel_map[4][current_pos.y][current_pos.x];
-        heur += liste_accel_map[5][current_pos.y][current_pos.x];
+        heur += CONCUR_SPEED_WEIGHT * liste_accel_map[1][current_pos.y][current_pos.x];
+        heur += CONCUR_SPEED_WEIGHT * liste_accel_map[2][current_pos.y][current_pos.x];
     }
 
 
     return heur;
 }
 
-int _in (tuple_int ** liste, int size, tuple_int elem) {
-    int i;
-
-    for (i = 0; i < size; i++) {
-        if (liste[i]->x == elem.x && liste[i]->y == elem.y) {
-            return 1;
-        }
-    }
-
-    return 0;
-}
 
 tuple_int * int_to_tuple(int entier) {
 

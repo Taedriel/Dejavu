@@ -38,3 +38,15 @@ int dot_product(tuple_int *a, tuple_int *b, tuple_int *c) {
 double distance(tuple_int a, tuple_int b) {
     return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 }
+
+int _in(tuple_int **liste, int size, tuple_int elem) {
+    int i;
+
+    for (i = 0; i < size; i++) {
+        if (liste[i]->x == elem.x && liste[i]->y == elem.y) {
+            return 1;
+        }
+    }
+
+    return 0;
+}

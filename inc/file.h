@@ -85,5 +85,6 @@ queue* copy_queue(queue* s);
  */
 void destroy_queue(queue* s);
 
+void** queue_to_tab(queue* s);
 
 #endif
