@@ -131,21 +131,23 @@ int is_in_diagonal_from(tuple_int start, tuple_int dest) {
     return abs(start.x - dest.x) > 0 && abs(start.y - dest.y) > 0; 
 }
 
-list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int ** endpos, int size){
+list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos){
 
-    int i, min = -1;
+    int x, y, i, min = -1;
 
     list * ret = create_list();
     tuple_int * current_pos;
     tuple_int * diff;
 
-    for (i = 0; i < size; i ++) {
-        fprintf(stderr, "(%d %d)\n", endpos[i]->x, endpos[i]->y);
-        if (weighted_map->came_from[endpos[i]->y][endpos[i]->x] != -1) {
-            if (min == -1 || weighted_map->heuristique[endpos[i]->y][endpos[i]->x] < min){
-                fprintf(stderr, "find min heur value for %d %d: %f\n", endpos[i]->x, endpos[i]->y, weighted_map->heuristique[endpos[i]->y][endpos[i]->x]);
-                min = weighted_map->heuristique[endpos[i]->y][endpos[i]->x];
-                current_pos = copy_tuple_int(*(endpos[i]));
+
+    for (i = 0; i < endpos->size; i ++) {
+        x = ((tuple_int *)get_list(endpos, i))->x;
+        y = ((tuple_int *)get_list(endpos, i))->y;
+        if (weighted_map->came_from[y][x] != -1) {
+            if (min == -1 || weighted_map->heuristique[y][x] < min){
+                // fprintf(stderr, "find min heur value for %d %d: %f\n", x, y, weighted_map->heuristique[y][x]);
+                min = weighted_map->heuristique[y][x];
+                current_pos = copy_tuple_int(*((tuple_int *)get_list(endpos, i)));
             }
         }
     }
@@ -157,8 +159,8 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
     while (!(current_pos->x == start.x && current_pos->y == start.y)) {
 
         add_list(ret, copy_tuple_int(*current_pos));
-        fprintf(stderr, "%d %d\n", current_pos->x, current_pos->y);
-        fprintf(stderr, "%x\n", weighted_map->came_from[current_pos->y][current_pos->x]);
+        // fprintf(stderr, "%d %d\n", current_pos->x, current_pos->y);
+        // fprintf(stderr, "%x\n", weighted_map->came_from[current_pos->y][current_pos->x]);
 
         diff = int_to_tuple(weighted_map->came_from[current_pos->y][current_pos->x]);
         current_pos->x += diff->x;
@@ -170,23 +172,21 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
     return ret;
 }
 
-tuple_int **find_end(map_t map, int *size) {
-    tuple_int **retour = malloc(sizeof(tuple_int *) * 20);
-    int i, j, cpt;
-
-    *size = 0;
+list *find_end(map_t map) {
+    list * ret = create_list();
+    tuple_int * temp;
+    int i, j;
 
     for (i = 0; i < map.height; i++) {
         for (j = 0; j < map.width; j++) {
             if (map.array[i][j] == END_CHAR) {
-                cpt = (*size);
-                retour[cpt] = malloc(sizeof(tuple_int));
-                retour[cpt]->y = i;
-                retour[cpt]->x = j;
-                (*size)++;
+                temp = malloc(sizeof(tuple_int));
+                temp->y = i;
+                temp->x = j;
+                add_list(ret, temp);
             }
         }
     }
 
-    return retour;
+    return ret;
 }

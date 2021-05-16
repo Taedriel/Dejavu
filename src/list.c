@@ -133,12 +133,16 @@ void **list_to_tab(list *s) {
     void **ret = malloc(sizeof(void *) * s->size + 1);
     list_cell *temp = s->head;
     while (temp != NULL) {
-        fprintf(stderr, "%p\n", temp->x);
         ret[i] = temp->x;
-        fprintf(stderr, "%p\n", ret[i]);
         i++;
         temp = temp->next;
     }
 
+    return ret;
+}
+
+list * create_list_from_obj(void * o) {
+    list * ret = create_list();
+    add_list(ret, o);
     return ret;
 }

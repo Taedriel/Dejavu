@@ -13,7 +13,7 @@ list * get_valid_neighbor(int width, int height, tuple_int startpos);
 
 float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** liste_map_accel, float cout);
 
-list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple_int ** endpos, int size);
+list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos);
 
 /**
  * @brief return a list of coord that are the end of the track
@@ -22,7 +22,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, tuple
  * @param size 
  * @return tuple_int** 
  */
-tuple_int ** find_end(map_t map, int * size);
+list * find_end(map_t map);
 
 int tuple_to_int(tuple_int origine, tuple_int dest);
 

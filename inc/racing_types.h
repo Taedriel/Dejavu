@@ -22,6 +22,7 @@
 #define ACTION_LENGTH               100
 #define MAX_PATH_SIZE               1024
 #define DELTA_SPEED                 0.5
+#define DIAG_WEIGHT                 1.1
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'
