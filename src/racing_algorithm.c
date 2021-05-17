@@ -145,7 +145,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     while (!(current_pos->x == start.x && current_pos->y == start.y)) {
 
         add_list(ret, copy_tuple_int(*current_pos));
-        // fprintf(stderr, "%d %d\n", current_pos->x, current_pos->y);
+        fprintf(stderr, "%d %d\n", current_pos->x, current_pos->y);
         // fprintf(stderr, "%x\n", weighted_map->came_from[current_pos->y][current_pos->x]);
 
         diff = int_to_tuple(weighted_map->came_from[current_pos->y][current_pos->x]);

@@ -168,7 +168,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         fill_proba_map(*map, list_acc_map[i], *(cars[i].pos), cars[i]);
     }
 
-    print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
+    // print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
 
     sorted_list *openList = create_sorted_list();
     sorted_list_cell *temp_sorted;

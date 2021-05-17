@@ -81,11 +81,13 @@ int main () {
         if (new_segment){
 
             A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
-            end_pos = copy_tuple_int(*(opti_global[segment]));
+            end_pos = copy_tuple_int(*(opti_global[tmp_stack->size-2-segment]));
             list_endpos = create_list_from_obj(end_pos);
             pre_weight_map(A_star_local, &map, list_endpos);
         
             new_segment = 0;
+            fprintf(stderr, "New Segment %d Started ! Start: (%d %d) End (%d %d) Lenght: %f\n", segment, start_pos->x, start_pos->y \
+            ,end_pos->x, end_pos->y, segment_len(opti_global, tmp_stack->size, segment));
         }
 
         weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
@@ -102,7 +104,7 @@ int main () {
         list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
         max_normed_speed = 0;
         cpt = 0;
-        for (i = list_opti_local->size-2; i > 0 && cpt < 6; i--) {
+        for (i = list_opti_local->size-2; i >= 0 && cpt < 6; i--) {
             dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, i)), 0);
             normed_speed = sqrt((cars[0].spe->x + dir.x) * (cars[0].spe->x + dir.x) + (cars[0].spe->y + dir.y) * (cars[0].spe->y + dir.y));
             fprintf(stderr, "normed speed: %d\n", normed_speed);
