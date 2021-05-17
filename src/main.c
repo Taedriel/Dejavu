@@ -86,10 +86,10 @@ int main () {
             print_map_path(&map, opti, tmp_stack->size, stderr);
         }
         srand(time(0));
-        int test_1 = rand() % map.height;
-        int test_2 = rand() % map.width;
+        int test_x = 10; // rand() % map.width;
+        int test_y = 5; // rand() % map.height;
 
-        fprintf(stderr, "value index for coord %d %d : %d", test_2, test_1, get_segment_by_coord(opti, tmp_stack->size, A_star, create_tuple_int(test_1, test_2)));
+        fprintf(stderr, "value index for coord %d %d : %d", test_x, test_y, get_segment_by_coord(opti, tmp_stack->size, A_star, create_tuple_int(test_x, test_y)));
         #if 0 
         /* Gas consumption cannot be accurate here. */
         consum_gas(cars, 0);

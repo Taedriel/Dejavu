@@ -168,8 +168,7 @@ void **stack_to_tab(stack *s) {
 stack *list_to_stack(list *s) {
     stack *new_stack = create_stack();
     int i;
-    for (i = 0 ; i < s->size; i++)
-    {
+    for (i = s->size - 1 ; i >= 0  ; i--) {
         push_stack(new_stack, get_list(s, i));
     }
     return new_stack;
