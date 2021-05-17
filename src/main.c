@@ -9,9 +9,9 @@
 
 int main () {
 
-    int width, height, i;
+    int width, height, i, max_normed_speed, normed_speed, cpt;
     int round = 0, gas = 0;
-    int segment = 0, new_segment = 1;
+    int segment = 0, new_seg, new_segment = 1;
 
     char line_buffer[MAX_LINE_LENGTH];
     FILE *logs, *logs_cout;
@@ -30,7 +30,7 @@ int main () {
     tuple_int ** opti_global;
     tuple_int * end_pos;
     tuple_int * start_pos;
-    tuple_int dir;
+    tuple_int dir, maxdir;
 
     //do_all_tests();
 
@@ -51,6 +51,7 @@ int main () {
         round++;
         // RACE_ROUND(round, stderr)
         read_positions(cars);
+        print_car(&cars[0], stderr);
         
         if (round == 1) {
             A_star_global = init_weighted_map(map.height, map.width, *(cars[0].pos));
@@ -99,11 +100,27 @@ int main () {
         fclose(logs_cout);
 
         list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
-        dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, 0)));
-        set_acceleration(cars, dir.x, dir.y);
+        max_normed_speed = 0;
+        cpt = 0;
+        for (i = list_opti_local->size-2; i > 0 && cpt < 6; i--) {
+            dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, i)), 0);
+            normed_speed = sqrt((cars[0].spe->x + dir.x) * (cars[0].spe->x + dir.x) + (cars[0].spe->y + dir.y) * (cars[0].spe->y + dir.y));
+            fprintf(stderr, "normed speed: %d\n", normed_speed);
+            if (normed_speed >= max_normed_speed && normed_speed <= 5) {
+                max_normed_speed = normed_speed;
+                maxdir.x = dir.x;
+                maxdir.y = dir.y;
+            }
+            cpt++;
+        }
+        set_acceleration(cars, maxdir.x, maxdir.y);
 
-        //TEST FIN DE SEGMENT ICI
-        
+        new_seg = get_segment_by_coord((tuple_int **)list_to_tab(list_opti_local), list_opti_local->size, A_star_local, cars[0].pos);
+        fprintf(stderr, "Segment at the end: %d\nCurrent Segment: %d\n", new_seg, segment);
+        if (new_seg > segment) {
+            segment = new_seg;
+            new_segment = 1;
+        }
 
         consum_gas(cars, 0);
         post_actions(cars);

@@ -65,26 +65,26 @@ weighted_map_t *init_weighted_map(int height, int width, tuple_int start) {
 void fill_proba_map(map_t map, float ** to_map, tuple_int start_pos, car_t car) {
     int i,j, delta;
     
-    fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->x, car.spe->x, car.pos->x + car.spe->x - 2, car.pos->x, car.spe->x, car.pos->x + car.spe->x + 2 + 1);
-    fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->y, car.spe->y, car.pos->y + car.spe->y - 2, car.pos->y, car.spe->y, car.pos->y + car.spe->y + 2 + 1);
+    // fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->x, car.spe->x, car.pos->x + car.spe->x - 2, car.pos->x, car.spe->x, car.pos->x + car.spe->x + 2 + 1);
+    // fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->y, car.spe->y, car.pos->y + car.spe->y - 2, car.pos->y, car.spe->y, car.pos->y + car.spe->y + 2 + 1);
 
     for (i = max(car.pos->x + car.spe->x - 2, 0); i < min(car.pos->x + car.spe->x + 2 + 1, map.width); i++) {
         if (to_map[start_pos.y][i] == 0) {
             delta = abs(i - (car.pos->x + car.spe->x));
             to_map[start_pos.y][i] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
-            fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
+            // fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
         }
     } 
-    fprintf(stderr, "\n");
+    // fprintf(stderr, "\n");
 
     for (i = max(car.pos->y + car.spe->y - 2, 0); i < min(car.pos->y + car.spe->y + 2 + 1, map.height); i++) {
         if (to_map[i][start_pos.x] == 0) {
             delta = abs(i - (car.pos->y + car.spe->y));
             to_map[i][start_pos.x] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
-            fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
+            // fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
         }
     } 
-    fprintf(stderr, "\n");
+    // fprintf(stderr, "\n");
 
     for (i = 0; i < map.height; i++) {
         for (j = 0; j < map.width; j++) {
