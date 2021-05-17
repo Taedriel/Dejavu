@@ -69,7 +69,11 @@ void print_float_weighted_map(float ** map, int width, int height, FILE *file) {
     int i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
-            fprintf(file, "(%5.1f) ", map[i][j]);
+            if (map[i][j] == 0.){
+                fprintf(file, "     ");
+            } else {
+                fprintf(file, "%2.1f ", map[i][j]);
+            }
         }
         fprintf(file, "\n");
     }

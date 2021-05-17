@@ -82,4 +82,6 @@ void destroy_list(list *s);
 
 void **list_to_tab(list *s);
 
+list *create_list_from_obj(void *o);
+
 #endif

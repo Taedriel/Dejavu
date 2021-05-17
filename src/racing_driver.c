@@ -1,4 +1,5 @@
 #include "racing_driver.h"
+#include "racing_io.h"
 #include "racing_checkpoints.h"
 
 void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
@@ -43,8 +44,11 @@ void set_acceleration_on_tuple(struct car_t* player_car, tuple_int acc) {
     set_acceleration(player_car, acc.x, acc.y);
 }
 
-inline int theoric_position(int new_coord, int prev_coord, int prev_spe) {
-    return new_coord - prev_coord - prev_spe;
+tuple_int * dist_to_futur_pos(tuple_int futur_pos, car_t car) {
+    tuple_int * ret = create_tuple_int(0,0);
+    ret->x = futur_pos.x - (car.pos->x + car.spe->x);
+    ret->y = futur_pos.y - (car.pos->y + car.spe->y);
+    return ret;
 }
 /**
  * @todo ici on doit recup le segment en question 
@@ -52,23 +56,26 @@ inline int theoric_position(int new_coord, int prev_coord, int prev_spe) {
  * arbitraire avec une valeur choisi de longeur limite
  * avant le boost. 
  */
-inline int normed_acc(int coord) {
-    if (coord < 0)
+int normed_acc(int acc_require, int boost_allowed) {
+    if (acc_require < 0 && !boost_allowed)
         return -1;
-    if (coord > 0)
+    if (acc_require > 0 && !boost_allowed)
         return 1;
+    if (acc_require > 1 && boost_allowed)
+        return 2;
+    if (acc_require < -1 && boost_allowed)
+        return -2;
     return 0;
 }
 
-tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int B) {
+tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_reach, int boost_allowed) {
     tuple_int acc;
-    int x;
-    int y;
+    tuple_int * deltaToReach;
     //double new_speed_norm;
-    x = theoric_position(B.x, car->pos->x, car->spe->x);
-    y = theoric_position(B.y, car->pos->y, car->spe->y);
-    acc.x = normed_acc(x);
-    acc.y = normed_acc(y);
+    deltaToReach = dist_to_futur_pos(to_reach, *car);
+    acc.x = normed_acc(deltaToReach->x, boost_allowed);
+    acc.y = normed_acc(deltaToReach->y, boost_allowed); 
+    fprintf(stderr, "To Reach: %d %d\nDelta: \t%d %d\nAcc: \t%d %d\n", to_reach.x, to_reach.y, deltaToReach->x, deltaToReach->y, acc.x, acc.y);
 
 #if 0
     new_speed_norm = sqrt((acc.x + car->spe->x) * (acc.x + car->spe->x) +

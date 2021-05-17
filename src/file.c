@@ -121,3 +121,16 @@ void destroy_queue(queue *s) {
     }
     free(s);
 }
+
+void **queue_to_tab(queue *s) {
+    int i = 0;
+    void **ret = malloc(sizeof(void *) * s->size + 1);
+    queue_cell *temp = s->head;
+    while (temp != NULL) {
+        ret[i] = temp->x;
+        i++;
+        temp = temp->next;
+    }
+
+    return ret;
+}

@@ -58,7 +58,7 @@ void set_acceleration_on_tuple(struct car_t *player_car, tuple_int acc);
  * @param prev_spe 
  * @return int 
  */
-int theoric_position(int new_coord, int prev_coord, int prev_spe);
+tuple_int * dist_to_futur_pos(tuple_int futur_pos, car_t car);
 
 /**
  * @brief Return the logical acceleration
@@ -66,7 +66,7 @@ int theoric_position(int new_coord, int prev_coord, int prev_spe);
  * @param coord 
  * @return int 
  */
-int normed_acc(int coord);
+int normed_acc(int acc_require, int boost_allowed);
 
 /**
  * @brief Get the acceleration to reach point
@@ -76,7 +76,7 @@ int normed_acc(int coord);
  * @param B The point you want to reach
  * @return tuple_int 
  */
-tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int B);
+tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int to_reach, int boost_allowed);
 
 /**
  * @brief Return which composant of the acceleration is valid 
@@ -86,6 +86,6 @@ tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int B);
  * @param map 
  * @return int 
  */
-int is_valid_acceleration(struct car_t *car, tuple_int acc, struct map_t map);
+int is_valid_acceleration(struct car_t * car, tuple_int acc, struct map_t map);
 
 #endif
