@@ -14,7 +14,7 @@ int main () {
     int segment = 0, new_seg, new_segment = 1;
 
     char line_buffer[MAX_LINE_LENGTH];
-    FILE *logs, *logs_cout;
+    FILE *logs_cout, *logs_heur, *logs_dist;
 
     list * list_opti_global;
     list * list_opti_local;
@@ -30,7 +30,7 @@ int main () {
     tuple_int ** opti_global;
     tuple_int * end_pos;
     tuple_int * start_pos;
-    tuple_int dir, maxdir;
+    tuple_int dir, maxdir, * futur_pos;
 
     //do_all_tests();
 
@@ -49,7 +49,7 @@ int main () {
     
     while (!feof(stdin)) {
         round++;
-        // RACE_ROUND(round, stderr)
+        RACE_ROUND(round, stderr)
         read_positions(cars);
         print_car(&cars[0], stderr);
         
@@ -81,7 +81,7 @@ int main () {
         if (new_segment){
 
             A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
-            end_pos = copy_tuple_int(*(opti_global[tmp_stack->size-2-segment]));
+            end_pos = copy_tuple_int(*(opti_global[segment+1]));
             list_endpos = create_list_from_obj(end_pos);
             pre_weight_map(A_star_local, &map, list_endpos);
         
@@ -90,25 +90,31 @@ int main () {
             ,end_pos->x, end_pos->y, segment_len(opti_global, tmp_stack->size, segment));
         }
 
+
         weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
 
-        logs = fopen("log.txt", "w+");
+        logs_heur = fopen("log_heur.txt", "w+");
+        logs_dist = fopen("log_dist.txt", "w+");
         logs_cout = fopen("log_cout.txt", "w+");
-        fprintf(logs, "Round n°%d, Segement n°%d\n", round, segment);
+        fprintf(logs_heur, "Round n°%d, Segement n°%d\n", round, segment);
+        fprintf(logs_dist, "Round n°%d, Segement n°%d\n", round, segment);
         fprintf(logs_cout, "Round n°%d, Segement n°%d\n", round, segment);
-        print_float_weighted_map(A_star_local->cout, map.width, map.height, logs);
-        fclose(logs);
-        print_float_weighted_map(A_star_local->heuristique, map.width, map.height, logs_cout);
+        print_float_weighted_map(A_star_local->cout, map.width, map.height, logs_cout);
+        print_float_weighted_map(A_star_local->heuristique, map.width, map.height, logs_heur);
+        print_float_weighted_map(A_star_local->dist_from_end, map.width, map.height, logs_dist);
         fclose(logs_cout);
+        fclose(logs_heur);
+        fclose(logs_dist);
 
         list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
+        fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
         max_normed_speed = 0;
         cpt = 0;
-        for (i = list_opti_local->size-2; i >= 0 && cpt < 6; i--) {
+        for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
             dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, i)), 0);
             normed_speed = sqrt((cars[0].spe->x + dir.x) * (cars[0].spe->x + dir.x) + (cars[0].spe->y + dir.y) * (cars[0].spe->y + dir.y));
             fprintf(stderr, "normed speed: %d\n", normed_speed);
-            if (normed_speed >= max_normed_speed && normed_speed <= 5) {
+            if (normed_speed >= max_normed_speed && normed_speed <= 5 && (maxdir.x != 0 && maxdir.y != 0)) {
                 max_normed_speed = normed_speed;
                 maxdir.x = dir.x;
                 maxdir.y = dir.y;
@@ -117,10 +123,13 @@ int main () {
         }
         set_acceleration(cars, maxdir.x, maxdir.y);
 
-        new_seg = get_segment_by_coord((tuple_int **)list_to_tab(list_opti_local), list_opti_local->size, A_star_local, cars[0].pos);
-        fprintf(stderr, "Segment at the end: %d\nCurrent Segment: %d\n", new_seg, segment);
-        if (new_seg > segment) {
-            segment = new_seg;
+        // new_seg = get_segment_by_coord((tuple_int **)list_to_tab(list_opti_local), list_opti_local->size, A_star_local, cars[0].pos);
+        // fprintf(stderr, "Segment at the end: %d\nCurrent Segment: %d\n", new_seg, segment);
+        futur_pos = create_tuple_int(cars[0].pos->x + cars[0].acc->x + cars[0].spe->x, cars[0].pos->y + cars[0].acc->y + cars[0].spe->y);
+        fprintf(stderr, "futur pos will be: %d %d (dist_from_end = %f)\n", futur_pos->x, futur_pos->y, A_star_local->dist_from_end[futur_pos->y][futur_pos->x]);
+        if (A_star_local->dist_from_end[futur_pos->y][futur_pos->x] == 0.) {
+            segment ++;
+            fprintf(stderr, "NEW SEGMENT !\n");
             new_segment = 1;
         }
 

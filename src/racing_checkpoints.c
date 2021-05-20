@@ -46,8 +46,9 @@ int get_segment_by_coord(tuple_int **checkpoint, int checkpoint_size, weighted_m
     for (i = 0; i < checkpoint_size - 1; i++) {
         checkpoint_coord = checkpoint[i];
         heuristique_checkpoint = get_weight_checkpoint(checkpoint, checkpoint_size, i, weighted_map);
-        heuristique_car = weighted_map->heuristique[coord->y][coord->x];
-        if (heuristique_car > heuristique_checkpoint) {
+        heuristique_car = weighted_map->dist_from_end[coord->y][coord->x];
+        fprintf(stderr, "%d %d\n", heuristique_car, heuristique_checkpoint);
+        if (heuristique_car <= heuristique_checkpoint) {
             return i;
         }
     }

@@ -146,6 +146,18 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     return;
 }
 
+void reset_cost(weighted_map_t *weighted_map, map_t map) {
+
+    int x, y;
+
+    for (y = 0; y < map.height; y++) {
+        for (x = 0; x < map.width; x++) {
+            weighted_map->cout[y][x] = -1.;
+        }
+    }
+
+}
+
 
 /**
  * @brief perform A*
@@ -163,10 +175,13 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     float current_weight = 0., cout = 0.;
     float *** list_acc_map = malloc(sizeof(float **) * 3);
 
+    fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
+    print_list(endpos, print_tuple, stderr);
     for (i = 0; i < 3; i++) {
         list_acc_map[i] = init_accel_map(map->height, map->width);
         fill_proba_map(*map, list_acc_map[i], *(cars[i].pos), cars[i]);
     }
+    reset_cost(weighted_map, *map);
 
     // print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
 
@@ -184,10 +199,10 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
 
     while (!is_sorted_list_empty(openList)) {
 
-        
+        print_sorted_list(openList, print_tuple, stderr);
         *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
         remove_sorted_list(openList, 0);
-        // fprintf(stderr, "===========Current %d %d================\n", u->x, u->y);
+        fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {
             if (u->x == ((tuple_int *)get_list(endpos, i))->x && u->y == ((tuple_int *)get_list(endpos, i))->y) {
                 return;
@@ -204,8 +219,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                 exist_in_closed = 0;
                 exist_in_open = 0;
 
+                // print_list(closedList, print_tuple, stderr);
                 if (!is_list_empty(closedList)) {
-                    // print_list(closedList, print_tuple, stderr);
                     temp = closedList->head;
                     while (temp != NULL) {
                         tempx = ((tuple_int *)(temp->x))->x;
@@ -259,7 +274,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
 
                         if (!exist_in_open) {
                             add_sorted_list(openList, (void *)v, weighted_map->heuristique[v->y][v->x]);
-                            // fprintf(stderr, "Ajout de nouvelle case de poid: %f %f\n", cout, weighted_map->heuristique[v->y][v->x]);
+                            fprintf(stderr, "Ajout de nouvelle case de poid: %f (%f + %f * ratio)\n", weighted_map->heuristique[v->y][v->x], weighted_map->cout[v->y][v->x], weighted_map->dist_from_end[v->y][v->x]);
                         }
                     }
                 }
@@ -269,6 +284,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // print_sorted_list(openList, print_tuple, stderr);
     }
 
+    fprintf(stderr, "END OF ASTAR !\n");
     destroy_list(closedList);
     destroy_sorted_list(openList);
     /*

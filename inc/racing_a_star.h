@@ -22,6 +22,8 @@ void fill_proba_map(map_t map, weighted_map_t * weighted_map, tuple_int start_po
 
 void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos, car_t cars[3]);
 
+void reset_cost(weighted_map_t *weighted_map, map_t map);
+
 float **init_accel_map(int height, int width);
 
 #endif

@@ -23,10 +23,11 @@
 #define MAX_PATH_SIZE               1024
 #define DELTA_SPEED                 0.5
 
-#define DIAG_WEIGHT                 1
-#define OWN_SPEED_WEIGHT            1
-#define CONCUR_SPEED_WEIGHT         1
+#define DIAG_WEIGHT                 0.5
+#define OWN_SPEED_WEIGHT            0.5
+#define CONCUR_SPEED_WEIGHT         0.25
 #define POURCENT_LOSS_BY_ACC_WEIGHT 1./5.
+#define TEST_NB_FUTUR_POINT         2
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'
