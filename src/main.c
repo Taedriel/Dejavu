@@ -32,6 +32,8 @@ int main () {
     tuple_int * start_pos;
     tuple_int dir, maxdir, * futur_pos;
 
+    tuple_int past_pos[3]; 
+
     //do_all_tests();
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin);
@@ -50,8 +52,22 @@ int main () {
     while (!feof(stdin)) {
         round++;
         RACE_ROUND(round, stderr)
+
+	int i;
+
+	for (i=0; i<3;i++){
+		past_pos[i].x = cars[i].pos->x; 
+		past_pos[i].y = cars[i].pos->y;
+	}
+
         read_positions(cars);
         print_car(&cars[0], stderr);
+
+	for(i=0;i<3;i++){
+		if ((past_pos[i].x == cars[i].pos->x) && (past_pos[i].y == cars[i].pos->y)){
+			set_acceleration(&cars[i],0,0);
+		}
+	}
         
         if (round == 1) {
             A_star_global = init_weighted_map(map.height, map.width, *(cars[0].pos));
