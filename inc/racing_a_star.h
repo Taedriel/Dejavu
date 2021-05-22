@@ -18,7 +18,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos);
  * @param start_pos 
  * @param car 
  */
-void fill_proba_map(map_t map, weighted_map_t * weighted_map, tuple_int start_pos, car_t * car);
+void fill_proba_map(map_t map, weighted_map_t * weighted_map, car_t * car);
 
 void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos, car_t cars[3]);
 

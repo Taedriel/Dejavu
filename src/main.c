@@ -108,13 +108,14 @@ int main () {
 
         list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
         fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
+        print_car(&cars[0], stderr);
         max_normed_speed = 0;
         cpt = 0;
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
             dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, i)), 0);
             normed_speed = sqrt((cars[0].spe->x + dir.x) * (cars[0].spe->x + dir.x) + (cars[0].spe->y + dir.y) * (cars[0].spe->y + dir.y));
             fprintf(stderr, "normed speed: %d\n", normed_speed);
-            if (normed_speed >= max_normed_speed && normed_speed <= 5 && (maxdir.x != 0 && maxdir.y != 0)) {
+            if (normed_speed >= max_normed_speed && normed_speed <= 5) {
                 max_normed_speed = normed_speed;
                 maxdir.x = dir.x;
                 maxdir.y = dir.y;
@@ -127,7 +128,7 @@ int main () {
         // fprintf(stderr, "Segment at the end: %d\nCurrent Segment: %d\n", new_seg, segment);
         futur_pos = create_tuple_int(cars[0].pos->x + cars[0].acc->x + cars[0].spe->x, cars[0].pos->y + cars[0].acc->y + cars[0].spe->y);
         fprintf(stderr, "futur pos will be: %d %d (dist_from_end = %f)\n", futur_pos->x, futur_pos->y, A_star_local->dist_from_end[futur_pos->y][futur_pos->x]);
-        if (A_star_local->dist_from_end[futur_pos->y][futur_pos->x] == 0.) {
+        if (A_star_local->dist_from_end[futur_pos->y][futur_pos->x] < 2.) {
             segment ++;
             fprintf(stderr, "NEW SEGMENT !\n");
             new_segment = 1;

@@ -62,25 +62,25 @@ weighted_map_t *init_weighted_map(int height, int width, tuple_int start) {
     return ret;
 }
 
-void fill_proba_map(map_t map, float ** to_map, tuple_int start_pos, car_t car) {
+void fill_proba_map(map_t map, float ** to_map, car_t car) {
     int i,j, delta;
     
     // fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->x, car.spe->x, car.pos->x + car.spe->x - 2, car.pos->x, car.spe->x, car.pos->x + car.spe->x + 2 + 1);
     // fprintf(stderr, "%d + %d - 2 = %d ==> %d + %d +2 +1 = %d\n", car.pos->y, car.spe->y, car.pos->y + car.spe->y - 2, car.pos->y, car.spe->y, car.pos->y + car.spe->y + 2 + 1);
 
     for (i = max(car.pos->x + car.spe->x - 2, 0); i < min(car.pos->x + car.spe->x + 2 + 1, map.width); i++) {
-        if (to_map[start_pos.y][i] == 0) {
+        if (to_map[car.pos->y][i] == 0) {
             delta = abs(i - (car.pos->x + car.spe->x));
-            to_map[start_pos.y][i] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
+            to_map[car.pos->y][i] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
             // fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
         }
     } 
     // fprintf(stderr, "\n");
 
     for (i = max(car.pos->y + car.spe->y - 2, 0); i < min(car.pos->y + car.spe->y + 2 + 1, map.height); i++) {
-        if (to_map[i][start_pos.x] == 0) {
+        if (to_map[i][car.pos->x] == 0) {
             delta = abs(i - (car.pos->y + car.spe->y));
-            to_map[i][start_pos.x] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
+            to_map[i][car.pos->x] = 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta;
             // fprintf(stderr, "%f  ", 1 - POURCENT_LOSS_BY_ACC_WEIGHT * delta);
         }
     } 
@@ -88,9 +88,9 @@ void fill_proba_map(map_t map, float ** to_map, tuple_int start_pos, car_t car) 
 
     for (i = 0; i < map.height; i++) {
         for (j = 0; j < map.width; j++) {
-            if (i != start_pos.y && j != start_pos.x){
-                if (to_map[i][start_pos.x] != 0. && to_map[start_pos.y][j] != 0) {
-                    to_map[i][j] = to_map[start_pos.y][j] * to_map[i][start_pos.x];
+            if (i != car.pos->y && j != car.pos->x){
+                if (to_map[i][car.pos->x] != 0. && to_map[car.pos->y][j] != 0) {
+                    to_map[i][j] = to_map[car.pos->y][j] * to_map[i][car.pos->x];
                 }
             }
         }
@@ -179,11 +179,19 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     print_list(endpos, print_tuple, stderr);
     for (i = 0; i < 3; i++) {
         list_acc_map[i] = init_accel_map(map->height, map->width);
-        fill_proba_map(*map, list_acc_map[i], *(cars[i].pos), cars[i]);
+        fill_proba_map(*map, list_acc_map[i], cars[i]);
     }
     reset_cost(weighted_map, *map);
 
-    // print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
+    
+    fprintf(stderr, "===================\n");
+    print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
+    fprintf(stderr, "===================\n");
+    print_float_weighted_map(list_acc_map[1], map->width, map->height, stderr);
+    fprintf(stderr, "===================\n");
+    print_float_weighted_map(list_acc_map[2], map->width, map->height, stderr);
+    fprintf(stderr, "===================\n");
+    
 
     sorted_list *openList = create_sorted_list();
     sorted_list_cell *temp_sorted;
@@ -199,7 +207,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
 
     while (!is_sorted_list_empty(openList)) {
 
-        print_sorted_list(openList, print_tuple, stderr);
+        // print_sorted_list(openList, print_tuple, stderr);
         *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
         remove_sorted_list(openList, 0);
         fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
@@ -274,7 +282,6 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
 
                         if (!exist_in_open) {
                             add_sorted_list(openList, (void *)v, weighted_map->heuristique[v->y][v->x]);
-                            fprintf(stderr, "Ajout de nouvelle case de poid: %f (%f + %f * ratio)\n", weighted_map->heuristique[v->y][v->x], weighted_map->cout[v->y][v->x], weighted_map->dist_from_end[v->y][v->x]);
                         }
                     }
                 }
