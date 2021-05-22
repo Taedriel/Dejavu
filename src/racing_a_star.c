@@ -183,7 +183,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     }
     reset_cost(weighted_map, *map);
 
-    
+    /*
     fprintf(stderr, "===================\n");
     print_float_weighted_map(list_acc_map[0], map->width, map->height, stderr);
     fprintf(stderr, "===================\n");
@@ -191,7 +191,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     fprintf(stderr, "===================\n");
     print_float_weighted_map(list_acc_map[2], map->width, map->height, stderr);
     fprintf(stderr, "===================\n");
-    
+    */
 
     sorted_list *openList = create_sorted_list();
     sorted_list_cell *temp_sorted;
@@ -210,7 +210,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // print_sorted_list(openList, print_tuple, stderr);
         *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
         remove_sorted_list(openList, 0);
-        fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
+        // fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {
             if (u->x == ((tuple_int *)get_list(endpos, i))->x && u->y == ((tuple_int *)get_list(endpos, i))->y) {
                 return;

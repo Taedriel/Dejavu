@@ -30,7 +30,7 @@ int main () {
     tuple_int ** opti_global;
     tuple_int * end_pos;
     tuple_int * start_pos;
-    tuple_int dir, maxdir, * futur_pos;
+    tuple_int dir, maxdir, * futur_pos, * temp;
 
     tuple_int past_pos[3]; 
 
@@ -53,21 +53,22 @@ int main () {
         round++;
         RACE_ROUND(round, stderr)
 
-	int i;
+	    int i;
 
-	for (i=0; i<3;i++){
-		past_pos[i].x = cars[i].pos->x; 
-		past_pos[i].y = cars[i].pos->y;
-	}
+        for (i=0; i<3;i++){
+            past_pos[i].x = cars[i].pos->x; 
+            past_pos[i].y = cars[i].pos->y;
+        }
 
         read_positions(cars);
-        print_car(&cars[0], stderr);
 
-	for(i=0;i<3;i++){
-		if ((past_pos[i].x == cars[i].pos->x) && (past_pos[i].y == cars[i].pos->y)){
-			set_acceleration(&cars[i],0,0);
-		}
-	}
+        for(i=0;i<3;i++){
+            if ((past_pos[i].x == cars[i].pos->x) && (past_pos[i].y == cars[i].pos->y)){
+                cars[i].spe->x = 0;
+                cars[i].spe->y = 0;
+            }
+        }
+        print_car(&cars[0], stderr);
         
         if (round == 1) {
             A_star_global = init_weighted_map(map.height, map.width, *(cars[0].pos));
@@ -123,18 +124,28 @@ int main () {
         fclose(logs_dist);
 
         list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
-        fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
+        print_list(list_opti_local, print_tuple, stderr);
+        // fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
         print_car(&cars[0], stderr);
         max_normed_speed = 0;
         cpt = 0;
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
-            dir = get_acc_to_reach(cars, map, *((tuple_int *) get_list(list_opti_local, i)), 0);
+            temp = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
+            dir = get_acc_to_reach(cars, map, *temp, 0);
             normed_speed = sqrt((cars[0].spe->x + dir.x) * (cars[0].spe->x + dir.x) + (cars[0].spe->y + dir.y) * (cars[0].spe->y + dir.y));
+            if (map.array[temp->y][temp->x] == SAND_CHAR) {
+                normed_speed = -1; 
+            }
+
+
             fprintf(stderr, "normed speed: %d\n", normed_speed);
-            if (normed_speed >= max_normed_speed && normed_speed <= 5) {
-                max_normed_speed = normed_speed;
-                maxdir.x = dir.x;
-                maxdir.y = dir.y;
+            if (normed_speed >= max_normed_speed) {
+                if (normed_speed <= 5  && max_normed_speed <= normed_speed) {
+                    max_normed_speed = normed_speed;
+                    maxdir.x = dir.x;
+                    maxdir.y = dir.y;
+                    
+                }
             }
             cpt++;
         }

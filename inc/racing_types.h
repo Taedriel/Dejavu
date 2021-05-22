@@ -28,7 +28,7 @@
 #define CONCUR_SPEED_WEIGHT         1
 #define DIST_FROM_END_WEIGHT        2
 #define POURCENT_LOSS_BY_ACC_WEIGHT 1./3.
-#define TEST_NB_FUTUR_POINT         2
+#define TEST_NB_FUTUR_POINT         3
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'
