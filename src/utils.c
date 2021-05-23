@@ -1,8 +1,5 @@
 #include "utils.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 void print_tuple(void *t, char *rep) {
     sprintf(rep, "%d %d", ((tuple_int *)t)->x, ((tuple_int *)t)->y);
 }
@@ -49,4 +46,8 @@ int _in(tuple_int **liste, int size, tuple_int elem) {
     }
 
     return 0;
+}
+
+bool is_in_sand(map_t *map, car_t *car) {
+    return (map->array[car->pos->y][car->pos->x] == SAND_CHAR)? true : false;
 }
