@@ -77,7 +77,8 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_rea
     acc.x = normed_acc(deltaToReach->x, boost_allowed);
     acc.y = normed_acc(deltaToReach->y, boost_allowed); 
 
-    if (is_in_sand(&map, car) && abs(acc.x) == abs(acc.y) && abs(acc.y) == 1 ){
+    if (is_in_sand(&map, car) && (abs(acc.x) == abs(acc.y)) && (abs(acc.y) == 1)){
+        fprintf(stderr, "\n\nDans le sable avec une accrélération de norme sup à 1\n\n");
         if (rand()%2 == 0) {
             acc.x = 0;
         } else {
