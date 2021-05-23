@@ -175,8 +175,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     float current_weight = 0., cout = 0.;
     float *** list_acc_map = malloc(sizeof(float **) * 3);
 
-    fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
-    print_list(endpos, print_tuple, stderr);
+    // fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
+    // print_list(endpos, print_tuple, stderr);
     for (i = 0; i < 3; i++) {
         list_acc_map[i] = init_accel_map(map->height, map->width);
         fill_proba_map(*map, list_acc_map[i], cars[i]);
@@ -203,7 +203,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     tuple_int *v;
     list * neighboor;
 
-    add_sorted_list(openList, (void *)(&start), weighted_map->heuristique[start.y][start.y]);
+    add_sorted_list(openList, (void *)(&start), weighted_map->heuristique[start.y][start.x]);
 
     while (!is_sorted_list_empty(openList)) {
 
@@ -291,7 +291,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // print_sorted_list(openList, print_tuple, stderr);
     }
 
-    fprintf(stderr, "END OF ASTAR !\n");
+    // fprintf(stderr, "END OF ASTAR !\n");
     destroy_list(closedList);
     destroy_sorted_list(openList);
     /*

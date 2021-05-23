@@ -127,7 +127,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     tuple_int * current_pos;
     tuple_int * diff;
 
-    fprintf(stderr, "GOAL is (%d %d)\n", start.x, start.y);
+    // fprintf(stderr, "GOAL is (%d %d)\n", start.x, start.y);
 
     for (i = 0; i < endpos->size; i ++) {
         x = ((tuple_int *)get_list(endpos, i))->x;
@@ -144,7 +144,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         //no path found
         return ret;
     }
-
+    
     while (!(current_pos->x == start.x && current_pos->y == start.y)) {
 
         add_list(ret, copy_tuple_int(*current_pos));
