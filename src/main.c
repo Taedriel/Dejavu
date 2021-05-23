@@ -69,7 +69,15 @@ int main () {
             }
         }
         print_car(&cars[0], stderr);
-        
+
+        if (round >= 2){
+            if (A_star_local->dist_from_end[futur_pos->y][futur_pos->x] < get_normed_speed(cars[0])) {
+                segment++;
+                fprintf(stderr, "NEW SEGMENT !\n");
+                new_segment = 1;
+            }
+        }
+
         if (round == 1) {
             A_star_global = init_weighted_map(map.height, map.width, *(cars[0].pos));
             list_endpos = find_end(map);
@@ -90,6 +98,10 @@ int main () {
 
             print_map_path(&map, (tuple_int **) list_to_tab(list_opti_global), list_opti_global->size, stderr);
             print_map_path(&map, opti_global, tmp_stack->size, stderr);
+
+            logs_heur = fopen("logs_global_heur.txt", "w+");
+            print_float_weighted_map(A_star_global->heuristique, map.width, map.height, logs_heur);
+            fclose(logs_heur);
 
         }
             
@@ -132,14 +144,14 @@ int main () {
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
             temp = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
             dir = get_acc_to_reach(cars, map, *temp, 0);
-            normed_speed = sqrt((cars[0].spe->x + dir.x) * (cars[0].spe->x + dir.x) + (cars[0].spe->y + dir.y) * (cars[0].spe->y + dir.y));
+            normed_speed = get_normed_speed(cars[0]);
             if (map.array[temp->y][temp->x] == SAND_CHAR) {
                 normed_speed = -1; 
             }
 
 
             fprintf(stderr, "normed speed: %d\n", normed_speed);
-            if (normed_speed >= max_normed_speed) {
+            if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir)) {
                 if (normed_speed <= 5  && max_normed_speed <= normed_speed) {
                     max_normed_speed = normed_speed;
                     maxdir.x = dir.x;
@@ -155,11 +167,6 @@ int main () {
         // fprintf(stderr, "Segment at the end: %d\nCurrent Segment: %d\n", new_seg, segment);
         futur_pos = create_tuple_int(cars[0].pos->x + cars[0].acc->x + cars[0].spe->x, cars[0].pos->y + cars[0].acc->y + cars[0].spe->y);
         fprintf(stderr, "futur pos will be: %d %d (dist_from_end = %f)\n", futur_pos->x, futur_pos->y, A_star_local->dist_from_end[futur_pos->y][futur_pos->x]);
-        if (A_star_local->dist_from_end[futur_pos->y][futur_pos->x] < 2.) {
-            segment ++;
-            fprintf(stderr, "NEW SEGMENT !\n");
-            new_segment = 1;
-        }
 
         consum_gas(cars, is_in_sand(&map, cars));
         post_actions(cars);
