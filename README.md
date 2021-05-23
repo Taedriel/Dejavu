@@ -3,7 +3,7 @@ participation in an ENSICAEN challenge where you have to code a program to perfo
 
 ## Participants
 * Ismaël Delorme [![wakatime](https://wakatime.com/badge/github/Taedriel/Dejavu.svg)](https://wakatime.com/badge/github/Taedriel/Dejavu)
-* Sonia Hammami
-* Paul Lemair 
+* Sonia Hammami 
+* Paul Lemair [![wakatime](https://wakatime.com/badge/github/Taedriel/Dejavu.svg)](https://wakatime.com/badge/github/Taedriel/Dejavu)
 
 
