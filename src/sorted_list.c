@@ -4,11 +4,6 @@
 
 #include "sorted_list.h"
 
-/**
- * @brief Create a Queue object FILO
- * 
- * @return stack* 
- */
 sorted_list *create_sorted_list() {
     sorted_list *s;
     s = malloc(sizeof(sorted_list));
@@ -19,22 +14,10 @@ sorted_list *create_sorted_list() {
     return s;
 }
 
-/**
- * @brief return whether the queue is empty or not
- * 
- * @param s 
- * @return int 
- */
 int is_sorted_list_empty(sorted_list *s) {
     return s->size == 0;
 }
 
-/**
- * @brief add an element in the ordered list keeping the list ordered 
- * 
- * @param s 
- * @param a 
- */
 void add_sorted_list(sorted_list *s, void *a, float score) {
     sorted_list_cell * temp;
     sorted_list_cell * c = malloc(sizeof(sorted_list_cell));
@@ -58,23 +41,14 @@ void add_sorted_list(sorted_list *s, void *a, float score) {
             s->head = c;
         }
     } else {
-        temp = s->head;
-        
-        //fprintf(stderr, "%p --> %p\n",(void *) s->head, (void *) s->tail);
-        
-        while (temp != s->tail) {
-            
-            //fprintf(stderr, "!= %p\n", (void *) temp);
-            
+        temp = s->head;        
+        while (temp != s->tail) {            
             if (score < temp->score){
                 break;
             }
 
             temp = temp->next;
         }
-        
-        //fprintf(stderr, "end == %p (%f)\n", (void *) temp, score);
-
         if (temp == s->head && score < temp->score) {
             //insertion au debut
             s->head->prev = c;
@@ -98,12 +72,6 @@ void add_sorted_list(sorted_list *s, void *a, float score) {
     s->size++;
 }
 
-/**
- * @brief remove an object from the list at indice i
- * 
- * @param s 
- * @param indice 
- */
 void remove_sorted_list(sorted_list *s, int indice) {
     sorted_list_cell * temp;
     int cpt;
@@ -130,13 +98,6 @@ void remove_sorted_list(sorted_list *s, int indice) {
     }
 }
 
-/**
- * @brief get an element from the end of the queue,
- *  if the queue is empty, return a null element
- * 
- * @param s 
- * @return element 
- */
 void *get_sorted_list(sorted_list *s, int i, float * cout) {
     sorted_list_cell *temp;
     int cpt; 
@@ -159,6 +120,7 @@ void *get_sorted_list(sorted_list *s, int i, float * cout) {
     *cout = temp->score;
     return temp->x;
 }
+
 void print_sorted_list_int(int content, char *buf) {
     sprintf(buf, "%d", content);
 }
@@ -185,12 +147,6 @@ void print_sorted_list(sorted_list *s, void(print_func)(void *, char *), FILE *f
     fprintf(file, "] = %d\n", s->size);
 }
 
-/**
- * @brief copy a queue into another
- * 
- * @param s 
- * @return queue* 
- */
 sorted_list *copy_sorted_list(sorted_list *s) {
     sorted_list *copy;
     sorted_list_cell *p = s->tail;
@@ -208,11 +164,6 @@ sorted_list *copy_sorted_list(sorted_list *s) {
     return copy;
 }
 
-/**
- * @brief free a queue and all the queue_cell inside
- * 
- * @param s 
- */
 void destroy_sorted_list(sorted_list *s) {
     while (s->size != 0) {
         remove_sorted_list(s, 0);

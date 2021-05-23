@@ -1,17 +1,8 @@
 #include "racing_io.h"
 
-/**
- * @brief send action to stdout, publishing theme to the GDC
- * 
- * @param player_car 
- * @return int 
- */
 int post_actions(car_t *player_car) {
     char action[ACTION_LENGTH];
-    /*int ax = (player_car->acc->x == 0) ? 0 : player_car->acc->x / abs(player_car->acc->x);
-    int ay = (player_car->acc->y == 0) ? 0 : player_car->acc->y / abs(player_car->acc->y);
 
-    sprintf(action, "%d %d", ax, ay);*/
     sprintf(action, "%d %d", player_car->acc->x, player_car->acc->y);
     fprintf(stdout, "%s", action);
     fflush(stdout);
@@ -21,13 +12,6 @@ int post_actions(car_t *player_car) {
     return EXIT_SUCCESS;
 }
 
-/**
- * @brief read positions of all the pilots of the track ans store them in there 
- * respective car struc
- * 
- * @param car_list 
- * @return int 
- */
 int read_positions(struct car_t *car_list) {
     char line_buffer[MAX_LINE_LENGTH];
 
@@ -47,12 +31,6 @@ int read_positions(struct car_t *car_list) {
     return EXIT_SUCCESS;
 }
 
-/**
- * @brief print all the car info 
- * 
- * @param player_car 
- * @param file 
- */
 void print_car(struct car_t *player_car, FILE *file) {
     fprintf(file, "Acc: %d %d\tSpeed: %d %d\tPos: %d %d", player_car->acc->x,
             player_car->acc->y, player_car->spe->x, player_car->spe->y,

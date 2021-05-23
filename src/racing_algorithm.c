@@ -101,12 +101,6 @@ int hamming_weight(int x) {
     return ret;
 }
 
-/**
- * @brief transform a normed tupled into the same format than relative_pos
- * 
- * @param a 
- * @return int 
- */
 int tuple_normed_to_int(tuple_int a) {
     return ((a.x < 0 ? 2 : a.x == 0 ? 0
                                     : 1)

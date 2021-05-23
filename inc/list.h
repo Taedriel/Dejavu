@@ -80,8 +80,21 @@ list *copy_list(list *s);
  */
 void destroy_list(list *s);
 
+
+/**
+ * @brief translate a list into a table
+ * 
+ * @param s 
+ * @return void** 
+ */
 void **list_to_tab(list *s);
 
+/**
+ * @brief Create a list from object
+ * 
+ * @param o 
+ * @return list* 
+ */
 list *create_list_from_obj(void *o);
 
 #endif

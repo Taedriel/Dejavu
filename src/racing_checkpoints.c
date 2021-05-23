@@ -24,16 +24,16 @@ stack *remove_useless_points(stack *traj) {
     return new_stack;
 }
 
-double segment_len(tuple_int **tab, int tab_size, int index) {
-    if (index + 1 > tab_size) {
+double segment_len(tuple_int **checkpoint, int checkpoint_size, int index) {
+    if (index + 1 > checkpoint_size) {
         return -1;
     }
-    return distance(*(tab[index]), *(tab[index + 1]));
+    return distance(*(checkpoint[index]), *(checkpoint[index + 1]));
 }
 
-int get_weight_checkpoint(tuple_int **tab, int tab_size, int index, weighted_map_t *weighted_map) {
+int get_weight_checkpoint(tuple_int **checkpoint, int checkpoint_size, int index, weighted_map_t *weighted_map) {
     tuple_int *checkpoint_coord;
-    checkpoint_coord = tab[index];
+    checkpoint_coord = checkpoint[index];
     return weighted_map->dist_from_end[checkpoint_coord->y][checkpoint_coord->x];
 }
 
@@ -54,6 +54,6 @@ int get_segment_by_coord(tuple_int **checkpoint, int checkpoint_size, weighted_m
 
 }
 
-int get_segment(tuple_int **tab, int tab_size, weighted_map_t *weighted_map, car_t *car) {
-    return get_segment_by_coord(tab, tab_size, weighted_map, car->pos);
+int get_segment(tuple_int **checkpoint, int checkpoint_size, weighted_map_t *weighted_map, car_t *car) {
+    return get_segment_by_coord(checkpoint, checkpoint_size, weighted_map, car->pos);
 }
