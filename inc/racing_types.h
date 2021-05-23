@@ -89,4 +89,7 @@ typedef struct weighted_map_t
 
 } weighted_map_t;
 
+/* =================== Enum ===================*/
+typedef enum {false, true} bool;
+
 #endif

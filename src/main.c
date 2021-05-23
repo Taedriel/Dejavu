@@ -161,7 +161,7 @@ int main () {
             new_segment = 1;
         }
 
-        consum_gas(cars, 0);
+        consum_gas(cars, is_in_sand(&map, cars));
         post_actions(cars);
     }
 
