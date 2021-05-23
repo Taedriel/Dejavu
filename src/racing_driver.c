@@ -5,25 +5,18 @@
 
 void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
               int spe_x, int spe_y, int gas) {
-    player_car->acc = malloc(sizeof(tuple_int));
-    player_car->spe = malloc(sizeof(tuple_int));
-    player_car->pos = malloc(sizeof(tuple_int));
-    player_car->acc->x = acc_x;
-    player_car->acc->y = acc_y;
+    player_car->acc = create_tuple_int(acc_x, acc_y);
+    player_car->spe = create_tuple_int(spe_x, spe_y);
+    player_car->pos = create_tuple_int(0, 0);
     player_car->boosts = boosts;
     player_car->gas_level = gas;
-    player_car->spe->x = spe_x;
-    player_car->spe->y = spe_y;
-    player_car->pos->x = 0;
-    player_car->pos->y = 0;
 }
 
 int gas_consumption(struct car_t* player_car, int inSand) {
     int gas = player_car->acc->x * player_car->acc->x +
               player_car->acc->y * player_car->acc->y;
     gas += (int)(sqrt(player_car->spe->x * player_car->spe->x +
-                      player_car->spe->y * player_car->spe->y) *
-                 3.0 / 2.0);
+                      player_car->spe->y * player_car->spe->y) * 3. / 2.);
     if (inSand) {
         gas += 1;
     }
@@ -47,10 +40,12 @@ void set_acceleration_on_tuple(struct car_t* player_car, tuple_int acc) {
 
 tuple_int * dist_to_futur_pos(tuple_int futur_pos, car_t car) {
     tuple_int * ret = create_tuple_int(0,0);
+
     ret->x = futur_pos.x - (car.pos->x + car.spe->x);
     ret->y = futur_pos.y - (car.pos->y + car.spe->y);
     return ret;
 }
+
 /**
  * @todo ici on doit recup le segment en question 
  * puis on calcule la distance. Enfin, un if 
@@ -72,13 +67,12 @@ int normed_acc(int acc_require, int boost_allowed) {
 tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_reach, int boost_allowed) {
     tuple_int acc;
     tuple_int * deltaToReach;
-    //double new_speed_norm;
+
     deltaToReach = dist_to_futur_pos(to_reach, *car);
     acc.x = normed_acc(deltaToReach->x, boost_allowed);
     acc.y = normed_acc(deltaToReach->y, boost_allowed); 
 
     if (is_in_sand(&map, car) && (abs(acc.x) == abs(acc.y)) && (abs(acc.y) == 1)){
-        fprintf(stderr, "\n\nDans le sable avec une accrélération de norme sup à 1\n\n");
         if (rand()%2 == 0) {
             acc.x = 0;
         } else {
@@ -86,15 +80,7 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_rea
         }
     }
     fprintf(stderr, "To Reach: %d %d\nDelta: \t%d %d\nAcc: \t%d %d\n", to_reach.x, to_reach.y, deltaToReach->x, deltaToReach->y, acc.x, acc.y);
-
-#if 0
-    new_speed_norm = sqrt((acc.x + car->spe->x) * (acc.x + car->spe->x) +
-                          (acc.y + car->spe->y) * (acc.y + car->spe->y));
-    if (new_speed_norm > 5) {
-        acc.x = 0;
-        acc.y = 0;
-    }
-#endif
+    free(deltaToReach);
     return acc;
 }
 
@@ -136,6 +122,7 @@ int is_move_valid(map_t map, car_t cars[3], tuple_int acc_asked){
 
     free(line);
     free(pos);
+    free(futur_pos);
     return 1;
 }
 

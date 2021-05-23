@@ -32,9 +32,7 @@ double segment_len(tuple_int **checkpoint, int checkpoint_size, int index) {
 }
 
 int get_weight_checkpoint(tuple_int **checkpoint, int checkpoint_size, int index, weighted_map_t *weighted_map) {
-    tuple_int *checkpoint_coord;
-    checkpoint_coord = checkpoint[index];
-    return weighted_map->dist_from_end[checkpoint_coord->y][checkpoint_coord->x];
+    return weighted_map->dist_from_end[checkpoint[index]->y][checkpoint[index]->x];
 }
 
 int get_segment_by_coord(tuple_int **checkpoint, int checkpoint_size, weighted_map_t *weighted_map, tuple_int *coord) {
