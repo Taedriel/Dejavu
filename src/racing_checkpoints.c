@@ -40,11 +40,9 @@ int get_weight_checkpoint(tuple_int **tab, int tab_size, int index, weighted_map
 int get_segment_by_coord(tuple_int **checkpoint, int checkpoint_size, weighted_map_t *weighted_map, tuple_int *coord) {
     int heuristique_car;
     int heuristique_checkpoint;
-    tuple_int * checkpoint_coord;
     int i;
 
     for (i = 0; i < checkpoint_size - 1; i++) {
-        checkpoint_coord = checkpoint[i];
         heuristique_checkpoint = get_weight_checkpoint(checkpoint, checkpoint_size, i, weighted_map);
         heuristique_car = weighted_map->dist_from_end[coord->y][coord->x];
         fprintf(stderr, "%d %d\n", heuristique_car, heuristique_checkpoint);

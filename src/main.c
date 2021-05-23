@@ -11,7 +11,7 @@ int main () {
 
     int width, height, i, max_normed_speed, normed_speed, cpt;
     int round = 0, gas = 0;
-    int segment = 0, new_seg, new_segment = 1;
+    int segment = 0, new_segment = 1;
 
     char line_buffer[MAX_LINE_LENGTH];
     FILE *logs_cout, *logs_heur, *logs_dist;
@@ -30,7 +30,7 @@ int main () {
     tuple_int ** opti_global;
     tuple_int * end_pos;
     tuple_int * start_pos;
-    tuple_int dir, maxdir, * futur_pos, * temp;
+    tuple_int dir, maxdir, * futur_pos, * v;
 
     tuple_int past_pos[3]; 
 
@@ -52,8 +52,6 @@ int main () {
     while (!feof(stdin)) {
         round++;
         RACE_ROUND(round, stderr)
-
-	    int i;
 
         for (i=0; i<3;i++){
             past_pos[i].x = cars[i].pos->x; 
@@ -142,21 +140,20 @@ int main () {
         max_normed_speed = 0;
         cpt = 0;
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
-            temp = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
-            dir = get_acc_to_reach(cars, map, *temp, 0);
+            v = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
+            dir = get_acc_to_reach(cars, map, *v, 0);
             normed_speed = get_normed_speed(cars[0]);
-            if (map.array[temp->y][temp->x] == SAND_CHAR) {
+            if (map.array[v->y][v->x] == SAND_CHAR) {
                 normed_speed = -1; 
             }
 
 
             fprintf(stderr, "normed speed: %d\n", normed_speed);
             if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir)) {
-                if (normed_speed <= 5  && max_normed_speed <= normed_speed) {
+                if (normed_speed <= MAX_SPEED && max_normed_speed <= normed_speed && normed_speed <= A_star_local->dist_from_end[v->y][v->x]) {
                     max_normed_speed = normed_speed;
                     maxdir.x = dir.x;
                     maxdir.y = dir.y;
-                    
                 }
             }
             cpt++;
