@@ -88,4 +88,18 @@ tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int to_rea
  */
 int is_valid_acceleration(struct car_t * car, tuple_int acc, struct map_t map);
 
+/**
+ * @brief return whether the move of car0 is a valide move, i.e. it does not goes through wall or opposent
+ * 
+ */
+int is_move_valid(map_t map, car_t cars[3], tuple_int dir);
+
+/**
+ * @brief return the normed speed of a car
+ * 
+ * @param car 
+ * @return double 
+ */
+double get_normed_speed(car_t car);
+
 #endif

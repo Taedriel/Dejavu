@@ -1,6 +1,7 @@
 #include "racing_driver.h"
 #include "racing_io.h"
 #include "racing_checkpoints.h"
+#include "follow_line.h"
 
 void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
               int spe_x, int spe_y, int gas) {
@@ -106,4 +107,29 @@ int is_valid_acceleration(struct car_t* car, tuple_int acc, struct map_t map) {
         return ERROR_ACC_X;
     }
     return ERROR_ACC_ALL;
+}
+
+int is_move_valid(map_t map, car_t cars[3], tuple_int acc_asked){
+    //using follow_line.c, 
+    InfoLine * line = malloc(sizeof(InfoLine));
+    Pos2Dint * pos = malloc(sizeof(Pos2Dint));
+    tuple_int * futur_pos = create_tuple_int(cars[0].spe->x + cars[0].pos->x + acc_asked.x, cars[0].spe->y + cars[0].pos->y + acc_asked.y);
+
+    initLine(cars[0].pos->x, cars[0].pos->y, futur_pos->x, futur_pos->y, line);
+
+    while (nextPoint(line, pos, 1) != -1){
+        if (map.array[pos->y][pos->x] == WALL_CHAR){
+            free(line);
+            free(pos);
+            return 0;
+        }
+    }
+
+    free(line);
+    free(pos);
+    return 1;
+}
+
+double get_normed_speed(car_t car) {
+    return sqrt(car.spe->x * car.spe->x + car.spe->y * car.spe->y);
 }
