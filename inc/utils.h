@@ -20,4 +20,8 @@ int _in(tuple_int **liste, int size, tuple_int elem);
 
 double distance(tuple_int a, tuple_int b);
 
+int _in(tuple_int **liste, int size, tuple_int elem);
+
+bool is_in_sand(map_t *map, car_t *car);
+
 #endif

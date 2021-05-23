@@ -165,7 +165,7 @@ int main () {
         futur_pos = create_tuple_int(cars[0].pos->x + cars[0].acc->x + cars[0].spe->x, cars[0].pos->y + cars[0].acc->y + cars[0].spe->y);
         fprintf(stderr, "futur pos will be: %d %d (dist_from_end = %f)\n", futur_pos->x, futur_pos->y, A_star_local->dist_from_end[futur_pos->y][futur_pos->x]);
 
-        consum_gas(cars, 0);
+        consum_gas(cars, is_in_sand(&map, cars));
         post_actions(cars);
     }
 
