@@ -11,7 +11,7 @@ int main () {
 
     int width, height, i, max_normed_speed, normed_speed, cpt;
     int round = 0, gas = 0;
-    int segment = 0, new_segment = 1;
+    int segment = 0, new_segment = 1, indice_end_point;
 
     char line_buffer[MAX_LINE_LENGTH];
     FILE *logs_cout, *logs_heur, *logs_dist;
@@ -30,7 +30,7 @@ int main () {
     tuple_int ** opti_global;
     tuple_int * end_pos;
     tuple_int * start_pos;
-    tuple_int dir, maxdir, * futur_pos, * v;
+    tuple_int dir, maxdir, * futur_pos, * v, * temp;
 
     tuple_int past_pos[3]; 
 
@@ -66,12 +66,10 @@ int main () {
                 cars[i].spe->y = 0;
             }
         }
-        print_car(&cars[0], stderr);
 
         if (round >= 2){
             if (A_star_local->dist_from_end[futur_pos->y][futur_pos->x] < get_normed_speed(cars[0])) {
                 segment++;
-                fprintf(stderr, "NEW SEGMENT !\n");
                 new_segment = 1;
             }
         }
@@ -110,6 +108,16 @@ int main () {
             A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
             end_pos = copy_tuple_int(*(opti_global[segment+1]));
             list_endpos = create_list_from_obj(end_pos);
+            for (i = 0; i < list_opti_global->size; i++){
+                temp = (tuple_int *) get_list(list_opti_global, i);
+                if (temp->x == end_pos->x && temp->y == end_pos->y){
+                    indice_end_point = i;
+                    break;
+                }
+            }
+            for (i = 0;i < NB_CASE_END; i++) {
+                add_list(list_endpos, get_list(list_opti_global, indice_end_point - 1 - i));
+            }
             pre_weight_map(A_star_local, &map, list_endpos);
         
             new_segment = 0;
@@ -138,22 +146,26 @@ int main () {
         // fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
         print_car(&cars[0], stderr);
         max_normed_speed = 0;
+        maxdir.x = cars[0].spe->x > 0 ? -1 : (cars[0].spe->x < 0 ? 1 : 0);
+        maxdir.y = cars[0].spe->y > 0 ? -1 : (cars[0].spe->y < 0 ? 1 : 0);
         cpt = 0;
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
             v = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
             dir = get_acc_to_reach(cars, map, *v, 0);
-            normed_speed = get_normed_speed(cars[0]);
+            normed_speed = distance(*create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y), *create_tuple_int(0,0));
             if (map.array[v->y][v->x] == SAND_CHAR) {
-                normed_speed = -1; 
+                normed_speed = 1; 
             }
 
 
-            fprintf(stderr, "normed speed: %d\n", normed_speed);
+            fprintf(stderr, "normed speed: %d\t", normed_speed);
+            fprintf(stderr, "valide move ? %d <= dist_from_end ? %d | %d < %d ? %d\n", is_move_valid(map, cars, dir), normed_speed <= segment_len(opti_global, tmp_stack->size, segment), normed_speed, MAX_SPEED, normed_speed < MAX_SPEED);
+
             if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir)) {
-                if (normed_speed <= MAX_SPEED && max_normed_speed <= normed_speed && normed_speed <= A_star_local->dist_from_end[v->y][v->x]) {
+                if (normed_speed < MAX_SPEED && max_normed_speed <= normed_speed && normed_speed <= segment_len(opti_global, tmp_stack->size, segment)) {
                     max_normed_speed = normed_speed;
                     maxdir.x = dir.x;
-                    maxdir.y = dir.y;
+                    maxdir.y = dir.y;   
                 }
             }
             cpt++;

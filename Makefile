@@ -6,7 +6,7 @@ PATH_INC=./inc
 
 CC=gcc
 
-CFLAGS = -Wall -Wextra -ansi -pedantic -std=c99 -Wpedantic -g -I$(PATH_INC) -Wno-unused-parameter	
+CFLAGS = -Wall -Wextra -ansi -pedantic -std=c99 -Wpedantic -g -I$(PATH_INC) -Wno-unused-parameter
 LDFLAGS= -lm
 PILOT_NAME = $(PATH_BIN)/Dejavu
 
