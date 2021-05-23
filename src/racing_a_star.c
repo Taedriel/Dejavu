@@ -175,8 +175,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     float current_weight = 0., cout = 0.;
     float *** list_acc_map = malloc(sizeof(float **) * 3);
 
-    // fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
-    // print_list(endpos, print_tuple, stderr);
+    fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
+    print_list(endpos, print_tuple, stderr);
     for (i = 0; i < 3; i++) {
         list_acc_map[i] = init_accel_map(map->height, map->width);
         fill_proba_map(*map, list_acc_map[i], cars[i]);
@@ -248,6 +248,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                     cout += (is_in_diagonal_from(*u, *v) ? DIAG_WEIGHT : 0);
                     switch (map->array[v->y][v->x]) {
                         case SAND_CHAR:
+                            cout += (is_in_diagonal_from(*u, *v) ? 100000000 : 0);
                             cout += 1.5;
                             break;
 
@@ -291,7 +292,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // print_sorted_list(openList, print_tuple, stderr);
     }
 
-    // fprintf(stderr, "END OF ASTAR !\n");
+    fprintf(stderr, "END OF ASTAR !\n");
     destroy_list(closedList);
     destroy_sorted_list(openList);
     /*
