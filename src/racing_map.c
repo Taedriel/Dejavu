@@ -1,13 +1,5 @@
 #include "racing_map.h"
 
-/**
- * @brief init the map struct given the first input of a race
- *        ! Must be used ! => else buffer pb  
- * 
- * @param map 
- * @param height 
- * @param width 
- */
 void init_map(map_t *map, int height, int width) {
     int row;
 
@@ -23,12 +15,6 @@ void init_map(map_t *map, int height, int width) {
     }
 }
 
-/**
- * @brief print the map
- * 
- * @param map 
- * @param file 
- */
 void print_map(map_t *map, FILE *file) {
     int row;
 
@@ -38,12 +24,7 @@ void print_map(map_t *map, FILE *file) {
         fputs(map->array[row], file);
     }
 }
-/**
- * @brief print the map but with a path
- * 
- * @param map 
- * @param file 
- */
+
 void print_map_path(map_t *map, tuple_int **path, int path_size, FILE *file) {
     int row, col, p = 0, printed;
 

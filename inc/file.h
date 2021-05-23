@@ -85,6 +85,12 @@ queue* copy_queue(queue* s);
  */
 void destroy_queue(queue* s);
 
+/**
+ * @brief translate a queue into a table  
+ * 
+ * @param s 
+ * @return void** 
+ */
 void** queue_to_tab(queue* s);
 
 #endif
