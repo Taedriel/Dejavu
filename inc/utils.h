@@ -32,6 +32,14 @@ int min(int a, int b);
 int dot_product(tuple_int *a, tuple_int *b, tuple_int *c);
 
 /**
+ * @brief Return a*a
+ * 
+ * @param a 
+ * @return int 
+ */
+int pow_int_2(int a);
+
+/**
  * @brief Compute the distance between two points
  * 
  * @param a 
