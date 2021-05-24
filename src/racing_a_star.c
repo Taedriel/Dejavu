@@ -189,7 +189,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     while (!is_sorted_list_empty(openList)) {
 
         // print_sorted_list(openList, print_tuple, stderr);
-        *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
+        u = (tuple_int *)get_sorted_list(openList, 0, &current_weight);
         remove_sorted_list(openList, 0);
         // fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {

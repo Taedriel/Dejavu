@@ -19,9 +19,11 @@ endif
 SRCS = $(wildcard $(PATH_SRC)/*.c)
 OBJS = $(patsubst $(PATH_SRC)/%.c, $(PATH_OBJ)/%.o, $(SRCS))
 
-.PHONY: all dir clean dist-clean doxy
+.PHONY: all utils dir clean dist-clean doxy
 
-all: dir $(PILOT_NAME)
+include $(PATH_SRC)/utils/Makefile
+
+all: utils dir $(PILOT_NAME)
 	@echo "\nAll is done !\n"
 
 install: clean all
@@ -37,7 +39,7 @@ doxy:
 	@mkdir -p $(PATH_DOC)
 	@doxygen
 
-$(PILOT_NAME):$(OBJS)
+$(PILOT_NAME):$(OBJS) $(OBJS_UTILS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(PATH_OBJ)/%.o: $(PATH_SRC)/%.c
