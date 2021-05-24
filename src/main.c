@@ -1,11 +1,11 @@
+#include "racing_a_star.h"
 #include "racing_algorithm.h"
+#include "racing_checkpoints.h"
 #include "racing_driver.h"
 #include "racing_io.h"
 #include "racing_map.h"
-#include "racing_a_star.h"
-#include "racing_checkpoints.h"
-#include "utils.h"
 #include "test.h"
+#include "utils.h"
 
 int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A_star_local, map_t map, car_t cars[3], tuple_int *start_pos, list ** list_endpos) {
     tuple_int * end_pos;
@@ -17,6 +17,11 @@ int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A
 
     end_pos = copy_tuple_int((tuple_int *) get_list(list_checkpoint, segment + 1));
     *list_endpos = create_list_from_obj(end_pos);
+
+    if (*A_star_local) {
+        free_weighted_map(*A_star_local);
+    }
+
     *A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
 
     pre_weight_map(*A_star_local, &map, *list_endpos);
@@ -93,7 +98,8 @@ tuple_int find_local_path(map_t map, weighted_map_t * A_star_local, tuple_int * 
 
 void find_global_path(weighted_map_t * A_star_global, car_t cars[3], map_t map, list ** list_checkpoint){
 
-    list * list_endpos, *list_opti_global;
+    list * list_endpos;
+    list *list_opti_global;
     stack *tmp_stack;
     FILE * logs_heur;
 
@@ -112,6 +118,7 @@ void find_global_path(weighted_map_t * A_star_global, car_t cars[3], map_t map, 
 
     logs_heur = fopen("logs_global_heur.txt", "w+");
     print_float_weighted_map(A_star_global->heuristique, map.width, map.height, logs_heur);
+
     fclose(logs_heur);
 
     destroy_list(list_opti_global);
@@ -148,6 +155,7 @@ int main () {
     int segment = 0;
     int new_segment = 1;
 
+
     char line_buffer[MAX_LINE_LENGTH];
 
     list * list_opti_local;
@@ -161,7 +169,6 @@ int main () {
     car_t cars[3];
     map_t map;
 
-    tuple_int * end_pos;
     tuple_int * start_pos;
     tuple_int maxdir;
     tuple_int * futur_pos;
@@ -200,12 +207,12 @@ int main () {
                 new_segment = 1;
             }
         }
-    
+
         start_pos = copy_tuple_int(cars[0].pos);
         
         if (new_segment){
             end = prepare_new_segment(segment, list_checkpoint, &A_star_local, map, cars, start_pos, &list_endpos);
-            }
+        }
 
         if (end) {
             weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
@@ -234,7 +241,6 @@ int main () {
     destroy_list(list_opti_local);
     destroy_list(list_endpos);
 
-    free(end_pos);
     free(start_pos);
     free(futur_pos);
     free(v);
