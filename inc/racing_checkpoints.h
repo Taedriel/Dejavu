@@ -19,7 +19,7 @@ stack *remove_useless_points(stack *traj);
  * @param index 
  * @return double 
  */
-double segment_len(tuple_int **checkpoint, int checkpoint_size, int index);
+double segment_len(list * list_checkpoint, int index);
 
 /**
  * @brief Get the weight of a checkpoint

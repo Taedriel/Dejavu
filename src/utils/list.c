@@ -146,3 +146,16 @@ list * create_list_from_obj(void * o) {
     add_list(ret, o);
     return ret;
 }
+
+list * tab_to_list(void ** elems, int size_tabs) {
+
+    int i;
+    list * ret = create_list();
+
+    for(i = 0; i < size_tabs; i++) {
+        add_list(ret, elems[i]);
+    }
+
+    return ret;
+
+}

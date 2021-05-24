@@ -97,4 +97,13 @@ void **list_to_tab(list *s);
  */
 list *create_list_from_obj(void *o);
 
+/**
+ * @brief Create a list from a tab of size_tabs elements 
+ * 
+ * @param elems 
+ * @param size_tabs 
+ * @return list* 
+ */
+list *tab_to_list(void **elems, int size_tabs);
+
 #endif

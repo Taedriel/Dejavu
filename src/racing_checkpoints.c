@@ -24,11 +24,11 @@ stack *remove_useless_points(stack *traj) {
     return new_stack;
 }
 
-double segment_len(tuple_int **checkpoint, int checkpoint_size, int index) {
-    if (index + 1 > checkpoint_size) {
+double segment_len(list * list_checkpoint,  int index) {
+    if (index + 1 > list_checkpoint->size) {
         return -1;
     }
-    return distance(*(checkpoint[index]), *(checkpoint[index + 1]));
+    return distance(*((tuple_int *)get_list(list_checkpoint, index)), *((tuple_int *)get_list(list_checkpoint, index + 1)));
 }
 
 int get_weight_checkpoint(tuple_int **checkpoint, int checkpoint_size, int index, weighted_map_t *weighted_map) {

@@ -90,4 +90,11 @@ void** stack_to_tab(stack* s);
  */
 stack *list_to_stack(list* s);
 
+/**
+ * @brief translate a stack into a list
+ * 
+ * @param stack 
+ * @return list* 
+ */
+list* stack_to_list(stack* stack);
 #endif

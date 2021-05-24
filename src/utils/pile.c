@@ -132,3 +132,15 @@ stack *list_to_stack(list *s) {
     }
     return new_stack;
 }
+
+list *stack_to_list(stack *stack) {
+    int i;
+    int maxsize = stack->size;
+    list *ret = create_list();
+
+    for (i = 0; i < maxsize; i++) {
+        add_list(ret, pop_stack(stack));
+    }
+
+    return ret;
+}
