@@ -275,6 +275,14 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     }
 
     fprintf(stderr, "END OF ASTAR !\n");
+    /**
+     * @todo le free de list_acc_map
+     * 
+     */
+    // for (i = 0; i < weighted_map->height; i++) {
+    //     free(list_acc_map[i]);
+    // }
+    // free(list_acc_map);
     destroy_list(closedList);
     destroy_sorted_list(openList);
     free(temp_sorted);

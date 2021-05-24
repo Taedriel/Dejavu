@@ -13,6 +13,7 @@
 #include "pile.h"
 #include "list.h"
 #include "sorted_list.h"
+#include "tuple.h"
 
 
 /* =================== Constant ===================*/
@@ -58,14 +59,6 @@
                                         fflush(file);
 
 /* =================== Struct ===================*/
-
-typedef struct tuple_int
-{
-
-    int x;
-    int y;
-
-} tuple_int;
 
 typedef struct car_t
 {

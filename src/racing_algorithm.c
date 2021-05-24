@@ -47,7 +47,6 @@ list * get_valid_neighbor(int width, int height, tuple_int startpos) {
             add_list(ret, create_tuple_int(startpos.x - 1, startpos.y + 1));
         }
     }
-
     return ret;
 }
 
@@ -70,28 +69,6 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** 
     return heur;
 }
 
-
-tuple_int * int_to_tuple(int entier) {
-
-    tuple_int * ret = create_tuple_int(0, 0);
-    int diff;
-    ret->x = (entier >> 4) == 2 ? -1 : (entier >> 4);
-    diff = entier - ((int) (entier >> 4) << 4);
-    ret->y = diff == 2 ? -1 : diff;
-
-    return ret;
-}
-
-int tuple_to_int(tuple_int origine, tuple_int dest) {
-    int deltaX = origine.x - dest.x;
-    int deltaY = origine.y - dest.y;
-    return ((deltaX < 0 ? 2 : deltaX == 0 ? 0
-                                          : 1)
-            << 4) |
-           (deltaY < 0 ? 2 : deltaY == 0 ? 0
-                                         : 1);
-}
-
 int hamming_weight(int x) {
     int ret = 0;
     while (x > 0) {
@@ -99,14 +76,6 @@ int hamming_weight(int x) {
         x = x >> 1;
     }
     return ret;
-}
-
-int tuple_normed_to_int(tuple_int a) {
-    return ((a.x < 0 ? 2 : a.x == 0 ? 0
-                                    : 1)
-                << 4 |
-            (a.y < 0 ? 2 : a.y == 0 ? 0
-                                    : 1));
 }
 
 int is_in_diagonal_from(tuple_int start, tuple_int dest) {

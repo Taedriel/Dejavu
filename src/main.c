@@ -9,9 +9,16 @@
 
 int main () {
 
-    int width, height, i, max_normed_speed, normed_speed, cpt;
+    int width;
+    int height;
+    int i;
+    int max_normed_speed;
+    int normed_speed;
+    int cpt;
     int round = 0, gas = 0;
-    int segment = 0, new_segment = 1, indice_end_point;
+    int segment = 0;
+    int new_segment = 1;
+    int indice_end_point;
 
     char line_buffer[MAX_LINE_LENGTH];
     FILE *logs_cout, *logs_heur, *logs_dist;
@@ -22,7 +29,8 @@ int main () {
 
     stack *tmp_stack;
 
-    weighted_map_t *A_star_global, *A_star_local;
+    weighted_map_t *A_star_global;
+    weighted_map_t *A_star_local;
 
     car_t cars[3];
     map_t map;
@@ -30,7 +38,10 @@ int main () {
     tuple_int ** opti_global;
     tuple_int * end_pos;
     tuple_int * start_pos;
-    tuple_int dir, maxdir, * futur_pos, * v, * temp;
+    tuple_int dir, maxdir;
+    tuple_int * futur_pos;
+    tuple_int * v;
+    tuple_int * temp;
 
     tuple_int past_pos[3]; 
 
@@ -158,6 +169,11 @@ int main () {
             v = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
             dir = get_acc_to_reach(cars, map, *v, 0);
 
+            /**
+             * @todo j'ai mis ça la en attendant d'avoir une fonction qui fait tout ça.
+             * Pour l'ODL pas le droit à cette declaration ici.
+             * 
+             */
             tuple_int * temp_tuple_1 = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
 
             normed_speed = distance(*temp_tuple_1, create_0_0_tuple());

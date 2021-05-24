@@ -23,37 +23,12 @@ list * get_valid_neighbor(int width, int height, tuple_int startpos);
 float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** liste_map_accel, float cout);
 
 /**
- * @brief Convert an int into a tuple
- * 
- * @param entier 
- * @return tuple_int* 
- */
-tuple_int *int_to_tuple(int entier);
-
-/**
- * @brief Convert a tuple into an int
- * 
- * @param origine 
- * @param dest 
- * @return int 
- */
-int tuple_to_int(tuple_int origine, tuple_int dest);
-
-/**
  * @brief Compute the hamming weight
  * 
  * @param x 
  * @return int 
  */
 int hamming_weight(int x);
-
-/**
- * @brief transform a normed tupled into the same format than relative_pos
- * 
- * @param a 
- * @return int 
- */
-int tuple_normed_to_int(tuple_int a);
 
 /**
  * @brief Check if the two points aren't paralleles to an axis
