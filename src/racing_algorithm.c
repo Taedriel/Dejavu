@@ -87,7 +87,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
             if (min == -1 || weighted_map->heuristique[y][x] < min){
                 // fprintf(stderr, "find min heur value for %d %d: %f\n", x, y, weighted_map->heuristique[y][x]);
                 min = weighted_map->heuristique[y][x];
-                current_pos = copy_tuple_int(*((tuple_int *)get_list(endpos, i)));
+                current_pos = copy_tuple_int((tuple_int *)get_list(endpos, i));
             }
         }
     }
@@ -99,7 +99,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     
     while (!(current_pos->x == start.x && current_pos->y == start.y)) {
 
-        add_list(ret, copy_tuple_int(*current_pos));
+        add_list(ret, copy_tuple_int(current_pos));
         fprintf(stderr, "%d %d\n", current_pos->x, current_pos->y);
         fprintf(stderr, "%x\n", weighted_map->came_from[current_pos->y][current_pos->x]);
 
@@ -108,7 +108,7 @@ list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         current_pos->y += diff->y;
 
     }
-    add_list(ret, copy_tuple_int(*current_pos));
+    add_list(ret, copy_tuple_int(current_pos));
 
     return ret;
 }

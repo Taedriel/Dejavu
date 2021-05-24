@@ -1,9 +1,9 @@
 #include "tuple.h"
 
-tuple_int *copy_tuple_int(tuple_int o) {
+tuple_int *copy_tuple_int(tuple_int * o) {
     tuple_int *ret = malloc(sizeof(tuple_int));
-    ret->x = o.x;
-    ret->y = o.y;
+    ret->x = o->x;
+    ret->y = o->y;
 
     return ret;
 }

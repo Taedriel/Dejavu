@@ -104,7 +104,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     tuple_int * current_pos = malloc(sizeof(tuple_int));
 
     for (i = 0; i < endpos->size; i++) {
-        temp = copy_tuple_int(*((tuple_int *)get_list(endpos, i)));
+        temp = copy_tuple_int((tuple_int *)get_list(endpos, i));
         weighted_map->dist_from_end[temp->y][temp->x] = 0.;
         add_queue(s, (void *)temp);
     }
@@ -115,7 +115,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
 
         neighboor = get_valid_neighbor(map->width, map->height, *current_pos);
         for (i = 0; i < neighboor->size; i++) {
-            temp = copy_tuple_int(*((tuple_int *) get_list(neighboor, i)));
+            temp = copy_tuple_int((tuple_int *) get_list(neighboor, i));
             if (map->array[temp->y][temp->x] != WALL_CHAR) {
                 weight = current_value + 1;
                 weight += (is_in_diagonal_from(*current_pos, *temp) ? 0.5 : 0);
@@ -137,7 +137,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
 
 void reset_cost(weighted_map_t *weighted_map) {
     int x, y;
-    
+
     for (y = 0; y < weighted_map->height; y++) {
         for (x = 0; x < weighted_map->width; x++) {
             weighted_map->cout[y][x] = -1.;
@@ -146,7 +146,7 @@ void reset_cost(weighted_map_t *weighted_map) {
 }
 
 void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos, car_t cars[3]) {
-    int i;
+    int i, j;
     int tempx;
     int tempy;
     int exist_in_open = 0;
@@ -189,7 +189,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     while (!is_sorted_list_empty(openList)) {
 
         // print_sorted_list(openList, print_tuple, stderr);
-        *u = *((tuple_int *)get_sorted_list(openList, 0, &current_weight));
+        u = (tuple_int *)get_sorted_list(openList, 0, &current_weight);
         remove_sorted_list(openList, 0);
         // fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {
@@ -200,7 +200,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
 
         neighboor = get_valid_neighbor(map->width, map->height, *u);
         for (i = 0; i < neighboor->size; i++) {
-            v = copy_tuple_int(*((tuple_int *) get_list(neighboor, i)));
+            v = copy_tuple_int((tuple_int *) get_list(neighboor, i));
             // fprintf(stderr, "Neighbor: %d %d = %c\n", v->x, v->y, map->array[v->y][v->x]);
 
             if (map->array[v->y][v->x] != WALL_CHAR) {
@@ -223,8 +223,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                     }
                 }
 
-                if (!(exist_in_closed)) {
-
+                if (!exist_in_closed) {
                     cout = weighted_map->cout[u->y][u->x];
                     cout += (is_in_diagonal_from(*u, *v) ? DIAG_WEIGHT : 0);
                     switch (map->array[v->y][v->x]) {
@@ -232,11 +231,9 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                             cout += (is_in_diagonal_from(*u, *v) ? 100000000 : 0);
                             cout += 1.5;
                             break;
-
                         case END_CHAR:
                             cout += 0;
                             break;
-
                         case ROAD_CHAR:
                             __attribute__((fallthrough));
                         default:
@@ -269,26 +266,25 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                 }
             }
         }
-        add_list(closedList, (void *)copy_tuple_int(*u));
+        add_list(closedList, (void *)copy_tuple_int(u));
         // print_sorted_list(openList, print_tuple, stderr);
+        free(neighboor);
     }
 
     fprintf(stderr, "END OF ASTAR !\n");
-    /**
-     * @todo le free de list_acc_map
-     * 
-     */
-    // for (i = 0; i < weighted_map->height; i++) {
-    //     free(list_acc_map[i]);
-    // }
-    // free(list_acc_map);
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; i < map->height; i++){
+            free(list_acc_map[i][j]);
+        }
+    }
+    free(list_acc_map);
     destroy_list(closedList);
     destroy_sorted_list(openList);
     free(temp_sorted);
     free(temp);
-    free(neighboor);
-    free(u);
     free(v);
+    free(u);
 
     return;
 }

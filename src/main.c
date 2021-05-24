@@ -112,7 +112,7 @@ int main () {
 
         }
             
-        start_pos = copy_tuple_int(*(cars[0].pos));
+        start_pos = copy_tuple_int(cars[0].pos);
         
         if (new_segment){
 
@@ -121,7 +121,7 @@ int main () {
                 goto end;
             }
 
-            end_pos = copy_tuple_int(*(opti_global[segment+1]));
+            end_pos = copy_tuple_int(opti_global[segment+1]);
             list_endpos = create_list_from_obj(end_pos);
             A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
             // indice_end_point = 0;
@@ -166,7 +166,7 @@ int main () {
         maxdir.y = cars[0].spe->y > 0 ? -1 : (cars[0].spe->y < 0);
         cpt = 0;
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
-            v = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
+            v = copy_tuple_int((tuple_int *)get_list(list_opti_local, i));
             dir = get_acc_to_reach(cars, map, *v, 0);
 
             /**
@@ -202,7 +202,7 @@ int main () {
         weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
         list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
 
-        v = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, list_opti_local->size - 2)));
+        v = copy_tuple_int((tuple_int *)get_list(list_opti_local, list_opti_local->size - 2));
         dir = get_acc_to_reach(cars, map, *v, 0);
         maxdir.x = dir.x;
         maxdir.y = dir.y;
