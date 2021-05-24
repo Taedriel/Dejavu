@@ -31,7 +31,7 @@ tuple_int create_0_0_tuple();
  * @param o 
  * @return tuple_int* 
  */
-tuple_int *copy_tuple_int(tuple_int o);
+tuple_int *copy_tuple_int(tuple_int *o);
 
 /**
  * @brief Print a tuple
