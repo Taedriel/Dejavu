@@ -20,6 +20,11 @@ tuple_int *create_tuple_int(int a, int b) {
     return ret;
 }
 
+tuple_int create_0_0_tuple(){
+    tuple_int tuple = {0,0};
+    return tuple;
+}
+
 int max(int a, int b) {
     return a >= b ? a : b;
 }

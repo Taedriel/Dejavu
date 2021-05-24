@@ -28,7 +28,7 @@
 #define CONCUR_SPEED_WEIGHT         1
 #define DIST_FROM_END_WEIGHT        2
 #define POURCENT_LOSS_BY_ACC_WEIGHT 1./3.   //amount to remove from on case to another when we change acceleration
-#define TEST_NB_FUTUR_POINT         1   //number of point that are testing to search the best accessible case
+#define TEST_NB_FUTUR_POINT         3   //number of point that are testing to search the best accessible case
 #define MAX_SPEED                   3   //Max speed of the car
 #define NB_CASE_END                 2
 
@@ -85,6 +85,8 @@ typedef struct map_t
 
 typedef struct weighted_map_t
 {
+    int width;
+    int height;
     int ** came_from;
     float ** dist_from_end;
     float ** heuristique;

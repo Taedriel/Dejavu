@@ -51,9 +51,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
  * @brief reset all costs
  * 
  * @param weighted_map 
- * @param map 
  */
-void reset_cost(weighted_map_t *weighted_map, map_t map);
+void reset_cost(weighted_map_t *weighted_map);
 
 /**
  * @brief init a weigthed_map structure that contain two float tab. One representing
@@ -65,5 +64,7 @@ void reset_cost(weighted_map_t *weighted_map, map_t map);
  * @return weighted_map_t* 
  */
 float **init_accel_map(int height, int width);
+
+void free_weighted_map(weighted_map_t *weighted_map);
 
 #endif

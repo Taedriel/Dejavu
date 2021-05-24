@@ -151,13 +151,16 @@ int main () {
         // fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
         print_car(&cars[0], stderr);
         max_normed_speed = 0;
-        maxdir.x = cars[0].spe->x > 0 ? -1 : (cars[0].spe->x < 0 ? 1 : 0);
-        maxdir.y = cars[0].spe->y > 0 ? -1 : (cars[0].spe->y < 0 ? 1 : 0);
+        maxdir.x = cars[0].spe->x > 0 ? -1 : (cars[0].spe->x < 0);
+        maxdir.y = cars[0].spe->y > 0 ? -1 : (cars[0].spe->y < 0);
         cpt = 0;
         for (i = list_opti_local->size-2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
             v = copy_tuple_int(*((tuple_int *)get_list(list_opti_local, i)));
             dir = get_acc_to_reach(cars, map, *v, 0);
-            normed_speed = distance(*create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y), *create_tuple_int(0,0));
+
+            tuple_int * temp_tuple_1 = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
+
+            normed_speed = distance(*temp_tuple_1, create_0_0_tuple());
             if (map.array[v->y][v->x] == SAND_CHAR) {
                 normed_speed = 1; 
             }
@@ -174,6 +177,8 @@ int main () {
                 }
             }
             cpt++;
+            free(temp_tuple_1);
+            free(v);
         }
         goto accel;
 
@@ -199,5 +204,24 @@ int main () {
     }
 
     // TODO free plein de truc
+
+    fclose(logs_cout);
+    fclose(logs_heur);
+    fclose(logs_dist);
+
+    free_weighted_map(A_star_global);
+    free_weighted_map(A_star_local);
+
+    destroy_list(list_opti_global);
+    destroy_list(list_opti_local);
+    destroy_list(list_endpos);
+
+    destroy_stack(tmp_stack);
+
+    free(end_pos);
+    free(start_pos);
+    free(futur_pos);
+    free(v);
+
     return EXIT_SUCCESS;
 }

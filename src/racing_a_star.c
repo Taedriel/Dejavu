@@ -11,6 +11,7 @@ float ** init_accel_map(int height, int width) {
 
     int i;
     float **acceleration = malloc(sizeof(float *) * height);
+    
     for (i = 0; i < height; i++) {
         acceleration[i] = malloc(sizeof(int) * width);
         for (int j = 0; j < width; j++) {
@@ -29,6 +30,9 @@ weighted_map_t *init_weighted_map(int height, int width, tuple_int start) {
     float **dist_from_end = malloc(sizeof(float *) * height);
     float **heuristique = malloc(sizeof(float *) * height);
     float **cout = malloc(sizeof(float *) * height);
+
+    ret->height = height;
+    ret->width = width;
 
     for (i = 0; i < height; i++) {
         came_from[i] = malloc(sizeof(int) * width);
@@ -131,23 +135,36 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     return;
 }
 
-void reset_cost(weighted_map_t *weighted_map, map_t map) {
+void reset_cost(weighted_map_t *weighted_map) {
 
     int x, y;
 
-    for (y = 0; y < map.height; y++) {
-        for (x = 0; x < map.width; x++) {
+    for (y = 0; y < weighted_map->height; y++) {
+        for (x = 0; x < weighted_map->width; x++) {
             weighted_map->cout[y][x] = -1.;
         }
     }
-
 }
 
 void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos, car_t cars[3]) {
-    int i, tempx, tempy;
-    int exist_in_open = 0, exist_in_closed = 0;
-    float current_weight = 0., cout = 0.;
+    int i;
+    int tempx;
+    int tempy;
+    int exist_in_open = 0;
+    int exist_in_closed = 0;
+    float current_weight = 0.;
+    float cout = 0.;
     float *** list_acc_map = malloc(sizeof(float **) * 3);
+
+    sorted_list *openList = create_sorted_list();
+    sorted_list_cell *temp_sorted;
+
+    list *closedList = create_list();
+    list_cell *temp;
+
+    tuple_int *u = malloc(sizeof(tuple_int));
+    tuple_int *v;
+    list * neighboor;
 
     fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
     print_list(endpos, print_tuple, stderr);
@@ -155,7 +172,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         list_acc_map[i] = init_accel_map(map->height, map->width);
         fill_proba_map(*map, list_acc_map[i], cars[i]);
     }
-    reset_cost(weighted_map, *map);
+    reset_cost(weighted_map);
 
     /*
     fprintf(stderr, "===================\n");
@@ -167,15 +184,6 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     fprintf(stderr, "===================\n");
     */
 
-    sorted_list *openList = create_sorted_list();
-    sorted_list_cell *temp_sorted;
-
-    list *closedList = create_list();
-    list_cell *temp;
-
-    tuple_int *u = malloc(sizeof(tuple_int));
-    tuple_int *v;
-    list * neighboor;
 
     add_sorted_list(openList, (void *)(&start), weighted_map->heuristique[start.y][start.x]);
 
@@ -269,11 +277,26 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     fprintf(stderr, "END OF ASTAR !\n");
     destroy_list(closedList);
     destroy_sorted_list(openList);
-    /*
-    free(temptuple);
+    free(temp_sorted);
+    free(temp);
+    free(neighboor);
     free(u);
     free(v);
-    */
 
     return;
+}
+
+void free_weighted_map(weighted_map_t *weighted_map) {
+    int i;
+
+    for (i = 0; i < weighted_map->height; i++) {
+        free(weighted_map->came_from[i]);
+        free(weighted_map->dist_from_end[i]);
+        free(weighted_map->heuristique[i]);
+        free(weighted_map->cout[i]);
+    }
+    free(weighted_map->came_from);
+    free(weighted_map->dist_from_end);
+    free(weighted_map->heuristique);
+    free(weighted_map->cout);
 }
