@@ -136,9 +136,8 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
 }
 
 void reset_cost(weighted_map_t *weighted_map) {
-
     int x, y;
-
+    
     for (y = 0; y < weighted_map->height; y++) {
         for (x = 0; x < weighted_map->width; x++) {
             weighted_map->cout[y][x] = -1.;

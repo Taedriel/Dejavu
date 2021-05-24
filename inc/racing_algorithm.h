@@ -23,23 +23,6 @@ list * get_valid_neighbor(int width, int height, tuple_int startpos);
 float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** liste_map_accel, float cout);
 
 /**
- * @brief Compute the hamming weight
- * 
- * @param x 
- * @return int 
- */
-int hamming_weight(int x);
-
-/**
- * @brief Check if the two points aren't paralleles to an axis
- * 
- * @param start 
- * @param dest 
- * @return int 
- */
-int is_in_diagonal_from(tuple_int start, tuple_int dest);
-
-/**
  * @brief Find the path
  * 
  * @param weighted_map 
