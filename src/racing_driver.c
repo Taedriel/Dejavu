@@ -13,10 +13,8 @@ void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
 }
 
 int gas_consumption(struct car_t* player_car, int inSand) {
-    int gas = player_car->acc->x * player_car->acc->x +
-              player_car->acc->y * player_car->acc->y;
-    gas += (int)(sqrt(player_car->spe->x * player_car->spe->x +
-                      player_car->spe->y * player_car->spe->y) * 3. / 2.);
+    int gas = pow_int_2(player_car->acc->x) + pow_int_2(player_car->acc->y);
+    gas += (int)(get_normed_speed(*player_car) * 3. / 2.);
     if (inSand) {
         gas += 1;
     }
@@ -127,5 +125,5 @@ int is_move_valid(map_t map, car_t cars[3], tuple_int acc_asked){
 }
 
 double get_normed_speed(car_t car) {
-    return sqrt(car.spe->x * car.spe->x + car.spe->y * car.spe->y);
+    return sqrt(pow_int_2(car.spe->x) + pow_int_2(car.spe->y));
 }
