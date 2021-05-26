@@ -55,14 +55,14 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** 
 
     float heur = cout + (weighted_map.dist_from_end[current_pos.y][current_pos.x] * DIST_FROM_END_WEIGHT);
 
-    if (liste_accel_map != NULL) {
-        fprintf(stderr, "- %1.2f ", (heur * OWN_SPEED_WEIGHT * liste_accel_map[0][current_pos.y][current_pos.x]));
-        heur -= heur * OWN_SPEED_WEIGHT * liste_accel_map[0][current_pos.y][current_pos.x];
-        // fprintf(stderr, "+ %1.2f ", (heur * CONCUR_SPEED_WEIGHT * liste_accel_map[1][current_pos.y][current_pos.x]));
-        heur += heur * CONCUR_SPEED_WEIGHT * liste_accel_map[1][current_pos.y][current_pos.x];
-        // fprintf(stderr, "+ %1.2f ", (heur * CONCUR_SPEED_WEIGHT * liste_accel_map[2][current_pos.y][current_pos.x]));
-        heur += heur * CONCUR_SPEED_WEIGHT * liste_accel_map[2][current_pos.y][current_pos.x];
-    }
+    // if (liste_accel_map != NULL) {
+    // fprintf(stderr, "%1.2f - %1.2f (%1.2f * %1.2f) ", heur, (OWN_SPEED_WEIGHT * liste_accel_map[0][current_pos.y][current_pos.x]), OWN_SPEED_WEIGHT, liste_accel_map[0][current_pos.y][current_pos.x]);
+    heur -= OWN_SPEED_WEIGHT * liste_accel_map[0][current_pos.y][current_pos.x];
+    // fprintf(stderr, "+ %1.2f ", (heur * CONCUR_SPEED_WEIGHT * liste_accel_map[1][current_pos.y][current_pos.x]));
+    heur += CONCUR_SPEED_WEIGHT * liste_accel_map[1][current_pos.y][current_pos.x];
+    // fprintf(stderr, "+ %1.2f ", (heur * CONCUR_SPEED_WEIGHT * liste_accel_map[2][current_pos.y][current_pos.x]));
+    heur += CONCUR_SPEED_WEIGHT * liste_accel_map[2][current_pos.y][current_pos.x];
+    // }
 
     // fprintf(stderr, "Ajout de (%d %d) de poid: %f (%f + %f * ratio)\n", current_pos.x, current_pos.y, heur,cout);
 

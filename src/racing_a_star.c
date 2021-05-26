@@ -87,7 +87,7 @@ void fill_proba_map(map_t map, float ** to_map, car_t car) {
         for (j = 0; j < map.width; j++) {
             if (i != car.pos->y && j != car.pos->x){
                 if (to_map[i][car.pos->x] != 0. && to_map[car.pos->y][j] != 0) {
-                    to_map[i][j] = to_map[car.pos->y][j] * to_map[i][car.pos->x];
+                    to_map[i][j] = (to_map[car.pos->y][j] + to_map[i][car.pos->x])/2;
                 }
             }
         }
@@ -273,6 +273,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                         weighted_map->came_from[v->y][v->x] = tuple_to_int(*u, *v);
                         weighted_map->cout[v->y][v->x] = cout;
                         weighted_map->heuristique[v->y][v->x] = heuristique(*weighted_map, *v, list_acc_map, cout);
+                        fprintf(stderr, "(%d %d) -> %f %f\n", v->x, v->y, cout, weighted_map->heuristique[v->y][v->x]);
 
                         if (!is_sorted_list_empty(openList)) {
                             temp_sorted = openList->head;

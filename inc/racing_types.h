@@ -25,8 +25,8 @@
 #define DELTA_SPEED                 0.5
 
 #define DIAG_WEIGHT                 1
-#define OWN_SPEED_WEIGHT            0.2
-#define CONCUR_SPEED_WEIGHT         1
+#define OWN_SPEED_WEIGHT            0.5
+#define CONCUR_SPEED_WEIGHT         0.3
 #define DIST_FROM_END_WEIGHT        2
 #define POURCENT_LOSS_BY_ACC_WEIGHT 1./3.   //amount to remove from on case to another when we change acceleration
 #define TEST_NB_FUTUR_POINT         3   //number of point that are testing to search the best accessible case
