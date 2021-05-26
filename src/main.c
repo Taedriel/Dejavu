@@ -139,7 +139,7 @@ void find_global_path(weighted_map_t * A_star_global, car_t cars[3], map_t map, 
     list * list_endpos;
     list *list_opti_global;
     stack *tmp_stack;
-    FILE * logs_heur;
+    FILE * logs_heur, * logs_dist, * logs_cout;
 
     A_star_global = init_weighted_map(map.height, map.width, *(cars[0].pos));
     list_endpos = find_end(map);
@@ -155,9 +155,15 @@ void find_global_path(weighted_map_t * A_star_global, car_t cars[3], map_t map, 
     *list_checkpoint = stack_to_list(tmp_stack);
 
     logs_heur = fopen("logs_global_heur.txt", "w+");
+    logs_dist = fopen("logs_global_dist.txt", "w+");
+    logs_cout = fopen("logs_global_cout.txt", "w+");
     print_float_weighted_map(A_star_global->heuristique, map.width, map.height, logs_heur);
+    print_float_weighted_map(A_star_global->cout, map.width, map.height, logs_cout);
+    print_float_weighted_map(A_star_global->dist_from_end, map.width, map.height, logs_dist);
 
     fclose(logs_heur);
+    fclose(logs_dist);
+    fclose(logs_cout);
 
     destroy_list(list_opti_global);
     destroy_list(list_endpos);
@@ -190,7 +196,7 @@ void get_input(car_t cars[3], tuple_int past_pos[3]) {
 int main () {
 
     int nb_point_tested = TEST_NB_FUTUR_POINT;
-    int width;
+    int width, sand_around, cars_around;
     int end;
     int height;
     int round = 0, gas = 0;
@@ -250,7 +256,13 @@ int main () {
         }
 
         start_pos = copy_tuple_int(cars[0].pos);
-        nb_point_tested = (is_in_sand(map, cars[0]) ? 1 : TEST_NB_FUTUR_POINT - nb_cars_around(map, cars, DISTANCE_CARS_AROUND));
+        cars_around = nb_cars_around(map, cars, DISTANCE_CARS_AROUND);
+        sand_around = nb_sand_around(map, cars, DISTANCE_SAND_AROUND);
+        fprintf(stderr, "%d cars around - %d sand around\n", cars_around, sand_around);
+        nb_point_tested = TEST_NB_FUTUR_POINT;
+        nb_point_tested = min(nb_point_tested, (TEST_NB_FUTUR_POINT - cars_around));
+        nb_point_tested = min(nb_point_tested, TEST_NB_FUTUR_POINT - (int)(sand_around/ NB_SAND_TO_CARE_AROUND));
+        nb_point_tested = max(nb_point_tested, 1);
         fprintf(stderr, "NB POINT TESTED FOR THIS ROUND: %d\n\n", nb_point_tested);
 
         if (new_segment){

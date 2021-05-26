@@ -48,7 +48,7 @@ weighted_map_t *init_weighted_map(int height, int width, tuple_int start) {
         }
     }
 
-    cout[start.y][start.x] = 0;
+    cout[start.y][start.x] = 0.;
     heuristique[start.y][start.x] = 0;
 
     ret->came_from = came_from;
@@ -128,7 +128,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
             temp = get_list(neighboor, i);
             if (map->array[temp->y][temp->x] != WALL_CHAR) {
                 weight = current_value + 1;
-                weight += (is_in_diagonal_from(*current_pos, *temp) ? 0.5 : 0);
+                weight += (is_in_diagonal_from(*current_pos, *temp) ? DIAG_WEIGHT : 0);
                 if (weighted_map->dist_from_end[temp->y][temp->x] > weight \
                  || weighted_map->dist_from_end[temp->y][temp->x] == -1) {
                     weighted_map->dist_from_end[temp->y][temp->x] = weight;
@@ -152,7 +152,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     return;
 }
 
-void reset_cost(weighted_map_t *weighted_map) {
+void reset_cost(weighted_map_t *weighted_map, tuple_int start_pos) {
     int x, y;
 
     for (y = 0; y < weighted_map->height; y++) {
@@ -160,6 +160,9 @@ void reset_cost(weighted_map_t *weighted_map) {
             weighted_map->cout[y][x] = -1.;
         }
     }
+
+    weighted_map->cout[start_pos.y][start_pos.x] = 0.;
+
 }
 
 void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos, car_t cars[3]) {
@@ -194,7 +197,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         list_acc_map[i] = init_accel_map(map->height, map->width);
         fill_proba_map(*map, list_acc_map[i], cars[i]);
     }
-    reset_cost(weighted_map);
+    reset_cost(weighted_map, start);
 
     /*
     fprintf(stderr, "===================\n");
@@ -214,11 +217,11 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // print_sorted_list(openList, print_tuple, stderr);
         u = (tuple_int *)get_sorted_list(openList, 0, &current_weight);
         remove_sorted_list(openList, 0);
-        // fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
+        fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {
             if (u->x == ((tuple_int *)get_list(endpos, i))->x && u->y == ((tuple_int *)get_list(endpos, i))->y) {
                 /** @todo un tas de free */
-                fprintf(stderr, "FIN RAPIDE DU A*\n");
+                // fprintf(stderr, "FIN RAPIDE DU A*\n");
                 return;
             }
         }
@@ -253,16 +256,17 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                     cout += (is_in_diagonal_from(*u, *v) ? DIAG_WEIGHT : 0);
                     switch (map->array[v->y][v->x]) {
                         case SAND_CHAR:
-                            cout += (is_in_diagonal_from(*u, *v) ? 1000 : 0);
-                            cout += 1.5;
+                            cout += SAND_WEIGHT;
+                            cout += (is_in_diagonal_from(*u, *v) ? SAND_WEIGHT : 0);
                             break;
                         case END_CHAR:
-                            cout -= 1;
+                            cout += END_WEIGHT;
                             break;
                         case ROAD_CHAR:
-                            __attribute__((fallthrough));
+                            cout += ROAD_WEIGHT;
+                            break;
                         default:
-                            cout += 1;
+                            cout += ROAD_WEIGHT;
                             break;
                     }
                     if (weighted_map->cout[v->y][v->x] == -1 || cout < weighted_map->cout[v->y][v->x]) {
@@ -295,8 +299,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         free(neighboor);
     }
 
-    fprintf(stderr, "END OF ASTAR !\n");
-    fprintf(stderr, "I.E. SORTI DU GROS WHILE SA MERE\n");
+    // fprintf(stderr, "END OF ASTAR !\n");
+    // fprintf(stderr, "I.E. SORTI DU GROS WHILE SA MERE\n");
 
     for (i = 0; i < 3; i++) {
         for (j = 0; i < map->height; i++){

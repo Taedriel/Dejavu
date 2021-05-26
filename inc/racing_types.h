@@ -24,15 +24,20 @@
 #define MAX_PATH_SIZE               1024
 #define DELTA_SPEED                 0.5
 
-#define DIAG_WEIGHT                 0.5
+#define DIAG_WEIGHT                 1
 #define OWN_SPEED_WEIGHT            0.2
 #define CONCUR_SPEED_WEIGHT         1
 #define DIST_FROM_END_WEIGHT        2
 #define POURCENT_LOSS_BY_ACC_WEIGHT 1./3.   //amount to remove from on case to another when we change acceleration
 #define TEST_NB_FUTUR_POINT         3   //number of point that are testing to search the best accessible case
 #define MAX_SPEED                   3   //Max speed of the car
-#define NB_CASE_END                 2
 #define DISTANCE_CARS_AROUND        3.
+#define DISTANCE_SAND_AROUND        3.
+#define NB_SAND_TO_CARE_AROUND      3
+
+#define SAND_WEIGHT                 2.5
+#define END_WEIGHT                  -1
+#define ROAD_WEIGHT                 1
 
 #define END_CHAR                    '='
 #define WALL_CHAR                   '.'

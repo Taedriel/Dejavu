@@ -52,7 +52,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
  * 
  * @param weighted_map 
  */
-void reset_cost(weighted_map_t *weighted_map);
+void reset_cost(weighted_map_t *weighted_map, tuple_int start_pos);
 
 /**
  * @brief init a weigthed_map structure that contain two float tab. One representing

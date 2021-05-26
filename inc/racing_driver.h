@@ -111,4 +111,15 @@ double get_normed_speed(car_t car);
  * @return int 
  */
 int nb_cars_around(map_t map, car_t cars[3], int distance);
+
+/**
+ * @brief return the number of sand case at distance d of the car n°0
+ * 
+ * @param map 
+ * @param cars 
+ * @param distance 
+ * @return int 
+ */
+int nb_sand_around(map_t map, car_t cars[3], int distance);
+
 #endif
