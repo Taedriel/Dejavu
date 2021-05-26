@@ -12,6 +12,12 @@ void init_car(struct car_t* player_car, int boosts, int acc_x, int acc_y,
     player_car->gas_level = gas;
 }
 
+void free_car(car_t *car) {
+    free(car->pos);
+    free(car->spe);
+    free(car->acc);
+}
+
 int gas_consumption(struct car_t* player_car, int inSand) {
     int gas = pow_int_2(player_car->acc->x) + pow_int_2(player_car->acc->y);
     gas += (int)(get_normed_speed(*player_car) * 3. / 2.);
@@ -25,6 +31,44 @@ void consum_gas(struct car_t* player_car, int inSand) {
     player_car->gas_level -= gas_consumption(player_car, inSand);
     player_car->spe->x = (inSand) ? player_car->spe->x > 0 : player_car->spe->x + player_car->acc->x;
     player_car->spe->y = (inSand) ? player_car->spe->y > 0 : player_car->spe->y + player_car->acc->y;
+}
+
+tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car) {
+    int len_seg;
+    int ponctual_consumtion;
+    int worst_consum;
+    int best_consum; 
+    car_t tempory_car;
+
+    tuple_int new_acc;
+    tuple_int estimation;
+
+    init_car(&tempory_car, 0, 2, 2, 2, 2, 0);
+
+    ponctual_consumtion = gas_consumption(&tempory_car, 0);
+    len_seg = distance(begin, end);
+    worst_consum = len_seg * ponctual_consumtion;
+
+    free_car(&tempory_car);
+    init_car(&tempory_car, car->boosts, car->acc->x, car->acc->y, car->spe->x, car->spe->y, car->gas_level);
+    tempory_car.pos->x = car->pos->x;
+    tempory_car.pos->y = car->pos->y;
+
+    new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
+
+    set_acceleration_on_tuple(&tempory_car, new_acc);
+    best_consum = gas_consumption(&tempory_car, is_in_sand(*map, tempory_car));
+
+    set_acceleration(&tempory_car, 0, 0);
+
+    while( distance(*(tempory_car.pos), end) > 1) {
+        tempory_car.pos->x += tempory_car.spe->x;
+        tempory_car.pos->y += tempory_car.spe->y;
+        best_consum += gas_consumption(&tempory_car, is_in_sand(*map, tempory_car));
+    }
+    estimation.x = best_consum;
+    estimation.y = worst_consum;
+    return estimation;
 }
 
 void set_acceleration(struct car_t* player_car, int acc_x, int acc_y) {
