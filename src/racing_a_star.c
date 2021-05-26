@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <sys/resource.h>
 
 #include "racing_algorithm.h"
 #include "racing_map.h"
@@ -93,6 +94,9 @@ void fill_proba_map(map_t map, float ** to_map, car_t car) {
     }
 }
 
+/**
+ * @todo encore un free qui manque 
+ */
 void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     int i, current_value = 0;
     float weight;
@@ -101,7 +105,9 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     list * neighboor;
 
     tuple_int *temp;
-    tuple_int * current_pos = malloc(sizeof(tuple_int));
+    tuple_int * current_pos;
+
+    struct rusage r_usage;
 
     for (i = 0; i < endpos->size; i++) {
         temp = copy_tuple_int((tuple_int *)get_list(endpos, i));
@@ -109,13 +115,17 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
         add_queue(s, (void *)temp);
     }
 
+    /**************************************************** DEBUG MEMORY ****************************************************/
+    //getrusage(RUSAGE_SELF, &r_usage);
+    //fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
+
     do {
-        *current_pos = *((tuple_int *)(last_queue(s)));
+        current_pos  = (tuple_int *)(last_queue(s));
         current_value = weighted_map->dist_from_end[current_pos->y][current_pos->x];
 
         neighboor = get_valid_neighbor(map->width, map->height, *current_pos);
         for (i = 0; i < neighboor->size; i++) {
-            temp = copy_tuple_int((tuple_int *) get_list(neighboor, i));
+            temp = get_list(neighboor, i);
             if (map->array[temp->y][temp->x] != WALL_CHAR) {
                 weight = current_value + 1;
                 weight += (is_in_diagonal_from(*current_pos, *temp) ? 0.5 : 0);
@@ -123,15 +133,22 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
                  || weighted_map->dist_from_end[temp->y][temp->x] == -1) {
                     weighted_map->dist_from_end[temp->y][temp->x] = weight;
                     add_queue(s, (void *) temp);
+                } else {
+                    free(temp);
                 }
+            } else {
+                free(temp);
             }
         }
-
+        destroy_list(neighboor);
+        free(current_pos);
     } while (!is_queue_empty(s));
 
-    free(current_pos);
-    free(temp);
     destroy_queue(s);
+
+    /**************************************************** DEBUG MEMORY ****************************************************/
+    //getrusage(RUSAGE_SELF, &r_usage);
+    //fprintf(stderr, "memory used 3 : %ld\n", r_usage.ru_maxrss);
     return;
 }
 
@@ -165,6 +182,12 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     tuple_int *v;
     list * neighboor;
 
+    struct rusage r_usage;
+
+    /**************************************************** DEBUG MEMORY ****************************************************/
+    getrusage(RUSAGE_SELF, &r_usage);
+    fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
+
     fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
     print_list(endpos, print_tuple, stderr);
     for (i = 0; i < 3; i++) {
@@ -194,6 +217,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {
             if (u->x == ((tuple_int *)get_list(endpos, i))->x && u->y == ((tuple_int *)get_list(endpos, i))->y) {
+                /** @todo un tas de free */
+                fprintf(stderr, "FIN RAPIDE DU A*\n");
                 return;
             }
         }
@@ -240,7 +265,6 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                             cout += 1;
                             break;
                     }
-
                     if (weighted_map->cout[v->y][v->x] == -1 || cout < weighted_map->cout[v->y][v->x]) {
                         weighted_map->came_from[v->y][v->x] = tuple_to_int(*u, *v);
                         weighted_map->cout[v->y][v->x] = cout;
@@ -272,6 +296,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     }
 
     fprintf(stderr, "END OF ASTAR !\n");
+    fprintf(stderr, "I.E. SORTI DU GROS WHILE SA MERE\n");
 
     for (i = 0; i < 3; i++) {
         for (j = 0; i < map->height; i++){
@@ -285,6 +310,10 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     free(temp);
     free(v);
     free(u);
+
+    /**************************************************** DEBUG MEMORY ****************************************************/
+    getrusage(RUSAGE_SELF, &r_usage);
+    fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
     return;
 }
