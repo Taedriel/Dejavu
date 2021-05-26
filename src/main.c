@@ -25,10 +25,11 @@ int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A
     return 0;
 }
 
-tuple_int find_local_path(map_t map, weighted_map_t * A_star_local, tuple_int * start_pos, list * list_endpos, car_t cars[3], int segment, list * list_checkpoint, int round) {
+tuple_int find_local_path(map_t map, weighted_map_t * A_star_local, tuple_int * start_pos, list * list_endpos, car_t cars[3], int segment, list * list_checkpoint, int round, int nb_point_tested) {
     
     FILE *logs_cout, *logs_heur, *logs_dist;
-    int normed_speed, max_normed_speed, cpt, i;
+    double normed_speed, max_normed_speed, normed_speed_y, normed_speed_x;
+    int cpt, i, inSand, old_x_value;
 
     tuple_int maxdir, * v, dir;
 
@@ -49,39 +50,76 @@ tuple_int find_local_path(map_t map, weighted_map_t * A_star_local, tuple_int * 
     list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
     print_list(list_opti_local, print_tuple, stderr);
     // fprintf(stderr, "SIZE PATH: %d\n", list_opti_local->size);
-    print_car(&cars[0], stderr);
-    max_normed_speed = 0;
+    max_normed_speed = 0.;
     maxdir.x = cars[0].spe->x > 0 ? -1 : (cars[0].spe->x < 0);
     maxdir.y = cars[0].spe->y > 0 ? -1 : (cars[0].spe->y < 0);
     cpt = 0;
-    for (i = list_opti_local->size - 2; i >= 0 && cpt < TEST_NB_FUTUR_POINT; i--) {
+    for (i = list_opti_local->size - 2; i >= 0 && cpt < nb_point_tested; i--) {
         v = copy_tuple_int((tuple_int *)get_list(list_opti_local, i));
-        dir = get_acc_to_reach(cars, map, *v, 0);
+        dir = get_acc_to_reach(&cars[0], map, *v, 0);
 
         /**
              * @todo j'ai mis ça la en attendant d'avoir une fonction qui fait tout ça.
              * Pour l'ODL pas le droit à cette declaration ici.
              * 
              */
-        tuple_int *temp_tuple_1 = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
+        tuple_int *futur_speed = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
 
-        normed_speed = distance(*temp_tuple_1, create_0_0_tuple());
+        normed_speed = distance(*futur_speed, create_0_0_tuple());
+        inSand = is_in_sand(map, cars[0]);
         if (map.array[v->y][v->x] == SAND_CHAR) {
             normed_speed = 1;
         }
 
-        fprintf(stderr, "normed speed: %d\t", normed_speed);
-        fprintf(stderr, "valide move ? %d <= dist_from_end ? %d | %d < %d ? %d\n", is_move_valid(map, cars, dir), normed_speed <= segment_len(list_checkpoint, segment), normed_speed, MAX_SPEED, normed_speed < MAX_SPEED);
+        fprintf(stderr, "normed speed: %2.1f\t", normed_speed);
+        // fprintf(stderr, "valide move ? %d <= dist_from_end ? %d | %f < %d ? %d | inSand ? %d \n", is_move_valid(map, cars, dir), normed_speed <= segment_len(list_checkpoint, segment), normed_speed, MAX_SPEED, normed_speed < MAX_SPEED, inSand);
 
         if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir)) {
-            if (normed_speed < MAX_SPEED && max_normed_speed <= normed_speed && normed_speed <= segment_len(list_checkpoint, segment)) {
-                max_normed_speed = normed_speed;
-                maxdir.x = dir.x;
-                maxdir.y = dir.y;
+            fprintf(stderr, "find faster valid movement !\n");
+            if (normed_speed < MAX_SPEED && normed_speed <= segment_len(list_checkpoint, segment)+1.) {
+                fprintf(stderr, "speed (%f) < MAX Speed and < len(semgent)\n", normed_speed);
+                fprintf(stderr, "inSand: %d\n", inSand);
+                if (( inSand && normed_speed <= 1. ) || !inSand){
+                    max_normed_speed = normed_speed;
+                    maxdir.x = dir.x;
+                    maxdir.y = dir.y;
+                }
+                if (inSand && normed_speed > 1.){
+                    fprintf(stderr, "we test both axis\n");
+                    //both x and y are > to 1 so we need to determine which one we want to keep
+                    maxdir.x = 0;
+                    maxdir.y = 0;
+
+                    old_x_value = dir.x;
+                    dir.x = 0;
+                    tuple_int *futur_speed_y = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
+                    normed_speed_y = distance(*futur_speed_y, create_0_0_tuple());
+                    free(futur_speed_y);
+                    fprintf(stderr, "normed_speed_y: %f\n", normed_speed_y);
+                    if (is_move_valid(map, cars, dir) && normed_speed_y <= 1.){
+                        fprintf(stderr, "move is valide !\n");
+                        maxdir.x = dir.x;
+                        maxdir.y = dir.y;
+                    }
+
+                    dir.x = old_x_value;
+                    dir.y = 0;
+                    tuple_int *futur_speed_x = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
+                    normed_speed_x = distance(*futur_speed_x, create_0_0_tuple());
+                    free(futur_speed_x);
+                    fprintf(stderr, "normed_speed_x: %f\n", normed_speed_x);
+                    if (is_move_valid(map, cars, dir) && normed_speed_x <= 1.){
+                        fprintf(stderr, "move is valide !\n");
+                        maxdir.x = dir.x;
+                        maxdir.y = dir.y;
+                    } 
+                     
+                    
+                }
             }
         }
         cpt++;
-        free(temp_tuple_1);
+        free(futur_speed);
         free(v);
     }
 
@@ -129,9 +167,12 @@ void get_input(car_t cars[3], tuple_int past_pos[3]) {
     }
 
     read_positions(cars);
+    print_car(&cars[0], stderr);
 
     for (i = 0; i < 3; i++) {
         if ((past_pos[i].x == cars[i].pos->x) && (past_pos[i].y == cars[i].pos->y)) {
+            if (i == 0)
+                fprintf(stderr, "\n CAR STOPED ! RESET SPEED !\n\n");
             cars[i].spe->x = 0;
             cars[i].spe->y = 0;
         }
@@ -141,6 +182,7 @@ void get_input(car_t cars[3], tuple_int past_pos[3]) {
 
 int main () {
 
+    int nb_point_tested = TEST_NB_FUTUR_POINT;
     int width;
     int end;
     int height;
@@ -183,7 +225,6 @@ int main () {
 
     // RACE_START(stderr)
 
-    
     while (!feof(stdin)) {
         round++;
         RACE_ROUND(round, stderr)
@@ -202,7 +243,9 @@ int main () {
         }
     
         start_pos = copy_tuple_int(cars[0].pos);
-        
+        nb_point_tested = (is_in_sand(map, cars[0]) ? 1 : TEST_NB_FUTUR_POINT - nb_cars_around(map, cars, DISTANCE_CARS_AROUND));
+        fprintf(stderr, "NB POINT TESTED FOR THIS ROUND: %d\n\n", nb_point_tested);
+
         if (new_segment){
             end = prepare_new_segment(segment, list_checkpoint, &A_star_local, map, cars, start_pos, &list_endpos);
             }
@@ -212,19 +255,17 @@ int main () {
             list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
 
             v = copy_tuple_int((tuple_int *)get_list(list_opti_local, list_opti_local->size - 2));
-            maxdir = get_acc_to_reach(cars, map, *v, 0);
+            maxdir = get_acc_to_reach(&cars[0], map, *v, 0);
         }else {
-            maxdir = find_local_path(map, A_star_local, start_pos, list_endpos, cars, segment, list_checkpoint, round);
+            maxdir = find_local_path(map, A_star_local, start_pos, list_endpos, cars, segment, list_checkpoint, round, nb_point_tested);
         }
 
         set_acceleration(cars, maxdir.x, maxdir.y);
 
-        // new_seg = get_segment_by_coord((tuple_int **)list_to_tab(list_opti_local), list_opti_local->size, A_star_local, cars[0].pos);
-        // fprintf(stderr, "Segment at the end: %d\nCurrent Segment: %d\n", new_seg, segment);
         futur_pos = create_tuple_int(cars[0].pos->x + cars[0].acc->x + cars[0].spe->x, cars[0].pos->y + cars[0].acc->y + cars[0].spe->y);
-        fprintf(stderr, "futur pos will be: %d %d (dist_from_end = %f)\n", futur_pos->x, futur_pos->y, A_star_local->dist_from_end[futur_pos->y][futur_pos->x]);
+        // fprintf(stderr, "futur pos will be: %d %d (dist_from_end = %f)\n", futur_pos->x, futur_pos->y, A_star_local->dist_from_end[futur_pos->y][futur_pos->x]);
 
-        consum_gas(cars, is_in_sand(&map, cars));
+        consum_gas(cars, 0);
         post_actions(cars);
     }
 

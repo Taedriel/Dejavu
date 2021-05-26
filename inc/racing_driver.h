@@ -76,7 +76,7 @@ int normed_acc(int acc_require, int boost_allowed);
  * @param B The point you want to reach
  * @return tuple_int 
  */
-tuple_int get_acc_to_reach(struct car_t *car, struct map_t map, tuple_int to_reach, int boost_allowed);
+tuple_int get_acc_to_reach(struct car_t * car, struct map_t map, tuple_int to_reach, int boost_allowed);
 
 /**
  * @brief Return which composant of the acceleration is valid 
@@ -102,4 +102,13 @@ int is_move_valid(map_t map, car_t cars[3], tuple_int dir);
  */
 double get_normed_speed(car_t car);
 
+/**
+ * @brief return the number of cars at distance d of the car n°0 
+ * 
+ * @param map 
+ * @param cars 
+ * @param distance 
+ * @return int 
+ */
+int nb_cars_around(map_t map, car_t cars[3], int distance);
 #endif

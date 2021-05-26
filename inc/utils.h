@@ -55,7 +55,7 @@ double distance(tuple_int a, tuple_int b);
  * @param car 
  * @return int 
  */
-int is_in_sand(map_t *map, car_t *car);
+int is_in_sand(map_t map, car_t car);
 
 /**
  * @brief Compute the hamming weight

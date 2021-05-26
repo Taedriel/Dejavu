@@ -228,11 +228,11 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                     cout += (is_in_diagonal_from(*u, *v) ? DIAG_WEIGHT : 0);
                     switch (map->array[v->y][v->x]) {
                         case SAND_CHAR:
-                            cout += (is_in_diagonal_from(*u, *v) ? 100000000 : 0);
+                            cout += (is_in_diagonal_from(*u, *v) ? 1000 : 0);
                             cout += 1.5;
                             break;
                         case END_CHAR:
-                            cout += 0;
+                            cout -= 1;
                             break;
                         case ROAD_CHAR:
                             __attribute__((fallthrough));

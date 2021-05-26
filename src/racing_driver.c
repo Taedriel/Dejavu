@@ -70,7 +70,7 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_rea
     acc.x = normed_acc(deltaToReach->x, boost_allowed);
     acc.y = normed_acc(deltaToReach->y, boost_allowed); 
 
-    if (is_in_sand(&map, car) && (abs(acc.x) == abs(acc.y)) && (abs(acc.y) == 1)){
+    if (is_in_sand(map, *car) && (abs(acc.x) == abs(acc.y)) && (abs(acc.y) == 1)){
         if (rand()%2 == 0) {
             acc.x = 0;
         } else {
@@ -126,4 +126,29 @@ int is_move_valid(map_t map, car_t cars[3], tuple_int acc_asked){
 
 double get_normed_speed(car_t car) {
     return sqrt(pow_int_2(car.spe->x) + pow_int_2(car.spe->y));
+}
+
+int nb_cars_around(map_t map, car_t cars[3], int distance) {
+
+    int i, x, y, cpt = 0;
+    double dist = 0.;
+
+    // dx²+dy²=distance²
+    // dy²+dy²=distance²
+    // 2dy² = distance²
+    // dy² = distance²/2
+    // dy = sqrt(distance²/2)
+    int delta = sqrt((distance * distance)/2);
+
+    for (y = max(0, cars[0].pos->y - delta); y < min(map.height-1, cars[0].pos->y + delta); y++){
+        for (x = max(0, cars[0].pos->x - delta); x < min(map.width-1, cars[0].pos->x + delta); x++){
+            for(i = 1; i < 3; i++){
+                if (cars[i].pos->x == x && cars[i].pos->y == y){
+                    cpt += 1;
+                }
+            }
+        }
+    }
+
+    return cpt;
 }

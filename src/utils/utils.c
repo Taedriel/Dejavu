@@ -20,8 +20,8 @@ inline double distance(tuple_int a, tuple_int b) {
     return sqrt(pow_int_2(b.x - a.x) + pow_int_2(b.y - a.y));
 }
 
-inline int is_in_sand(map_t *map, car_t *car) {
-    return (map->array[car->pos->y][car->pos->x] == SAND_CHAR);
+inline int is_in_sand(map_t map, car_t car) {
+    return (map.array[car.pos->y][car.pos->x] == SAND_CHAR);
 }
 
 inline int hamming_weight(int x) {
