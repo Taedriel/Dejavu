@@ -33,14 +33,16 @@ int gas_consumption(struct car_t *player_car, int inSand);
  */
 void consum_gas(struct car_t *player_car, int inSand);
 
-/**
+tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car);
+
+    /**
  * @brief Set the acceleration of a car
  *
  * @param player_car
  * @param acc_x
  * @param acc_y
  */
-void set_acceleration(struct car_t *player_car, int acc_x, int acc_y);
+    void set_acceleration(struct car_t *player_car, int acc_x, int acc_y);
 
 /**
  * @brief Set the acceleration on tuple object

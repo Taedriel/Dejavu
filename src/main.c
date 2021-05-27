@@ -16,6 +16,8 @@ int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A
     }
 
     end_pos = copy_tuple_int((tuple_int *) get_list(list_checkpoint, segment + 1));
+    tuple_int test = estimation_gas(&map, *start_pos, *end_pos, cars);
+    fprintf(stderr, "estimation au plus bas : %d, au plus haut %d\n", test.x, test.y);
     *list_endpos = create_list_from_obj(end_pos);
 
     if (*A_star_local) {
@@ -24,8 +26,10 @@ int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A
 
     *A_star_local = init_weighted_map(map.height, map.width, *(cars[0].pos));
 
+
     pre_weight_map(*A_star_local, &map, *list_endpos);
     fprintf(stderr, "New Segment %d Started ! Start: (%d %d) End (%d %d) Lenght: %f\n", segment, start_pos->x, start_pos->y, end_pos->x, end_pos->y, segment_len(list_checkpoint, segment));
+
 
     return 0;
 }
