@@ -177,6 +177,8 @@ int nb_cars_around(map_t map, car_t cars[3], int distance) {
     int i, x, y, cpt = 0;
     int delta = sqrt((distance * distance)/2);
 
+    fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
+
     for (y = max(0, cars[0].pos->y - delta); y < min(map.height-1, cars[0].pos->y + delta + 1); y++){
         for (x = max(0, cars[0].pos->x - delta); x < min(map.width-1, cars[0].pos->x + delta + 1); x++){
             for(i = 1; i < 3; i++){

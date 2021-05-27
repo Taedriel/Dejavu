@@ -217,7 +217,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
         // print_sorted_list(openList, print_tuple, stderr);
         u = (tuple_int *)get_sorted_list(openList, 0, &current_weight);
         remove_sorted_list(openList, 0);
-        fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
+        // fprintf(stderr, "===========Current %d %d = %f================\n", u->x, u->y, current_weight);
         for (i = 0; i < endpos->size; i++) {
             if (u->x == ((tuple_int *)get_list(endpos, i))->x && u->y == ((tuple_int *)get_list(endpos, i))->y) {
                 /** @todo un tas de free */
@@ -273,7 +273,7 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
                         weighted_map->came_from[v->y][v->x] = tuple_to_int(*u, *v);
                         weighted_map->cout[v->y][v->x] = cout;
                         weighted_map->heuristique[v->y][v->x] = heuristique(*weighted_map, *v, list_acc_map, cout);
-                        fprintf(stderr, "(%d %d) -> %f %f\n", v->x, v->y, cout, weighted_map->heuristique[v->y][v->x]);
+                        // fprintf(stderr, "(%d %d) -> %f %f\n", v->x, v->y, cout, weighted_map->heuristique[v->y][v->x]);
 
                         if (!is_sorted_list_empty(openList)) {
                             temp_sorted = openList->head;

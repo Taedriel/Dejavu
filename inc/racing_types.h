@@ -35,7 +35,7 @@
 #define DISTANCE_SAND_AROUND        3.
 #define NB_SAND_TO_CARE_AROUND      3
 
-#define SAND_WEIGHT                 2.5
+#define SAND_WEIGHT                 4.5
 #define END_WEIGHT                  -1
 #define ROAD_WEIGHT                 1
 

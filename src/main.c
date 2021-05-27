@@ -256,7 +256,7 @@ int main () {
         }
 
         start_pos = copy_tuple_int(cars[0].pos);
-        cars_around = nb_cars_around(map, cars, DISTANCE_CARS_AROUND);
+        cars_around = nb_cars_around(map, cars, get_normed_speed(cars[0]) + DISTANCE_CARS_AROUND);
         sand_around = nb_sand_around(map, cars, DISTANCE_SAND_AROUND);
         fprintf(stderr, "%d cars around - %d sand around\n", cars_around, sand_around);
         nb_point_tested = TEST_NB_FUTUR_POINT;
