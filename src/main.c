@@ -200,7 +200,7 @@ void get_input(car_t cars[3], tuple_int past_pos[3]) {
 int main () {
 
     int nb_point_tested = TEST_NB_FUTUR_POINT;
-    int width, sand_around, cars_around;
+    int width, sand_around, cars_around, estimate_gas;
     int end;
     int height;
     int round = 0, gas = 0;
@@ -268,7 +268,8 @@ int main () {
         nb_point_tested = min(nb_point_tested, TEST_NB_FUTUR_POINT - (int)(sand_around/ NB_SAND_TO_CARE_AROUND));
         nb_point_tested = max(nb_point_tested, 1);
         fprintf(stderr, "NB POINT TESTED FOR THIS ROUND: %d\n\n", nb_point_tested);
-
+        estimate_gas = estimate_gas_needed(&map, list_checkpoint, segment, start_pos, &cars[0]);
+        fprintf(stderr, "GAS ESTIMATE: %d\n", estimate_gas);
         if (new_segment){
             end = prepare_new_segment(segment, list_checkpoint, &A_star_local, map, cars, start_pos, &list_endpos);
         }
