@@ -33,6 +33,28 @@ void consum_gas(struct car_t* player_car, int inSand) {
     player_car->spe->y = (inSand) ? player_car->spe->y > 0 : player_car->spe->y + player_car->acc->y;
 }
 
+double estimate_gas_needed(map_t *map, list * checkpoint, int segment, tuple_int * start_pos, car_t * car) {
+
+    int i;
+    double ret = 0.;
+    tuple_int gas;
+    
+    if (segment < checkpoint->size - 1){
+
+        gas = estimation_gas(map, *start_pos, *((tuple_int *) get_list(checkpoint, segment)), car);
+        ret = (gas.x + gas.y) / 2;
+
+        for (i = segment + 1; i < checkpoint->size - 1; i++) {
+            // fprintf(stderr, "segment n°%d\n", i);
+            gas = estimation_gas(map, *((tuple_int*)get_list(checkpoint, i)), *((tuple_int*)get_list(checkpoint, i + 1)), car);
+            ret += (gas.x + gas.y) / 2.;
+            fprintf(stderr, "[%d] (%d %d) to (%d %d) = %f\n",i, ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, (gas.x + gas.y) / 2.);
+        }
+    }
+
+    return ret;
+}
+
 tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car) {
     int worst_consum;
     int best_consum; 
@@ -72,10 +94,10 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
 
     best_consum = 0;
     while (distance(*(tempory_car.pos), end) > 1.) {
-        print_car(&tempory_car, stderr);
+        // print_car(&tempory_car, stderr);
         new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
 
-        fprintf(stderr, "new acc simu %d %d\n", new_acc.x, new_acc.y);
+        // fprintf(stderr, "new acc simu %d %d\n", new_acc.x, new_acc.y);
         if (abs(tempory_car.spe->x + new_acc.x) > 1){
             new_acc.x = 0;
         }
@@ -146,7 +168,7 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_rea
             acc.y = 0;
         }
     }
-    fprintf(stderr, "To Reach: %d %d\nDelta: \t%d %d\nAcc: \t%d %d\n", to_reach.x, to_reach.y, deltaToReach->x, deltaToReach->y, acc.x, acc.y);
+    // fprintf(stderr, "To Reach: %d %d\nDelta: \t%d %d\nAcc: \t%d %d\n", to_reach.x, to_reach.y, deltaToReach->x, deltaToReach->y, acc.x, acc.y);
     free(deltaToReach);
     return acc;
 }
