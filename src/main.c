@@ -7,6 +7,8 @@
 #include "test.h"
 #include "utils.h"
 
+#include <sys/resource.h>
+
 int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A_star_local, map_t map, car_t cars[3], tuple_int *start_pos, list ** list_endpos) {
     tuple_int * end_pos;
 
@@ -36,11 +38,21 @@ int prepare_new_segment(int segment, list * list_checkpoint, weighted_map_t ** A
 
 tuple_int find_local_path(map_t map, weighted_map_t * A_star_local, tuple_int * start_pos, list * list_endpos, car_t cars[3], int segment, list * list_checkpoint, int round, int nb_point_tested) {
     
-    FILE *logs_cout, *logs_heur, *logs_dist;
-    double normed_speed, max_normed_speed, normed_speed_y, normed_speed_x;
-    int cpt, i, inSand, old_x_value;
+    FILE *logs_cout;
+    FILE *logs_heur;
+    FILE *logs_dist;
+    double normed_speed;
+    double max_normed_speed;
+    double normed_speed_y;
+    double normed_speed_x;
+    int cpt;
+    int i;
+    int inSand;
+    int old_x_value;
 
-    tuple_int maxdir, * v, dir;
+    tuple_int maxdir;
+    tuple_int * v;
+    tuple_int dir;
 
     list *list_opti_local;
 
@@ -131,7 +143,7 @@ tuple_int find_local_path(map_t map, weighted_map_t * A_star_local, tuple_int * 
         free(futur_speed);
         free(v);
     }
-
+    
     fclose(logs_cout);
     fclose(logs_heur);
     fclose(logs_dist);
@@ -143,7 +155,9 @@ void find_global_path(weighted_map_t * A_star_global, car_t cars[3], map_t map, 
     list * list_endpos;
     list *list_opti_global;
     stack *tmp_stack;
-    FILE * logs_heur, * logs_dist, * logs_cout;
+    FILE * logs_heur;
+    FILE * logs_dist;
+    FILE * logs_cout;
 
     A_star_global = init_weighted_map(map.height, map.width, *(cars[0].pos));
     list_endpos = find_end(map);
@@ -294,6 +308,10 @@ int main () {
 
     free_weighted_map(A_star_global);
     free_weighted_map(A_star_local);
+
+    free_car(cars);
+    free_car(cars + 1);
+    free_car(cars + 2);
 
     destroy_list(list_opti_local);
     destroy_list(list_endpos);

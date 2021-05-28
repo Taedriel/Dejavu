@@ -16,6 +16,8 @@
  */
 void init_car(struct car_t *player_car, int boosts, int acc_x, int acc_y, int spe_x, int spe_y, int gas);
 
+void free_car(car_t *car);
+
 /**
  * @brief return the amount of gas used by the car
  *
