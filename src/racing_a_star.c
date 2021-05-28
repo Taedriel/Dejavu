@@ -191,8 +191,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     getrusage(RUSAGE_SELF, &r_usage);
     fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
-    fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
-    print_list(endpos, print_tuple, stderr);
+    // fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
+    // print_list(endpos, print_tuple, stderr);
     for (i = 0; i < 3; i++) {
         list_acc_map[i] = init_accel_map(map->height, map->width);
         fill_proba_map(*map, list_acc_map[i], cars[i]);
