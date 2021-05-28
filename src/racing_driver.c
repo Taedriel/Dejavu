@@ -64,14 +64,14 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
     tuple_int estimation;
 
     init_car(&tempory_car, 0, 2, 2, 2, 2, 0);
-    /*
     int len_seg;
     int ponctual_consumtion;
     ponctual_consumtion = gas_consumption(&tempory_car, 0);
     len_seg = distance(begin, end);
-    worst_consum = len_seg * ponctual_consumtion;*/
-
+    worst_consum = len_seg * ponctual_consumtion;
+    /*
     tempory_car.pos->x = car->pos->x;
+
     tempory_car.pos->y = car->pos->y;
     worst_consum = 0;
     while (distance(*(tempory_car.pos), end) > 1.) {
@@ -87,6 +87,7 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
         tempory_car.pos->x += tempory_car.spe->x;
         tempory_car.pos->y += tempory_car.spe->y;
     }
+    */
     free_car(&tempory_car);
     init_car(&tempory_car, car->boosts, car->acc->x, car->acc->y, car->spe->x, car->spe->y, car->gas_level);
     tempory_car.pos->x = car->pos->x;
@@ -94,10 +95,10 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
 
     best_consum = 0;
     while (distance(*(tempory_car.pos), end) > 1.) {
-        // print_car(&tempory_car, stderr);
+        //print_car(&tempory_car, stderr);
         new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
 
-        // fprintf(stderr, "new acc simu %d %d\n", new_acc.x, new_acc.y);
+        //fprintf(stderr, "simu distance %lf\n", distance(*(tempory_car.pos), end));
         if (abs(tempory_car.spe->x + new_acc.x) > 1){
             new_acc.x = 0;
         }
@@ -111,6 +112,8 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
         best_consum += gas_consumption(&tempory_car, is_in_sand(*map, tempory_car));
         tempory_car.pos->x += tempory_car.spe->x;
         tempory_car.pos->y += tempory_car.spe->y;
+        tempory_car.pos->x = (tempory_car.pos->x > 0) ? tempory_car.pos->x : 0;
+        tempory_car.pos->y = (tempory_car.pos->y > 0) ? tempory_car.pos->y : 0;
     }
     free_car(&tempory_car);
     estimation.x = best_consum;
