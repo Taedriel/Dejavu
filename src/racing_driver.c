@@ -43,7 +43,8 @@ int estimate_gas_needed(map_t *map, list * checkpoint, int segment, tuple_int * 
 
     for (i = segment + 1; i < checkpoint->size - 1; i++) {
         fprintf(stderr, "segment n°%d\n", i);
-        gas = estimation_gas(map, *((tuple_int*)get_list(checkpoint, i)), *((tuple_int*)get_list(checkpoint, i+1)), car);
+        fprintf(stderr, "(%d %d) to (%d %d)= %d\n", ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, i);
+        gas = estimation_gas(map, *((tuple_int*)get_list(checkpoint, i)), *((tuple_int*)get_list(checkpoint, i + 1)), car);
         ret = (gas.x + gas.y) / 2;
     }
 
@@ -74,7 +75,7 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
     best_consum = 0;
 
     while (distance(*(tempory_car.pos), end) > 1.) {
-        print_car(&tempory_car, stderr);
+        // print_car(&tempory_car, stderr);
         new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
 
         // fprintf(stderr, "new acc simu %d %d\n", new_acc.x, new_acc.y);
