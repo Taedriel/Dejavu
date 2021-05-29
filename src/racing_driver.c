@@ -62,43 +62,24 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
 
     tuple_int new_acc;
     tuple_int estimation;
-
-    init_car(&tempory_car, 0, 2, 2, 2, 2, 0);
     int len_seg;
     int ponctual_consumtion;
+
+    init_car(&tempory_car, 0, 2, 2, 2, 2, 0);
     ponctual_consumtion = gas_consumption(&tempory_car, 0);
+    free_car(&tempory_car);
+
     len_seg = distance(begin, end);
     worst_consum = len_seg * ponctual_consumtion;
-    /*
-    tempory_car.pos->x = car->pos->x;
-
-    tempory_car.pos->y = car->pos->y;
-    worst_consum = 0;
-    while (distance(*(tempory_car.pos), end) > 1.) {
-        print_car(&tempory_car, stderr);
-        new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
-
-        fprintf(stderr, "new acc simu %d %d\n", new_acc.x, new_acc.y);
-
-        set_acceleration_on_tuple(&tempory_car, new_acc);
-        tempory_car.spe->x += new_acc.x;
-        tempory_car.spe->y += new_acc.y;
-        worst_consum += gas_consumption(&tempory_car, is_in_sand(*map, tempory_car));
-        tempory_car.pos->x += tempory_car.spe->x;
-        tempory_car.pos->y += tempory_car.spe->y;
-    }
-    */
-    free_car(&tempory_car);
+    
     init_car(&tempory_car, car->boosts, car->acc->x, car->acc->y, car->spe->x, car->spe->y, car->gas_level);
     tempory_car.pos->x = car->pos->x;
     tempory_car.pos->y = car->pos->y;
 
     best_consum = 0;
     while (distance(*(tempory_car.pos), end) > 1.) {
-        //print_car(&tempory_car, stderr);
-        new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
 
-        //fprintf(stderr, "simu distance %lf\n", distance(*(tempory_car.pos), end));
+        new_acc = get_acc_to_reach(&tempory_car, *map, end, 0);
         new_acc.x = (abs(tempory_car.spe->x + new_acc.x) > 1) ? 0 : new_acc.x;
         new_acc.y = (abs(tempory_car.spe->y + new_acc.y) > 1) ? 0 : new_acc.y;
 
@@ -107,9 +88,10 @@ tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car)
         tempory_car.spe->y += new_acc.y;
         
         best_consum += gas_consumption(&tempory_car, is_in_sand(*map, tempory_car));
+        
         tempory_car.pos->x += tempory_car.spe->x;
         tempory_car.pos->y += tempory_car.spe->y;
-        
+
         tempory_car.pos->x = (tempory_car.pos->x > 0) ? tempory_car.pos->x : 0;
         tempory_car.pos->y = (tempory_car.pos->y > 0) ? tempory_car.pos->y : 0;
     }
