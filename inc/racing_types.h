@@ -34,6 +34,7 @@
 #define DISTANCE_CARS_AROUND        3.
 #define DISTANCE_SAND_AROUND        3.
 #define NB_SAND_TO_CARE_AROUND      3
+#define CONCUR_WEIGHT               50
 
 #define SAND_WEIGHT                 4.5
 #define END_WEIGHT                  -1

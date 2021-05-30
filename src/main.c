@@ -293,6 +293,7 @@ int main () {
         }
 
         if (end) {
+            list_endpos = find_end(map);
             weight_map(A_star_local, &map, *start_pos, list_endpos, cars);
             list_opti_local = find_path(A_star_local, &map, *start_pos, list_endpos);
 
