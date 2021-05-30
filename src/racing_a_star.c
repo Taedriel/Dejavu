@@ -1,6 +1,4 @@
 #include <assert.h>
-#include <sys/resource.h>
-
 #include "racing_algorithm.h"
 #include "racing_map.h"
 #include "racing_types.h"
@@ -107,17 +105,11 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     tuple_int *temp;
     tuple_int * current_pos;
 
-    struct rusage r_usage;
-
     for (i = 0; i < endpos->size; i++) {
         temp = copy_tuple_int((tuple_int *)get_list(endpos, i));
         weighted_map->dist_from_end[temp->y][temp->x] = 0.;
         add_queue(s, (void *)temp);
     }
-
-    /**************************************************** DEBUG MEMORY ****************************************************/
-    //getrusage(RUSAGE_SELF, &r_usage);
-    //fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
     do {
         current_pos  = (tuple_int *)(last_queue(s));
@@ -145,10 +137,6 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     } while (!is_queue_empty(s));
 
     destroy_queue(s);
-
-    /**************************************************** DEBUG MEMORY ****************************************************/
-    //getrusage(RUSAGE_SELF, &r_usage);
-    //fprintf(stderr, "memory used 3 : %ld\n", r_usage.ru_maxrss);
     return;
 }
 
@@ -184,12 +172,6 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     tuple_int *u = malloc(sizeof(tuple_int));
     tuple_int *v;
     list * neighboor;
-
-    struct rusage r_usage;
-
-    /**************************************************** DEBUG MEMORY ****************************************************/
-    getrusage(RUSAGE_SELF, &r_usage);
-    fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
     // fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
     // print_list(endpos, print_tuple, stderr);
@@ -315,10 +297,6 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     free(temp);
     free(v);
     free(u);
-
-    /**************************************************** DEBUG MEMORY ****************************************************/
-    getrusage(RUSAGE_SELF, &r_usage);
-    fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
     return;
 }

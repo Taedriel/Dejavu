@@ -48,7 +48,7 @@ double estimate_gas_needed(map_t *map, list * checkpoint, int segment, tuple_int
             // fprintf(stderr, "segment n°%d\n", i);
             gas = estimation_gas(map, *((tuple_int*)get_list(checkpoint, i)), *((tuple_int*)get_list(checkpoint, i + 1)), car);
             ret += (gas.x + gas.y) / 2.;
-            fprintf(stderr, "[%d] (%d %d) to (%d %d) = %f\n",i, ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, (gas.x + gas.y) / 2.);
+            //fprintf(stderr, "[%d] (%d %d) to (%d %d) = %f\n",i, ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, (gas.x + gas.y) / 2.);
         }
     }
 
@@ -207,7 +207,7 @@ int nb_cars_around(map_t map, car_t cars[3], int distance) {
     int i, x, y, cpt = 0;
     int delta = sqrt((distance * distance)/2);
 
-    fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
+    //fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
 
     for (y = max(0, cars[0].pos->y - delta); y < min(map.height-1, cars[0].pos->y + delta + 1); y++){
         for (x = max(0, cars[0].pos->x - delta); x < min(map.width-1, cars[0].pos->x + delta + 1); x++){
@@ -227,7 +227,7 @@ int nb_sand_around(map_t map, car_t cars[3], int distance) {
     int x, y, cpt = 0;
     int delta = sqrt((distance * distance) / 2);
 
-    fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
+    //fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
 
     for (y = max(0, cars[0].pos->y - delta); y < min(map.height - 1, cars[0].pos->y + delta + 1); y++) {
         for (x = max(0, cars[0].pos->x - delta); x < min(map.width - 1, cars[0].pos->x + delta + 1); x++) {
