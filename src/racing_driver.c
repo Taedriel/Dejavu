@@ -33,19 +33,19 @@ void consum_gas(struct car_t* player_car, int inSand) {
     player_car->spe->y = (inSand) ? player_car->spe->y > 0 : player_car->spe->y + player_car->acc->y;
 }
 
-double estimate_gas_needed(map_t *map, list * checkpoint, int segment, tuple_int * start_pos, car_t * car) {
+double estimate_gas_needed(map_t *map, list * path, tuple_int * start_pos, car_t * car) {
 
     int i;
     double ret = 0.;
     tuple_int gas;
     
-    if (segment < checkpoint->size - 1){
+    if (path->size - 1 > 0){
 
-        for (i = segment; i < checkpoint->size - 1; i++) {
-            gas = estimation_gas(map, *((tuple_int*)get_list(checkpoint, i)), *((tuple_int*)get_list(checkpoint, i + 1)), car);
-            fprintf(stderr, "segment n°%d: (%d %d) %f \n", i, gas.x, gas.y, segment_len(checkpoint, i));
-            ret += min(gas.x, gas.y);
-            // fprintf(stderr, "[%d] (%d %d) to (%d %d) = %f\n",i, ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, (gas.x + gas.y) / 2.);
+        ret += distance(*start_pos, *((tuple_int *) get_list(path, 0))) * 2;
+
+        for (i = 1; i < path->size - 1; i++) {
+
+            ret += distance(*((tuple_int *) get_list(path, i)), *((tuple_int *) get_list(path, i+1)));
         }
     }
 

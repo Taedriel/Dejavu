@@ -45,7 +45,7 @@ void consum_gas(struct car_t *player_car, int inSand);
  * @param car 
  * @return int 
  */
-double estimate_gas_needed(map_t *map, list * checkpoint, int segment, tuple_int * start_pos, car_t * car);
+double estimate_gas_needed(map_t *map, list * path, tuple_int * start_pos, car_t * car);
 
 
 tuple_int estimation_gas(map_t *map, tuple_int begin, tuple_int end, car_t *car);

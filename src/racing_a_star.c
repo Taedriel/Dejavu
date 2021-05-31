@@ -107,7 +107,7 @@ void pre_weight_map(weighted_map_t * weighted_map, map_t *map, list * endpos) {
     tuple_int *temp;
     tuple_int * current_pos;
 
-    struct rusage r_usage;
+    // struct rusage r_usage;
 
     for (i = 0; i < endpos->size; i++) {
         temp = copy_tuple_int((tuple_int *)get_list(endpos, i));
@@ -185,11 +185,11 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     tuple_int *v;
     list * neighboor;
 
-    struct rusage r_usage;
+    // struct rusage r_usage;
 
     /**************************************************** DEBUG MEMORY ****************************************************/
-    getrusage(RUSAGE_SELF, &r_usage);
-    fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
+    // getrusage(RUSAGE_SELF, &r_usage);
+    // fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
     // fprintf(stderr, "START OF ASTAR (%d %d) to ", start.x, start.y);
     // print_list(endpos, print_tuple, stderr);
@@ -317,8 +317,8 @@ void weight_map(weighted_map_t *weighted_map, map_t *map, tuple_int start, list 
     free(u);
 
     /**************************************************** DEBUG MEMORY ****************************************************/
-    getrusage(RUSAGE_SELF, &r_usage);
-    fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
+    // getrusage(RUSAGE_SELF, &r_usage);
+    // fprintf(stderr, "memory used 2 : %ld\n", r_usage.ru_maxrss);
 
     return;
 }
