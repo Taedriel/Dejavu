@@ -64,8 +64,8 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** 
     heur += CONCUR_SPEED_WEIGHT * liste_accel_map[2][current_pos.y][current_pos.x];
     // }
     
-    heur += liste_accel_map[1][current_pos.y][current_pos.x] == 1. ? 100 : 0;
-    heur += liste_accel_map[2][current_pos.y][current_pos.x] == 1. ? 100 : 0;
+    heur += liste_accel_map[1][current_pos.y][current_pos.x] == 1. ? CONCUR_WEIGHT : 0;
+    heur += liste_accel_map[2][current_pos.y][current_pos.x] == 1. ? CONCUR_WEIGHT : 0;
 
     // fprintf(stderr, "Ajout de (%d %d) de poid: %f (%f + %f * ratio)\n", current_pos.x, current_pos.y, heur,cout);
 

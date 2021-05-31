@@ -41,14 +41,11 @@ double estimate_gas_needed(map_t *map, list * checkpoint, int segment, tuple_int
     
     if (segment < checkpoint->size - 1){
 
-        gas = estimation_gas(map, *start_pos, *((tuple_int *) get_list(checkpoint, segment)), car);
-        ret = (gas.x + gas.y) / 2;
-
-        for (i = segment + 1; i < checkpoint->size - 1; i++) {
-            // fprintf(stderr, "segment n°%d\n", i);
+        for (i = segment; i < checkpoint->size - 1; i++) {
             gas = estimation_gas(map, *((tuple_int*)get_list(checkpoint, i)), *((tuple_int*)get_list(checkpoint, i + 1)), car);
-            ret += (gas.x + gas.y) / 2.;
-            //fprintf(stderr, "[%d] (%d %d) to (%d %d) = %f\n",i, ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, (gas.x + gas.y) / 2.);
+            fprintf(stderr, "segment n°%d: (%d %d) %f \n", i, gas.x, gas.y, segment_len(checkpoint, i));
+            ret += min(gas.x, gas.y);
+            // fprintf(stderr, "[%d] (%d %d) to (%d %d) = %f\n",i, ((tuple_int*)get_list(checkpoint, i))->x, ((tuple_int*)get_list(checkpoint, i))->y, ((tuple_int*)get_list(checkpoint, i+1))->x, ((tuple_int*)get_list(checkpoint, i+1))->y, (gas.x + gas.y) / 2.);
         }
     }
 
