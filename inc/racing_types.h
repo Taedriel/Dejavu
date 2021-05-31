@@ -32,13 +32,13 @@
 
 #define MAX_SPEED                   4       //Max speed of the car
 #define CONCUR_WEIGHT               50
-#define DIAG_WEIGHT                 0.6
+#define DIAG_WEIGHT                 0.8
 
 #define DISTANCE_CARS_AROUND        3.
 #define DISTANCE_SAND_AROUND        4.
 #define NB_SAND_TO_CARE_AROUND      3
 
-#define SAND_WEIGHT                 10
+#define SAND_WEIGHT                 12
 #define END_WEIGHT                  -1
 #define ROAD_WEIGHT                 1
 

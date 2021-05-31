@@ -104,7 +104,7 @@ int main() {
     int width, sand_around, cars_around;
     int height;
     int round = 0, gas = 0;
-    int boost = 0;
+    int nb_since_last_boost = 5;
 
     float estimate_gas;
 
@@ -163,7 +163,8 @@ int main() {
         fprintf(stderr, "NB POINT TESTED FOR THIS ROUND: %d\n\n", nb_point_tested);
         nb_point_tested = max(nb_point_tested, 1);
 
-        maxdir = find_local_path(map, path, cars, round, nb_point_tested, boost);
+        maxdir = find_local_path(map, path, cars, round, nb_point_tested, 0);
+
         set_acceleration(cars, maxdir.x, maxdir.y);
 
         consum_gas(cars, 0);
