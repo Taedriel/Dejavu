@@ -45,7 +45,7 @@ double estimate_gas_needed(map_t *map, list * path, tuple_int * start_pos, car_t
 
         for (i = 1; i < path->size - 1; i++) {
 
-            ret += distance(*((tuple_int *) get_list(path, i)), *((tuple_int *) get_list(path, i+1)));
+            ret += distance(*((tuple_int *) get_list(path, i)), *((tuple_int *) get_list(path, i+1))) * 1.1;
         }
     }
 

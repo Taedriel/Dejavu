@@ -31,7 +31,7 @@ float heuristique(weighted_map_t weighted_map, tuple_int current_pos, float *** 
  * @param endpos 
  * @return list* 
  */
-list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos);
+list *find_path(weighted_map_t *weighted_map, map_t *map, tuple_int start, list * endpos, car_t cars[3]);
 
 /**
  * @brief return a list of coord that are the end of the track

@@ -1,3 +1,5 @@
+#include <sys/resource.h>
+
 #include "racing_a_star.h"
 #include "racing_algorithm.h"
 #include "racing_checkpoints.h"
@@ -7,10 +9,7 @@
 #include "test.h"
 #include "utils.h"
 
-#include <sys/resource.h>
-
-tuple_int find_local_path(map_t map, list * path, car_t cars[3], int round, int nb_point_tested, int boost) {
-    
+tuple_int find_local_path(map_t map, list *path, car_t cars[3], int round, int nb_point_tested, int boost) {
     double normed_speed;
     double max_normed_speed = 0.;
     double normed_speed_y;
@@ -21,7 +20,7 @@ tuple_int find_local_path(map_t map, list * path, car_t cars[3], int round, int 
     int old_x_value;
 
     tuple_int maxdir;
-    tuple_int * v;
+    tuple_int *v;
     tuple_int dir;
 
     maxdir.x = cars[0].spe->x > 0 ? -1 : (cars[0].spe->x < 0);
@@ -39,36 +38,34 @@ tuple_int find_local_path(map_t map, list * path, car_t cars[3], int round, int 
             normed_speed = 1;
         }
 
-        if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir)) {
-            if (normed_speed < MAX_SPEED) {
-                if (( inSand && normed_speed <= 1. ) || !inSand){
-                    max_normed_speed = normed_speed;
+        if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir) && normed_speed < MAX_SPEED) {
+            if ((inSand && normed_speed <= 1.) || !inSand) {
+                max_normed_speed = normed_speed;
+                maxdir.x = dir.x;
+                maxdir.y = dir.y;
+            }
+            if (inSand && normed_speed > 1.) {
+                maxdir.x = 0;
+                maxdir.y = 0;
+
+                old_x_value = dir.x;
+                dir.x = 0;
+                tuple_int *futur_speed_y = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
+                normed_speed_y = distance(*futur_speed_y, create_0_0_tuple());
+                free(futur_speed_y);
+                if (is_move_valid(map, cars, dir) && normed_speed_y <= 1.) {
                     maxdir.x = dir.x;
                     maxdir.y = dir.y;
                 }
-                if (inSand && normed_speed > 1.){
-                    maxdir.x = 0;
-                    maxdir.y = 0;
 
-                    old_x_value = dir.x;
-                    dir.x = 0;
-                    tuple_int *futur_speed_y = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
-                    normed_speed_y = distance(*futur_speed_y, create_0_0_tuple());
-                    free(futur_speed_y);
-                    if (is_move_valid(map, cars, dir) && normed_speed_y <= 1.){
-                        maxdir.x = dir.x;
-                        maxdir.y = dir.y;
-                    }
-
-                    dir.x = old_x_value;
-                    dir.y = 0;
-                    tuple_int *futur_speed_x = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
-                    normed_speed_x = distance(*futur_speed_x, create_0_0_tuple());
-                    free(futur_speed_x);
-                    if (is_move_valid(map, cars, dir) && normed_speed_x <= 1.){
-                        maxdir.x = dir.x;
-                        maxdir.y = dir.y;
-                    } 
+                dir.x = old_x_value;
+                dir.y = 0;
+                tuple_int *futur_speed_x = create_tuple_int(cars[0].spe->x + dir.x, cars[0].spe->y + dir.y);
+                normed_speed_x = distance(*futur_speed_x, create_0_0_tuple());
+                free(futur_speed_x);
+                if (is_move_valid(map, cars, dir) && normed_speed_x <= 1.) {
+                    maxdir.x = dir.x;
+                    maxdir.y = dir.y;
                 }
             }
         }
@@ -102,8 +99,7 @@ void get_input(car_t cars[3], tuple_int past_pos[3], weighted_map_t *A_star, map
     }
 }
 
-int main () {
-
+int main() {
     int nb_point_tested = TEST_NB_FUTUR_POINT;
     int width, sand_around, cars_around;
     int height;
@@ -114,17 +110,17 @@ int main () {
 
     char line_buffer[MAX_LINE_LENGTH];
 
-    list * path = NULL;
-    list * list_endpos = NULL;
+    list *path = NULL;
+    list *list_endpos = NULL;
 
     weighted_map_t *A_star = NULL;
 
     car_t cars[3];
     map_t map;
 
-    tuple_int * start_pos;
+    tuple_int *start_pos;
     tuple_int maxdir;
-    tuple_int past_pos[3]; 
+    tuple_int past_pos[3];
 
     fgets(line_buffer, MAX_LINE_LENGTH, stdin);
     sscanf(line_buffer, "%d %d %d", &width, &height, &gas);
@@ -144,27 +140,25 @@ int main () {
         get_input(cars, past_pos, A_star, map, list_endpos);
         start_pos = copy_tuple_int(cars[0].pos);
 
-
-        if (round == 1){
+        if (round == 1) {
             list_endpos = find_end(map);
             A_star = init_weighted_map(height, width, *(cars[0].pos));
             pre_weight_map(A_star, &map, list_endpos);
         }
 
-
         weight_map(A_star, &map, *start_pos, list_endpos, cars);
-        path = find_path(A_star, &map, *start_pos, list_endpos);
+        path = find_path(A_star, &map, *start_pos, list_endpos, cars);
 
         cars_around = nb_cars_around(map, cars, get_normed_speed(cars[0]) + DISTANCE_CARS_AROUND);
         sand_around = nb_sand_around(map, cars, DISTANCE_SAND_AROUND);
-        
+
         nb_point_tested = TEST_NB_FUTUR_POINT;
-        nb_point_tested = min(nb_point_tested, (TEST_NB_FUTUR_POINT - cars_around));
-        nb_point_tested = min(nb_point_tested, TEST_NB_FUTUR_POINT - (int)(sand_around/ NB_SAND_TO_CARE_AROUND));
+        // nb_point_tested = min(nb_point_tested, (TEST_NB_FUTUR_POINT - cars_around));
+        nb_point_tested = min(nb_point_tested, TEST_NB_FUTUR_POINT - (int)(sand_around / NB_SAND_TO_CARE_AROUND));
         estimate_gas = estimate_gas_needed(&map, path, start_pos, &cars[0]);
         fprintf(stderr, "gas estimated to finish race: %f\n", estimate_gas);
         fprintf(stderr, "gas level: %d (%f)\n", cars[0].gas_level, cars[0].gas_level * 0.90);
-        nb_point_tested = cars[0].gas_level - (estimate_gas * 0.90) < 0 ? 1 : nb_point_tested;
+        nb_point_tested = (cars[0].gas_level - estimate_gas) < 0 ? 1 : nb_point_tested;
 
         fprintf(stderr, "NB POINT TESTED FOR THIS ROUND: %d\n\n", nb_point_tested);
         nb_point_tested = max(nb_point_tested, 1);
