@@ -31,14 +31,14 @@
 #define TEST_NB_FUTUR_POINT         3       //number of point that are testing to search the best accessible case
 
 #define MAX_SPEED                   4       //Max speed of the car
-#define CONCUR_WEIGHT               50
+#define CONCUR_WEIGHT               10
 #define DIAG_WEIGHT                 0.8
 
 #define DISTANCE_CARS_AROUND        3.
 #define DISTANCE_SAND_AROUND        4.
 #define NB_SAND_TO_CARE_AROUND      3
 
-#define SAND_WEIGHT                 12
+#define SAND_WEIGHT                 10
 #define END_WEIGHT                  -1
 #define ROAD_WEIGHT                 1
 

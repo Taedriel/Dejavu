@@ -37,7 +37,6 @@ double estimate_gas_needed(map_t *map, list * path, tuple_int * start_pos, car_t
 
     int i;
     double ret = 0.;
-    tuple_int gas;
     
     if (path->size - 1 > 0){
 
@@ -115,12 +114,6 @@ tuple_int * dist_to_futur_pos(tuple_int futur_pos, car_t car) {
     return ret;
 }
 
-/**
- * @todo ici on doit recup le segment en question 
- * puis on calcule la distance. Enfin, un if 
- * arbitraire avec une valeur choisi de longeur limite
- * avant le boost. 
- */
 int normed_acc(int acc_require, int boost_allowed) {
     if (acc_require < 0 && !boost_allowed)
         return -1;
@@ -148,7 +141,6 @@ tuple_int get_acc_to_reach(struct car_t* car, struct map_t map, tuple_int to_rea
             acc.y = 0;
         }
     }
-    // fprintf(stderr, "To Reach: %d %d\nDelta: \t%d %d\nAcc: \t%d %d\n", to_reach.x, to_reach.y, deltaToReach->x, deltaToReach->y, acc.x, acc.y);
     free(deltaToReach);
     return acc;
 }
@@ -174,7 +166,6 @@ int is_valid_acceleration(struct car_t* car, tuple_int acc, struct map_t map) {
 }
 
 int is_move_valid(map_t map, car_t cars[3], tuple_int acc_asked){
-    //using follow_line.c, 
     InfoLine * line = malloc(sizeof(InfoLine));
     Pos2Dint * pos = malloc(sizeof(Pos2Dint));
     tuple_int * futur_pos = create_tuple_int(cars[0].spe->x + cars[0].pos->x + acc_asked.x, cars[0].spe->y + cars[0].pos->y + acc_asked.y);
@@ -204,8 +195,6 @@ int nb_cars_around(map_t map, car_t cars[3], int distance) {
     int i, x, y, cpt = 0;
     int delta = sqrt((distance * distance)/2);
 
-    fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
-
     for (y = max(0, cars[0].pos->y - delta); y < min(map.height-1, cars[0].pos->y + delta + 1); y++){
         for (x = max(0, cars[0].pos->x - delta); x < min(map.width-1, cars[0].pos->x + delta + 1); x++){
             for(i = 1; i < 3; i++){
@@ -223,8 +212,6 @@ int nb_sand_around(map_t map, car_t cars[3], int distance) {
 
     int x, y, cpt = 0;
     int delta = sqrt((distance * distance) / 2);
-
-    fprintf(stderr, "DELTA: %d - (%d %d) -> (%d %d)\n", delta, max(0, cars[0].pos->x - delta), max(0, cars[0].pos->y - delta), min(map.width - 1, cars[0].pos->x + delta + 1), min(map.height - 1, cars[0].pos->y + delta + 1));
 
     for (y = max(0, cars[0].pos->y - delta); y < min(map.height - 1, cars[0].pos->y + delta + 1); y++) {
         for (x = max(0, cars[0].pos->x - delta); x < min(map.width - 1, cars[0].pos->x + delta + 1); x++) {

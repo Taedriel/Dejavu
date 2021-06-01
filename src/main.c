@@ -86,12 +86,9 @@ void get_input(car_t cars[3], tuple_int past_pos[3], weighted_map_t *A_star, map
     }
 
     read_positions(cars);
-    // print_car(&cars[0], stderr);
 
     for (i = 0; i < 3; i++) {
         if ((past_pos[i].x == cars[i].pos->x) && (past_pos[i].y == cars[i].pos->y)) {
-            if (i == 0)
-                fprintf(stderr, "\n CAR STOPED ! RESET SPEED !\n\n");
             cars[i].spe->x = 0;
             cars[i].spe->y = 0;
             pre_weight_map(A_star, &map, list_endpos);
@@ -101,10 +98,9 @@ void get_input(car_t cars[3], tuple_int past_pos[3], weighted_map_t *A_star, map
 
 int main() {
     int nb_point_tested = TEST_NB_FUTUR_POINT;
-    int width, sand_around, cars_around;
+    int width, sand_around;
     int height;
     int round = 0, gas = 0;
-    int nb_since_last_boost = 5;
 
     float estimate_gas;
 
@@ -130,18 +126,16 @@ int main() {
     init_car(cars + 2, BOOSTS_AT_START, 0, 0, 0, 0, gas);
 
     init_map(&map, height, width);
-    fprintf(stderr, "Height: %d Width: %d Gas: %d\n", height, width, gas);
 
-    // RACE_START(stderr)
 
     while (!feof(stdin)) {
         round++;
-        RACE_ROUND(round, stderr)
+        // RACE_ROUND(round, stderr)
         get_input(cars, past_pos, A_star, map, list_endpos);
         start_pos = copy_tuple_int(cars[0].pos);
+        list_endpos = find_end(map);
 
         if (round == 1) {
-            list_endpos = find_end(map);
             A_star = init_weighted_map(height, width, *(cars[0].pos));
             pre_weight_map(A_star, &map, list_endpos);
         }
@@ -149,20 +143,14 @@ int main() {
         weight_map(A_star, &map, *start_pos, list_endpos, cars);
         path = find_path(A_star, &map, *start_pos, list_endpos, cars);
 
-        cars_around = nb_cars_around(map, cars, get_normed_speed(cars[0]) + DISTANCE_CARS_AROUND);
         sand_around = nb_sand_around(map, cars, DISTANCE_SAND_AROUND);
 
         nb_point_tested = TEST_NB_FUTUR_POINT;
-        // nb_point_tested = min(nb_point_tested, (TEST_NB_FUTUR_POINT - cars_around));
         nb_point_tested = min(nb_point_tested, TEST_NB_FUTUR_POINT - (int)(sand_around / NB_SAND_TO_CARE_AROUND));
         estimate_gas = estimate_gas_needed(&map, path, start_pos, &cars[0]);
-        fprintf(stderr, "gas estimated to finish race: %f\n", estimate_gas);
-        fprintf(stderr, "gas level: %d (%f)\n", cars[0].gas_level, cars[0].gas_level * 0.90);
+        
         nb_point_tested = (cars[0].gas_level - estimate_gas) < 0 ? 1 : nb_point_tested;
-
-        fprintf(stderr, "NB POINT TESTED FOR THIS ROUND: %d\n\n", nb_point_tested);
         nb_point_tested = max(nb_point_tested, 1);
-
         maxdir = find_local_path(map, path, cars, round, nb_point_tested, 0);
 
         set_acceleration(cars, maxdir.x, maxdir.y);

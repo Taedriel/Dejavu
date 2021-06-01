@@ -8,7 +8,7 @@ CC=gcc
 
 CFLAGS = -Wall -Wextra -ansi -pedantic -std=c99 -Wpedantic -g -I$(PATH_INC) -Wno-unused-parameter
 LDFLAGS= -lm
-PILOT_NAME = $(PATH_BIN)/Dejavu
+PILOT_NAME = Dejavu
 
 SANITIZE=off
 ifeq ($(SANITIZE),on)
@@ -23,7 +23,9 @@ OBJS = $(patsubst $(PATH_SRC)/%.c, $(PATH_OBJ)/%.o, $(SRCS))
 
 include $(PATH_SRC)/utils/Makefile
 
-all: utils dir $(PILOT_NAME)
+$(PILOT_NAME): all
+
+all: utils dir $(PATH_BIN)/$(PILOT_NAME)
 	@echo "\nAll is done !\n"
 
 install: clean all
@@ -39,7 +41,7 @@ doxy:
 	@mkdir -p $(PATH_DOC)
 	@doxygen
 
-$(PILOT_NAME):$(OBJS) $(OBJS_UTILS)
+$(PATH_BIN)/$(PILOT_NAME):$(OBJS) $(OBJS_UTILS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(PATH_OBJ)/%.o: $(PATH_SRC)/%.c

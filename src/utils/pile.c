@@ -72,7 +72,6 @@ void print_stack(stack s, void(print_func)(void *, char *), FILE *file) {
 
 void concat_stack(stack *s1, stack *s2) {
     if (is_stack_empty(s1)) {
-        /* swap s1 and s2 */
         s1->head = s2->head;
         s1->tail = s2->tail;
         return;
@@ -116,7 +115,6 @@ void **stack_to_tab(stack *s) {
     cell *temp = s->head;
     while (temp != NULL) {
         ret[i] = temp->x;
-        //fprintf(stderr, "%p\n", ret[i]);
         i++;
         temp = temp->next;
     }

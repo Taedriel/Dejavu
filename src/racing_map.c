@@ -7,11 +7,9 @@ void init_map(map_t *map, int height, int width) {
     map->width = width;
     map->array = malloc(height * sizeof(char *));
 
-    /* Read map data, line per line */
     for (row = 0; row < height; row++) {
         map->array[row] = malloc(sizeof(char) * MAX_LINE_LENGTH);
         fgets(map->array[row], MAX_LINE_LENGTH, stdin);
-        fputs(map->array[row], stderr);
     }
 }
 

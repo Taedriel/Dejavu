@@ -7,7 +7,7 @@ int post_actions(car_t *player_car) {
     fprintf(stdout, "%s", action);
     fflush(stdout);
 
-    RACE_BRIEF(action, player_car->gas_level, stderr)
+    // RACE_BRIEF(action, player_car->gas_level, stderr)
 
     return EXIT_SUCCESS;
 }
@@ -15,18 +15,12 @@ int post_actions(car_t *player_car) {
 int read_positions(struct car_t *car_list) {
     char line_buffer[MAX_LINE_LENGTH];
 
-    fgets(line_buffer, MAX_LINE_LENGTH, stdin); /* Read positions of pilots */
+    fgets(line_buffer, MAX_LINE_LENGTH, stdin);
 
     sscanf(line_buffer, "%d %d %d %d %d %d",
            &(car_list[0].pos->x), &(car_list[0].pos->y),
            &(car_list[1].pos->x), &(car_list[1].pos->y),
            &(car_list[2].pos->x), &(car_list[2].pos->y));
-
-    /*fprintf(stderr, "    Positions: Me(%d,%d)  A(%d,%d), B(%d,%d)\n",
-            car_list[0].pos->x, car_list[0].pos->y,
-            car_list[1].pos->x, car_list[1].pos->y,
-            car_list[2].pos->x, car_list[2].pos->y);
-    fflush(stderr);*/
 
     return EXIT_SUCCESS;
 }

@@ -50,19 +50,14 @@ void add_sorted_list(sorted_list *s, void *a, float score) {
             temp = temp->next;
         }
         if (temp == s->head && score < temp->score) {
-            //insertion au debut
             s->head->prev = c;
             c->next = s->head;
             s->head = c;
         } else if (temp == s->tail && score > temp->score) {
-            //insertion a la fin
             s->tail->next = c;
             c->prev = s->tail;
             s->tail = c;
         } else {
-            //insertion entre deux, temp est à droite
-            //temp-1 -> temp -> temp+1
-            //insertion entre temp-1 et temp
             temp->prev->next = c;
             c->prev = temp->prev;
             c->next = temp;
