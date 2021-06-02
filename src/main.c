@@ -34,9 +34,6 @@ tuple_int find_local_path(map_t map, list *path, car_t cars[3], int round, int n
 
         normed_speed = distance(*futur_speed, create_0_0_tuple());
         inSand = is_in_sand(map, cars[0]);
-        if (map.array[v->y][v->x] == SAND_CHAR) {
-            normed_speed = 1;
-        }
 
         if (normed_speed >= max_normed_speed && is_move_valid(map, cars, dir) && normed_speed < MAX_SPEED) {
             if ((inSand && normed_speed <= 1.) || !inSand) {
